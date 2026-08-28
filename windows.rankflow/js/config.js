@@ -9,7 +9,7 @@ window.RANKFLOW_CONFIG = {
 
   // Google Places API key, restricted to the Maps JavaScript API (Places
   // library) and to this domain. console.cloud.google.com > APIs & Services.
-  GOOGLE_PLACES_API_KEY: "REPLACE_WITH_GOOGLE_PLACES_API_KEY",
+  GOOGLE_PLACES_API_KEY: "AIzaSyA8FaW5IgilCt5JeS4oZzHasO3PShjFMXk",
 
   // GHL calendar embed URLs (GHL: Calendars > [calendar] > Embed > copy the
   // iframe src). TRACKED = the "main" calendar (25k+ revenue AND verified
