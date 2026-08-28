@@ -95,9 +95,9 @@ window.TESTIMONIALS = [
 // ("Step 1: Watch This 2 Minute Video"). Still a placeholder - once you
 // have this file, same pattern: assets/videos/explainer.mp4.
 window.EXPLAINER_VIDEO = {
-  videoSrc: "",
-  poster: "",
-  caption: "we'll rank you top three in Google and Chat GPT",
+  videoSrc: "assets/videos/2min.mp4",
+  poster: "assets/videos/2min.jpg",
+  caption: "",
 };
 
 // Landing page (index.html) hero testimonials, in order
