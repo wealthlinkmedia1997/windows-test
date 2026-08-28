@@ -475,6 +475,11 @@ function wireBusinessAutocomplete(inputEl) {
   const placeAddrEl = form.querySelector('[name="placeAddress"]');
 
   let items = [], active = -1, timer = null, seq = 0, apiReady = false, suppress = false;
+  // Set when the user picks a suggestion. While it's on, typing does not
+  // trigger another lookup - the choice is final until they click back into
+  // the field. Without this, editing a picked name re-opens the list over
+  // and over.
+  let locked = false;
 
   loadGooglePlaces().then((ok) => { apiReady = ok; });
 
@@ -508,15 +513,22 @@ function wireBusinessAutocomplete(inputEl) {
     if (placeIdEl) placeIdEl.value = it.id || "";
     if (placeAddrEl) placeAddrEl.value = it.address || "";
     wrap.classList.add("is-picked");
+    locked = true;
     close();
-    suppress = false;
-    // Tell the progressive-reveal logic the field is filled, so the phone
-    // step unlocks on pick without the user typing another character.
+    // suppress stays ON across this dispatch. The event still bubbles to the
+    // form-level listener that updates the progress bar and tick, but the
+    // input's own handler below bails out - otherwise it reads this synthetic
+    // event as fresh typing, wipes the place ID and re-runs the search, which
+    // is what made the list reappear immediately after every pick.
     inputEl.dispatchEvent(new Event("input", { bubbles: true }));
+    suppress = false;
+    // Drop focus so the next click back into the field fires `focus` and
+    // unlocks it for editing.
+    inputEl.blur();
   }
 
   inputEl.addEventListener("input", function () {
-    if (suppress) return;
+    if (suppress || locked) return;
     // Typing after a pick invalidates that pick.
     wrap.classList.remove("is-picked");
     if (placeIdEl) placeIdEl.value = "";
@@ -554,6 +566,15 @@ function wireBusinessAutocomplete(inputEl) {
     e.preventDefault();
     choose(Number(li.dataset.i));
   });
+
+  // Clicking (or tabbing) back into the field releases the lock so the user
+  // can search again. `focus` alone isn't enough - after a pick the caret can
+  // still be in the field, in which case only `click` fires.
+  function unlock() {
+    locked = false;
+  }
+  inputEl.addEventListener("focus", unlock);
+  inputEl.addEventListener("click", unlock);
 
   inputEl.addEventListener("blur", () => setTimeout(close, 120));
 }
