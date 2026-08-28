@@ -844,3 +844,23 @@ footer {
   padding: 15px 42px;
   border-radius: 9999px;
 }
+
+/* ------------------------------------------------------------
+   Autocomplete dropdown stacking fix.
+
+   The reveal animation puts `transform: translateY(...)` on
+   .field-inner, and ANY non-none transform creates a stacking
+   context. That traps .ac-suggestions' z-index:30 inside the
+   business-name field, so it could never paint above the phone
+   and revenue fields that come after it in the DOM - no matter
+   how high that z-index went.
+
+   Raising the whole field instead puts the trapped context above
+   its later siblings, and the dropdown escapes with it.
+   ------------------------------------------------------------ */
+#leadForm .field {
+  position: relative;
+}
+#leadForm .field[data-step="businessName"] {
+  z-index: 40;
+}
