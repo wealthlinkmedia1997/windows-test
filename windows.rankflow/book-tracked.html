@@ -1,0 +1,86 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Ranking Report Is On Its Way | WealthLink Media</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preload" as="image" href="assets/logo.png">
+<link rel="preconnect" href="https://connect.facebook.net">
+<script src="js/config.js"></script>
+<!-- Meta Pixel IS on this page, intentionally: this is the tracked booking
+     path (verified GBP AND $25k+ revenue) — the segment worth optimising ad
+     delivery against. A Lead event fires below on page view. -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+if (window.RANKFLOW_CONFIG && !window.RANKFLOW_CONFIG.META_PIXEL_ID.startsWith('REPLACE')) {
+  fbq('init', window.RANKFLOW_CONFIG.META_PIXEL_ID);
+  fbq('track', 'PageView');
+  fbq('track', 'Lead');
+}
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=4390908821128639&ev=Lead&noscript=1"
+/></noscript>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo" id="logo"></div>
+
+  <p class="report-heading">📱 Your ranking report is on its way to your phone</p>
+  <p class="report-subheading">It shows where you rank — not why, or who's beating you. That's what the call is for.</p>
+
+  <div class="step-bar" id="stepBar"><u>Step 1:</u> Watch This 2 Minute Video</div>
+  <div id="explainer-video"></div>
+
+  <p class="step2-heading" id="step2Heading"><u>Step 2:</u> Book a Call Below</p>
+
+  <div class="calendar-card">
+    <div class="calendar-card-header">
+      <div class="calendar-avatar"></div>
+      <h3>Speak with Wealthlink Media 1</h3>
+    </div>
+    <div class="calendar-meta">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="calendar-embed-container" id="calendarEmbed">
+      <p class="calendar-loading">Loading calendar…</p>
+    </div>
+  </div>
+
+  <h2 id="testimonials">P.S. Check Out What Our Contractor Clients Have To Say</h2>
+  <div id="booking-testimonials"></div>
+
+  <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
+</div>
+
+<script src="js/testimonials-data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  renderLogo(document.getElementById("logo"));
+
+  // Hides the "Step 1" bar entirely while EXPLAINER_VIDEO.videoSrc is still
+  // empty (see testimonials-data.js).
+  renderExplainerVideo("explainer-video", "stepBar");
+
+  // ...which would otherwise leave a lone "Step 2" on the page with no Step 1
+  // above it. Drop the numbering until the explainer video actually exists.
+  if (!window.EXPLAINER_VIDEO || !window.EXPLAINER_VIDEO.videoSrc) {
+    document.getElementById("step2Heading").textContent = "Book a Call Below";
+  }
+
+  const metaSpans = document.querySelectorAll(".calendar-meta span");
+  metaSpans[0].innerHTML = ICON_CLOCK + " 30 min";
+  metaSpans[1].innerHTML = ICON_CALENDAR + " Pick a date";
+  metaSpans[2].innerHTML = ICON_GLOBE + " Your local time zone";
+
+  loadGhlCalendar("calendarEmbed", window.RANKFLOW_CONFIG.GHL_CALENDAR_TRACKED_URL);
+  renderTestimonials("booking-testimonials", window.BOOKING_TESTIMONIAL_IDS);
+</script>
+
+</body></html>

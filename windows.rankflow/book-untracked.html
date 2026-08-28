@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Ranking Report Is On Its Way | WealthLink Media</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preload" as="image" href="assets/logo.png">
+<script src="js/config.js"></script>
+<!-- No Meta Pixel on this page, intentionally: this is the non-Facebook-tracked
+     booking path (10-25k revenue with a verified GBP, or a suspended/unverified
+     GBP at any qualifying revenue). See routeUser() in main.js. -->
+</head>
+<body>
+<div class="wrap">
+  <div class="logo" id="logo"></div>
+
+  <p class="report-heading">📱 Your ranking report is on its way to your phone</p>
+  <p class="report-subheading">It shows where you rank — not why, or who's beating you. That's what the call is for.</p>
+
+  <div class="step-bar" id="stepBar"><u>Step 1:</u> Watch This 2 Minute Video</div>
+  <div id="explainer-video"></div>
+
+  <p class="step2-heading" id="step2Heading"><u>Step 2:</u> Book a Call Below</p>
+
+  <div class="calendar-card">
+    <div class="calendar-card-header">
+      <div class="calendar-avatar"></div>
+      <h3>Speak with Wealthlink Media 1</h3>
+    </div>
+    <div class="calendar-meta">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="calendar-embed-container" id="calendarEmbed">
+      <p class="calendar-loading">Loading calendar…</p>
+    </div>
+  </div>
+
+  <h2 id="testimonials">P.S. Check Out What Our Contractor Clients Have To Say</h2>
+  <div id="booking-testimonials"></div>
+
+  <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
+</div>
+
+<script src="js/testimonials-data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  renderLogo(document.getElementById("logo"));
+
+  // Hides the "Step 1" bar entirely while EXPLAINER_VIDEO.videoSrc is still
+  // empty (see testimonials-data.js).
+  renderExplainerVideo("explainer-video", "stepBar");
+
+  // ...which would otherwise leave a lone "Step 2" on the page with no Step 1
+  // above it. Drop the numbering until the explainer video actually exists.
+  if (!window.EXPLAINER_VIDEO || !window.EXPLAINER_VIDEO.videoSrc) {
+    document.getElementById("step2Heading").textContent = "Book a Call Below";
+  }
+
+  const metaSpans = document.querySelectorAll(".calendar-meta span");
+  metaSpans[0].innerHTML = ICON_CLOCK + " 30 min";
+  metaSpans[1].innerHTML = ICON_CALENDAR + " Pick a date";
+  metaSpans[2].innerHTML = ICON_GLOBE + " Your local time zone";
+
+  loadGhlCalendar("calendarEmbed", window.RANKFLOW_CONFIG.GHL_CALENDAR_UNTRACKED_URL);
+  renderTestimonials("booking-testimonials", window.BOOKING_TESTIMONIAL_IDS);
+</script>
+
+</body></html>

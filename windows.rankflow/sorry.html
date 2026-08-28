@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>We Can't Help Just Yet | WealthLink Media</title>
+<meta name="description" content="We only work with established contractors right now.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/config.js"></script>
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+if (window.RANKFLOW_CONFIG && !window.RANKFLOW_CONFIG.META_PIXEL_ID.startsWith('REPLACE')) {
+  fbq('init', window.RANKFLOW_CONFIG.META_PIXEL_ID);
+  fbq('track', 'PageView');
+}
+</script>
+</head>
+<body>
+<div class="wrap page-short">
+
+  <div class="logo" id="logo"></div>
+
+  <h1>Sorry, We Can't Help Just Yet</h1>
+
+  <p class="page-copy" id="sorryCopy">
+    Appreciate you reaching out about your AI search visibility. We only work with
+    established contractors right now, so we're not the right fit yet. Keep building
+    and hit us back up when you're there.
+  </p>
+
+  <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  renderLogo(document.getElementById("logo"));
+
+  // The first name arrives as ?fn= on the redirect (and is also in
+  // sessionStorage as a fallback). If we don't have one, the sentence just
+  // starts without a greeting rather than saying "Hey ,".
+  (function () {
+    var name = getLeadFirstName();
+    if (!name) return;
+    var el = document.getElementById("sorryCopy");
+    el.textContent = "Hey " + name + ", a" + el.textContent.trim().slice(1);
+  })();
+</script>
+
+</body></html>

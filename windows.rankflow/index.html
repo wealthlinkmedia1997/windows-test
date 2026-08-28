@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rank Top 3 in Google &amp; ChatGPT in 90 Days | WealthLink Media</title>
+<meta name="description" content="Contractors: rank top 3 in ChatGPT and Google in 90 days or you don't pay. Full refund, no questions asked.">
+<link rel="preconnect" href="https://connect.facebook.net">
+<link rel="preconnect" href="https://maps.googleapis.com">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preload" as="image" href="assets/logo.png">
+<script async="" src="js/fbevents.js"></script><script src="js/config.js"></script>
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+if (window.RANKFLOW_CONFIG && !window.RANKFLOW_CONFIG.META_PIXEL_ID.startsWith('REPLACE')) {
+  fbq('init', window.RANKFLOW_CONFIG.META_PIXEL_ID);
+  fbq('track', 'PageView');
+}
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
+/></noscript>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="logo" id="logo"></div>
+
+  <h1>Window Tint Shops Rank <span class="accent">Top 3</span> in Google and ChatGPT in 90 Days Or <span class="accent">You Don't Pay</span></h1>
+
+  <div class="guarantee">
+    <p>Not in the top 3 in 90 days? <strong>Full refund.</strong> No questions asked.</p>
+  </div>
+
+  <button type="button" class="btn" data-open-modal="">Show Me My Rankings</button>
+  <p class="stars-row"><span class="stars">★★★★★</span> 100+ reviews · 5 years serving window tinters</p>
+
+  <hr class="gold-divider">
+  <h2 class="section-heading">Check out what other tint shop owners are saying</h2>
+
+  <div id="explainer-video"></div>
+
+  <div id="hero-testimonials"></div>
+
+  <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
+</div>
+
+<!-- Sticky CTA bar: hidden until the user scrolls down, hides again on scroll up (see wireStickyCta in main.js) -->
+<div class="sticky-cta" id="stickyCta">
+  <button type="button" class="btn" data-open-modal="">Show Me My Rankings</button>
+  <p class="stars-row"><span class="stars">★★★★★</span> 100+ reviews · 5 years serving window tinters</p>
+</div>
+
+<!-- ============================================================
+     Lead qualification modal.
+
+     The fields are ordered by data-step, and wireProgressiveForm()
+     in main.js reveals them one at a time down a path that branches
+     on the Google Business Page answer:
+       Yes / Unverified -> first name, GBP, business name, phone, revenue
+       No               -> first name, GBP, phone, revenue
+
+     Note there is NO `required` attribute on any input, and the form
+     carries `novalidate`. A hidden field that is still `required`
+     makes Chrome refuse to submit with "An invalid form control is
+     not focusable" — so wireLeadForm() validates in JS instead,
+     against whichever branch the visitor is actually on.
+     ============================================================ -->
+<div class="modal-overlay" id="leadModal">
+  <div class="modal">
+    <button type="button" class="modal-close" data-close-modal="" aria-label="Close">×</button>
+    <h2>Where do you rank right now?</h2>
+
+    <form id="leadForm" novalidate>
+      <div class="form-progress"><i></i></div>
+
+      <!-- 1 — always visible -->
+      <div class="field" data-step="firstName">
+        <div class="field-inner">
+          <label for="firstName">Your First Name *</label>
+          <input type="text" id="firstName" name="firstName" placeholder="My name is..." autocomplete="given-name">
+        </div>
+      </div>
+
+      <!-- 2 — always visible; this answer picks the branch -->
+      <div class="field" data-step="gbp">
+        <div class="field-inner">
+          <label>Do You Have A Google Business Page? *</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="gbp" value="yes"> Yes</label>
+            <label class="radio-option"><input type="radio" name="gbp" value="no"> No</label>
+            <label class="radio-option"><input type="radio" name="gbp" value="unverified"> I Do But It's Unverified/Suspended</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 — only on the Yes / Unverified branch. The hidden inputs are
+           filled by the Google Places picker in main.js. -->
+      <div class="field is-hidden" data-step="businessName">
+        <div class="field-inner">
+          <label for="businessName">Your Business Name *</label>
+          <div class="autocomplete-wrapper">
+            <input type="text" id="businessName" name="businessName" placeholder="My business is..."
+                   autocomplete="off" role="combobox" aria-autocomplete="list"
+                   aria-controls="businessSuggestions" aria-expanded="false">
+            <span class="ac-spinner" hidden></span>
+            <ul class="ac-suggestions" id="businessSuggestions" role="listbox" hidden></ul>
+          </div>
+          <input type="hidden" name="placeId" value="">
+          <input type="hidden" name="placeAddress" value="">
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="field" data-step="phone">
+        <div class="field-inner">
+          <label for="phone">Your Mobile Phone *</label>
+          <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="field is-hidden" data-step="revenue">
+        <div class="field-inner">
+          <label>What's Your Current Monthly Revenue? *</label>
+          <div class="radio-group">
+            <label class="radio-option"><input type="radio" name="revenue" value="r0_10"> $0 - $10,000</label>
+            <label class="radio-option"><input type="radio" name="revenue" value="r10_25"> $10,000 - $25,000</label>
+            <label class="radio-option"><input type="radio" name="revenue" value="r25_100"> $25,000 - $100,000</label>
+            <label class="radio-option"><input type="radio" name="revenue" value="r100plus"> $100,000+</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 — submit only appears once everything above it is filled -->
+      <div class="field is-hidden" data-step="submit">
+        <div class="field-inner">
+          <button type="submit" class="btn">Text Me My Rankings</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="js/testimonials-data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  renderLogo(document.getElementById("logo"));
+  renderExplainerVideo("explainer-video");
+  renderTestimonials("hero-testimonials", window.HERO_TESTIMONIAL_IDS);
+  wireModal("[data-open-modal]", "leadModal");
+  wireLeadForm(document.getElementById("leadForm"));
+  wireProgressiveForm(document.getElementById("leadForm"));
+  wireStickyCta("stickyCta");
+</script>
+
+</body></html>

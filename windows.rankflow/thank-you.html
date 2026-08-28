@@ -1,0 +1,43 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your Call Is Booked | WealthLink Media</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preload" as="image" href="assets/logo.png">
+<!-- No Meta Pixel here by default, matching the "pixel only on landing +
+     qualified booking page" spec. If you later want a distinct booking-
+     confirmed conversion event, this is the natural place to add it. -->
+</head>
+<body>
+<div class="wrap">
+  <div class="logo" id="logo"></div>
+
+  <h1>Your Call With Angie Has Been Booked</h1>
+  <p class="page-copy">Please respond to Angie's personal text at
+    <span class="confirmed-phone" style="white-space:nowrap">(410) 824-5796</span></p>
+
+  <hr class="divider">
+
+  <!-- renderExplainerVideo() hides this heading entirely while
+       EXPLAINER_VIDEO.videoSrc is still empty in testimonials-data.js, so
+       there's no orphaned title sitting above nothing. -->
+  <h2 id="stepBar">Watch This 2-Minute Video To See Exactly How We Help You Rank #1 In ChatGPT And Google In 90 Days Below</h2>
+  <div id="explainer-video"></div>
+
+  <h2 id="testimonials">P.S. Check Out What Our Contractor Clients Have To Say</h2>
+  <div id="booking-testimonials"></div>
+
+  <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
+</div>
+
+<script src="js/config.js"></script>
+<script src="js/testimonials-data.js"></script>
+<script src="js/main.js"></script>
+<script>
+  renderLogo(document.getElementById("logo"));
+  renderExplainerVideo("explainer-video", "stepBar");
+  renderTestimonials("booking-testimonials", window.THANK_YOU_TESTIMONIAL_IDS);
+</script>
+
+</body></html>
