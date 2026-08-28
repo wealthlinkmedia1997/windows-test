@@ -180,13 +180,15 @@ function renderExplainerVideo(containerId, stepBarId) {
       <div class="video-card" data-video-src="${v.videoSrc}" data-poster="${v.poster || ""}" style="aspect-ratio:16/9;max-height:none;">
         ${v.poster ? `<img src="${v.poster}" alt="Explainer video" loading="lazy">` : ""}
         <div class="play-btn">${ICON_PLAY}</div>
+        <div class="sound-hint">Click for sound</div>
       </div>
       <div class="explainer-caption">${v.caption || ""}</div>
     </div>
   `;
-  // Click-only: hover-starting a 2-minute explainer with audio every time the
-  // cursor crosses it would be obnoxious. Testimonial cards opt in instead.
-  wireVideoCards(el, { hoverPreview: false });
+  // Same hover-to-preview behaviour as the testimonial cards: plays on hover
+  // with sound, pauses and rewinds on mouse-out, click commits it with
+  // controls. On touch devices it stays tap-to-play.
+  wireVideoCards(el);
 }
 
 // ---------- Lead routing ----------
