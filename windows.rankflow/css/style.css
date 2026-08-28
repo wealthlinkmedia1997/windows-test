@@ -814,3 +814,33 @@ footer {
   #leadForm .field.just-revealed input,
   #leadForm .field.just-revealed .radio-option { animation: none; }
 }
+/* ============================================================
+   Thank-you page: the 2-minute video heading and the
+   "More Testimonials" button beneath the testimonial grid.
+   Both are targeted by ID so the shared h2 / .btn rules used
+   everywhere else on the site are left alone.
+   ============================================================ */
+#stepBar {
+  font-size: 23px;
+  line-height: 1.32;
+  font-weight: 800;
+  margin: 30px 0 18px;
+}
+@media (min-width: 700px) {
+  #stepBar {
+    font-size: 28px;
+  }
+}
+
+/* Pill button, sized to its own text rather than the full column,
+   with breathing room above it. The ID beats the .btn width rules
+   (including the ones inside the 700px media query) on specificity,
+   so no !important is needed. */
+#moreTestimonials {
+  display: block;
+  width: fit-content;
+  min-width: 0;
+  margin: 44px auto 0;
+  padding: 15px 42px;
+  border-radius: 9999px;
+}
