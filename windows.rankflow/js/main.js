@@ -572,6 +572,29 @@ function ensureGhlEmbedScript() {
   document.body.appendChild(s);
 }
 
+// Pulls the answers the lead already gave us on the landing page so the GHL
+// booking widget arrives pre-filled instead of asking for the same details a
+// second time. Reads sessionStorage first, falls back to the ?fn= on the URL.
+// GHL accepts first_name / phone / company_name as query params on the embed.
+function ghlPrefillParams() {
+  let lead = {};
+  try {
+    lead = JSON.parse(sessionStorage.getItem("rankflow_lead") || "{}");
+  } catch (e) {
+    lead = {};
+  }
+  const qs = new URLSearchParams(window.location.search);
+  const fields = {
+    first_name: qs.get("fn") || lead.firstName || "",
+    phone: lead.phone || "",
+    company_name: lead.businessName || "",
+  };
+  return Object.keys(fields)
+    .filter((k) => fields[k])
+    .map((k) => k + "=" + encodeURIComponent(fields[k]))
+    .join("&");
+}
+
 function loadGhlCalendar(containerId, url) {
   const container = document.getElementById(containerId);
   if (!container) return;
@@ -581,8 +604,14 @@ function loadGhlCalendar(containerId, url) {
   }
   const widgetId = url.split("/").filter(Boolean).pop();
   const run = () => {
+    const prefill = ghlPrefillParams();
     const iframe = document.createElement("iframe");
-    iframe.src = url;
+    iframe.src = url + (prefill ? (url.indexOf("?") === -1 ? "?" : "&") + prefill : "");
+    // Deliberately the same id on every copy of this calendar on the page:
+    // GHL's form_embed.js resizes by looking the widget id up from the
+    // postMessage the iframe sends. A unique id would stop the second
+    // calendar resizing at all, so both share it and both rely on the
+    // 750px min-height below as the floor.
     iframe.id = widgetId;
     iframe.setAttribute("allow", "payment");
     iframe.setAttribute("scrolling", "no");
