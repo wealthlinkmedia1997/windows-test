@@ -14,10 +14,10 @@
 <div class="wrap">
   <div class="logo" id="logo"></div>
 
-  <p class="report-heading">📱 Your ranking report is on its way to your phone</p>
+  <p class="report-heading">📲 Your ranking report is on its way to your phone</p>
   <p class="report-subheading">It shows where you rank — not why, or who's beating you. That's what the call is for.</p>
 
-  <div class="step-bar" id="stepBar"><u>Step 1:</u> Watch This 2 Minute Video</div>
+  <div class="step-bar" id="stepBar">⬇️ <u>Step 1:</u> Watch This 2 Minute Video ⬇️</div>
   <div id="explainer-video"></div>
 
   <p class="step2-heading" id="step2Heading"><u>Step 2:</u> Book a Call Below</p>
@@ -40,6 +40,23 @@
   <h2 id="testimonials">P.S. Check Out What Our Contractor Clients Have To Say</h2>
   <div id="booking-testimonials"></div>
 
+  <!-- Second copy of the same calendar, so someone who has scrolled all the
+       way through the testimonials doesn't have to scroll back up to book. -->
+  <div class="calendar-card" id="calendarCardBottom">
+    <div class="calendar-card-header">
+      <div class="calendar-avatar"></div>
+      <h3>Speak with Wealthlink Media 1</h3>
+    </div>
+    <div class="calendar-meta">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="calendar-embed-container" id="calendarEmbedBottom">
+      <p class="calendar-loading">Loading calendar…</p>
+    </div>
+  </div>
+
   <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
 </div>
 
@@ -49,22 +66,25 @@
   renderLogo(document.getElementById("logo"));
 
   // Hides the "Step 1" bar entirely while EXPLAINER_VIDEO.videoSrc is still
-  // empty (see testimonials-data.js).
+  // empty (see testimonials-data.js)...
   renderExplainerVideo("explainer-video", "stepBar");
 
-  // ...which would otherwise leave a lone "Step 2" on the page with no Step 1
-  // above it. Drop the numbering until the explainer video actually exists.
+  // ...which would otherwise leave a lone "Step 2" with no Step 1 above it.
   if (!window.EXPLAINER_VIDEO || !window.EXPLAINER_VIDEO.videoSrc) {
     document.getElementById("step2Heading").textContent = "Book a Call Below";
   }
 
-  const metaSpans = document.querySelectorAll(".calendar-meta span");
-  metaSpans[0].innerHTML = ICON_CLOCK + " 30 min";
-  metaSpans[1].innerHTML = ICON_CALENDAR + " Pick a date";
-  metaSpans[2].innerHTML = ICON_GLOBE + " Your local time zone";
+  // Both calendar cards get the same 30 min / date / timezone meta line.
+  document.querySelectorAll(".calendar-meta").forEach(function (meta) {
+    var spans = meta.querySelectorAll("span");
+    spans[0].innerHTML = ICON_CLOCK + " 30 min";
+    spans[1].innerHTML = ICON_CALENDAR + " Pick a date";
+    spans[2].innerHTML = ICON_GLOBE + " Your local time zone";
+  });
 
   loadGhlCalendar("calendarEmbed", window.RANKFLOW_CONFIG.GHL_CALENDAR_UNTRACKED_URL);
   renderTestimonials("booking-testimonials", window.BOOKING_TESTIMONIAL_IDS);
+  loadGhlCalendar("calendarEmbedBottom", window.RANKFLOW_CONFIG.GHL_CALENDAR_UNTRACKED_URL);
 </script>
 
 </body></html>
