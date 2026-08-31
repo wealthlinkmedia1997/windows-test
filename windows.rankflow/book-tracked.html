@@ -39,15 +39,6 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=Lead&noscript=1"
   <p class="step2-heading" id="step2Heading"><u>Step 2:</u> Book a Call Below</p>
 
   <div class="calendar-card">
-    <div class="calendar-card-header">
-      <div class="calendar-avatar"></div>
-      <h3>Speak with Wealthlink Media 1</h3>
-    </div>
-    <div class="calendar-meta">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
     <div class="calendar-embed-container" id="calendarEmbed">
       <p class="calendar-loading">Loading calendar…</p>
     </div>
@@ -59,15 +50,6 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=Lead&noscript=1"
   <!-- Second copy of the same calendar, so someone who has scrolled all the
        way through the testimonials doesn't have to scroll back up to book. -->
   <div class="calendar-card" id="calendarCardBottom">
-    <div class="calendar-card-header">
-      <div class="calendar-avatar"></div>
-      <h3>Speak with Wealthlink Media 1</h3>
-    </div>
-    <div class="calendar-meta">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
     <div class="calendar-embed-container" id="calendarEmbedBottom">
       <p class="calendar-loading">Loading calendar…</p>
     </div>
@@ -89,14 +71,6 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=Lead&noscript=1"
   if (!window.EXPLAINER_VIDEO || !window.EXPLAINER_VIDEO.videoSrc) {
     document.getElementById("step2Heading").textContent = "Book a Call Below";
   }
-
-  // Both calendar cards get the same 30 min / date / timezone meta line.
-  document.querySelectorAll(".calendar-meta").forEach(function (meta) {
-    var spans = meta.querySelectorAll("span");
-    spans[0].innerHTML = ICON_CLOCK + " 30 min";
-    spans[1].innerHTML = ICON_CALENDAR + " Pick a date";
-    spans[2].innerHTML = ICON_GLOBE + " Your local time zone";
-  });
 
   loadGhlCalendar("calendarEmbed", window.RANKFLOW_CONFIG.GHL_CALENDAR_TRACKED_URL);
   renderTestimonials("booking-testimonials", window.BOOKING_TESTIMONIAL_IDS);
