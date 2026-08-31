@@ -9,7 +9,7 @@
 window.TESTIMONIALS = [
   {
     id: "todd",
-    quote: "The second you stop spending with Google ads you get no calls... SEO [and AI search] is the way to go for sure - the proof is there for me.",
+    quote: "After 30 days I'm at an extra $6,300 in commercial and residential $2,400",
     name: "Todd",
     company: "Tint Veteran",
     videoSrc: "assets/videos/todd.mp4?v=3",
