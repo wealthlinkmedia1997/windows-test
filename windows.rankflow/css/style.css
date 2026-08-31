@@ -357,9 +357,8 @@ h2 {
 }
 
 .calendar-card {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 20px;
+  /* No border or padding: GHL's embed renders its own bordered card, so a
+     frame here would double up. Kept as a plain spacing wrapper. */
   margin-bottom: 32px;
 }
 .calendar-card-header {
@@ -570,7 +569,9 @@ footer {
   display: block;
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, var(--blue), var(--gold));
+  /* Gold gradient sampled straight off the logo emblem: deep bronze through
+     the mid gold to the pale highlight on the wingtips. */
+  background: linear-gradient(90deg, #B8860B 0%, #C09828 45%, #E8C95F 100%);
   border-radius: 2px;
   transition: width .4s cubic-bezier(.22,.61,.36,1);
 }
@@ -860,7 +861,32 @@ footer {
    ------------------------------------------------------------ */
 #leadForm .field {
   position: relative;
+  z-index: 1;
 }
+
+/* Once a field has finished animating in, drop the transform entirely.
+   `transform: none` is not a stacking context, so nothing inside the field
+   is trapped any more. The hidden state keeps its translateY so the reveal
+   animation is unaffected - transitions between `none` and a translate
+   interpolate correctly. */
+#leadForm .field.is-open > .field-inner {
+  transform: none;
+}
+
+/* Belt and braces: even if a field somehow still forms a context, the
+   business-name field outranks every field below it explicitly. Relying on
+   `z-index: auto` for the later fields is what let this slip through the
+   first time. */
 #leadForm .field[data-step="businessName"] {
-  z-index: 40;
+  z-index: 60;
+}
+#leadForm .field[data-step="phone"],
+#leadForm .field[data-step="revenue"],
+#leadForm .field[data-step="submit"] {
+  z-index: 1;
+}
+
+/* And raise the list itself well clear of anything in the modal. */
+.ac-suggestions {
+  z-index: 100;
 }
