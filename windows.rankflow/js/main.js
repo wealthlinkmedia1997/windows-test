@@ -192,17 +192,20 @@ function renderExplainerVideo(containerId, stepBarId) {
 }
 
 // ---------- Lead routing ----------
-// Confirmed routing rules:
-//   GBP = No                                -> sorry (any revenue)
-//   Revenue $0-10k                          -> sorry (any qualifying GBP)
-//   GBP = Yes AND revenue $25k+             -> tracked (main) calendar, Lead pixel fires
-//   everything else that isn't disqualified -> untracked calendar, no pixel
-//     (GBP = unverified/suspended at any qualifying revenue, or
-//      GBP = Yes with revenue $10-25k)
+// Two disqualifiers, then revenue alone picks the calendar:
+//
+//   GBP = No        -> no-google-business.html  (any revenue)
+//   Revenue $0-10k  -> sorry.html               (Yes or Unverified)
+//   Revenue $10-25k -> book-untracked.html   SECONDARY (sCFZ3xO5KSrolIiIe0FY)
+//   Revenue $25k+   -> book-tracked.html     MAIN      (RLJBIDoVL2gvxpqqI7lu)
+//
+// Note the change: once a lead is past the two disqualifiers, GBP status no
+// longer affects which calendar they get. Unverified/suspended at $25k+ now
+// lands on the MAIN calendar, where it previously got the secondary one.
 function routeUser(gbp, revenue) {
-  if (gbp === "no") return "no-google-business.html";   // ← was "sorry.html"
+  if (gbp === "no") return "no-google-business.html";
   if (revenue === "r0_10") return "sorry.html";
-  if (gbp === "yes" && (revenue === "r25_100" || revenue === "r100plus")) {
+  if (revenue === "r25_100" || revenue === "r100plus") {
     return "book-tracked.html";
   }
   return "book-untracked.html";
