@@ -588,6 +588,7 @@ function wireBusinessAutocomplete(inputEl) {
 // postMessage from the iframe to auto-resize it (GHL calendars are variable
 // height depending on the booking step). We inject both, lazily.
 let ghlEmbedScriptLoaded = false;
+let ghlEmbedCounter = 0;
 function ensureGhlEmbedScript() {
   if (ghlEmbedScriptLoaded) return;
   ghlEmbedScriptLoaded = true;
@@ -631,29 +632,58 @@ function loadGhlCalendar(containerId, url) {
     const prefill = ghlPrefillParams();
     const iframe = document.createElement("iframe");
     iframe.src = url + (prefill ? (url.indexOf("?") === -1 ? "?" : "&") + prefill : "");
-    // Deliberately the same id on every copy of this calendar on the page:
-    // GHL's form_embed.js resizes by looking the widget id up from the
-    // postMessage the iframe sends. A unique id would stop the second
-    // calendar resizing at all, so both share it and both rely on the
-    // 750px min-height below as the floor.
-    iframe.id = widgetId;
+
+    // GHL's own generated snippet uses `widgetId_<unique suffix>`, e.g.
+    // sCFZ3xO5KSrolIiIe0FY_1787884958998. form_embed.js matches on that
+    // prefix, so each embed needs its OWN id. Two iframes sharing a single
+    // id means only one can ever be resized - the other stays collapsed,
+    // which reads as blank space where a calendar should be.
+    ghlEmbedCounter += 1;
+    iframe.id = widgetId + "_" + (Date.now() + ghlEmbedCounter);
+
     iframe.setAttribute("allow", "payment");
     iframe.setAttribute("scrolling", "no");
     iframe.style.width = "100%";
     iframe.style.minHeight = "750px";
     iframe.style.border = "none";
     iframe.style.overflow = "hidden";
-    iframe.loading = "lazy";
+    // NOT loading="lazy": the second calendar sits far below the fold, and a
+    // lazy iframe there can stay unloaded until it is scrolled right up to,
+    // leaving an empty box in the meantime.
     container.innerHTML = "";
     container.appendChild(iframe);
     ensureGhlEmbedScript();
+
+    // If nothing has rendered after 8s (blocked third-party frame, bad URL,
+    // ad blocker), give the visitor a direct link rather than blank space.
+    setTimeout(() => {
+      if (iframe.clientHeight > 120) return;
+      const p = document.createElement("p");
+      p.className = "calendar-loading";
+      p.innerHTML = 'Calendar slow to load? <a href="' + iframe.src +
+        '" target="_blank" rel="noopener"><strong>Open it in a new tab</strong></a>.';
+      container.appendChild(p);
+    }, 8000);
+  };
+
+  // requestIdleCallback with no timeout can be starved indefinitely on a page
+  // still decoding video posters, leaving the calendar on "Loading..." for
+  // good. The timeout forces it through.
+  const schedule = () => {
+    if (container.dataset.ghlStarted) return;
+    container.dataset.ghlStarted = "1";
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(run, { timeout: 1500 });
+    } else {
+      setTimeout(run, 200);
+    }
   };
   if (document.readyState === "complete") {
-    "requestIdleCallback" in window ? requestIdleCallback(run) : setTimeout(run, 200);
+    schedule();
   } else {
-    window.addEventListener("load", () => {
-      "requestIdleCallback" in window ? requestIdleCallback(run) : setTimeout(run, 200);
-    });
+    window.addEventListener("load", schedule);
+    // Safety net in case `load` is held up by a slow video or third-party js.
+    setTimeout(schedule, 3000);
   }
 }
 
