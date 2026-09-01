@@ -340,6 +340,22 @@ function wireProgressiveForm(formEl) {
   update();
 }
 
+// ---------- Human-readable labels for the webhook payload ----------
+// The radio values are internal codes (r25_100, unverified) because routing
+// switches on them. Anything leaving the browser for GHL/Slack gets the
+// readable version instead - "r25_100" in a Slack alert is unreadable.
+const REVENUE_LABELS = {
+  r0_10: "$0 - $10,000",
+  r10_25: "$10,000 - $25,000",
+  r25_100: "$25,000 - $100,000",
+  r100plus: "$100,000+",
+};
+const GBP_LABELS = {
+  yes: "Yes",
+  no: "No",
+  unverified: "Yes - but unverified/suspended",
+};
+
 // ---------- Lead form: validation, storage, routing ----------
 // The form carries `novalidate` and the inputs have no `required` attribute:
 // a hidden field that is still `required` makes Chrome refuse to submit with
@@ -352,14 +368,21 @@ function wireLeadForm(formEl) {
     const gbp = (formEl.querySelector('[name="gbp"]:checked') || {}).value;
     const needsBusiness = gbp === "yes" || gbp === "unverified";
 
+    const revenueCode = (formEl.querySelector('[name="revenue"]:checked') || {}).value;
+
     const data = {
       firstName: formEl.firstName.value.trim(),
       phone: formEl.phone.value.trim(),
-      gbp: gbp,
+      // Readable text is what GHL and Slack display.
+      gbp: GBP_LABELS[gbp] || gbp,
+      revenue: REVENUE_LABELS[revenueCode] || revenueCode,
+      // Raw codes kept alongside, for workflow conditions that need to match
+      // on an exact value rather than display text.
+      gbpCode: gbp,
+      revenueCode: revenueCode,
       businessName: needsBusiness ? formEl.businessName.value.trim() : "",
       businessPlaceId: needsBusiness ? formEl.placeId.value : "",
       businessAddress: needsBusiness ? formEl.placeAddress.value : "",
-      revenue: (formEl.querySelector('[name="revenue"]:checked') || {}).value,
     };
 
     const missing = [];
@@ -367,7 +390,7 @@ function wireLeadForm(formEl) {
     if (!data.gbp) missing.push("gbp");
     if (needsBusiness && data.businessName.length < 3) missing.push("businessName");
     if (digitsOnly(data.phone).length < 10) missing.push("phone");
-    if (!data.revenue) missing.push("revenue");
+    if (!revenueCode) missing.push("revenue");
     if (missing.length) {
       const f = formEl.querySelector('[data-step="' + missing[0] + '"]');
       if (f) {
@@ -388,7 +411,7 @@ function wireLeadForm(formEl) {
         keepalive: true,
       }).catch(() => {});
     }
-    const dest = routeUser(data.gbp, data.revenue);
+    const dest = routeUser(gbp, revenueCode);   // routing uses raw codes
     window.location.href = dest + "?fn=" + encodeURIComponent(data.firstName);
   });
 }
