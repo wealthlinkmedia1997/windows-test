@@ -365,8 +365,22 @@ function wireLeadForm(formEl) {
   if (!formEl) return;
   formEl.addEventListener("submit", function (e) {
     e.preventDefault();
-    const gbp = (formEl.querySelector('[name="gbp"]:checked') || {}).value;
-    const needsBusiness = gbp === "yes" || gbp === "unverified";
+    // The windows homepage asks no GBP question at all and collects the
+    // business name in the hero card instead of the modal. Both are resolved
+    // defensively so the same function serves either layout.
+    const hasGbpField = !!formEl.querySelector('[name="gbp"]');
+    const gbp = hasGbpField
+      ? (formEl.querySelector('[name="gbp"]:checked') || {}).value
+      : "";
+    const bizEl = formEl.querySelector('[name="businessName"]') ||
+                  document.querySelector('[name="businessName"]');
+    const pidEl = formEl.querySelector('[name="placeId"]') ||
+                  document.querySelector('[name="placeId"]');
+    const padEl = formEl.querySelector('[name="placeAddress"]') ||
+                  document.querySelector('[name="placeAddress"]');
+    const needsBusiness = hasGbpField
+      ? (gbp === "yes" || gbp === "unverified")
+      : !!bizEl;
 
     const revenueCode = (formEl.querySelector('[name="revenue"]:checked') || {}).value;
 
@@ -374,20 +388,20 @@ function wireLeadForm(formEl) {
       firstName: formEl.firstName.value.trim(),
       phone: formEl.phone.value.trim(),
       // Readable text is what GHL and Slack display.
-      gbp: GBP_LABELS[gbp] || gbp,
+      gbp: hasGbpField ? (GBP_LABELS[gbp] || gbp) : "",
       revenue: REVENUE_LABELS[revenueCode] || revenueCode,
       // Raw codes kept alongside, for workflow conditions that need to match
       // on an exact value rather than display text.
       gbpCode: gbp,
       revenueCode: revenueCode,
-      businessName: needsBusiness ? formEl.businessName.value.trim() : "",
-      businessPlaceId: needsBusiness ? formEl.placeId.value : "",
-      businessAddress: needsBusiness ? formEl.placeAddress.value : "",
+      businessName: needsBusiness && bizEl ? bizEl.value.trim() : "",
+      businessPlaceId: needsBusiness && pidEl ? pidEl.value : "",
+      businessAddress: needsBusiness && padEl ? padEl.value : "",
     };
 
     const missing = [];
     if (data.firstName.length < 2) missing.push("firstName");
-    if (!data.gbp) missing.push("gbp");
+    if (hasGbpField && !gbp) missing.push("gbp");
     if (needsBusiness && data.businessName.length < 3) missing.push("businessName");
     if (digitsOnly(data.phone).length < 10) missing.push("phone");
     if (!revenueCode) missing.push("revenue");
@@ -496,9 +510,12 @@ function wireBusinessAutocomplete(inputEl) {
   if (!wrap) return;
   const list = wrap.querySelector(".ac-suggestions");
   const spinner = wrap.querySelector(".ac-spinner");
-  const form = inputEl.form;
-  const placeIdEl = form.querySelector('[name="placeId"]');
-  const placeAddrEl = form.querySelector('[name="placeAddress"]');
+  // The hero scan card puts this input outside any <form>, so fall back to
+  // the nearest wrapper and then the document. inputEl.form is null there and
+  // would throw.
+  const scope = inputEl.form || inputEl.closest(".scan-card") || document;
+  const placeIdEl = scope.querySelector('[name="placeId"]');
+  const placeAddrEl = scope.querySelector('[name="placeAddress"]');
 
   let items = [], active = -1, timer = null, seq = 0, apiReady = false, suppress = false;
   // Set when the user picks a suggestion. While it's on, typing does not
@@ -736,6 +753,73 @@ function wireStickyCta(barId) {
       ticking = true;
     }
   }, { passive: true });
+}
+
+// ---------- Hero scan card (windows homepage) ----------
+// The business name is captured up front in the hero, before the modal ever
+// opens: it is the whole promise of the CTA ("run the scan"), and asking for
+// it first means the modal only has to ask three quick things.
+//
+// The value lives outside the <form>, so wireLeadForm() reaches for it via
+// document as a fallback.
+function wireHeroScan(inputId, buttonId, overlayId) {
+  const input = document.getElementById(inputId);
+  const button = document.getElementById(buttonId);
+  const overlay = document.getElementById(overlayId);
+  if (!input || !button || !overlay) return;
+
+  const wrap = input.closest(".autocomplete-wrapper");
+  if (!input.dataset.wired) {
+    input.dataset.wired = "1";
+    wireBusinessAutocomplete(input);
+  }
+
+  function fail(msg) {
+    const card = input.closest(".scan-card");
+    if (card) card.classList.add("has-error");
+    let note = card && card.querySelector(".scan-error");
+    if (note) note.textContent = msg;
+    input.focus();
+    setTimeout(() => { if (card) card.classList.remove("has-error"); }, 600);
+  }
+
+  function open() {
+    if (input.value.trim().length < 2) {
+      fail("Enter your business name to run the scan.");
+      return;
+    }
+    overlay.classList.add("open");
+    const first = overlay.querySelector('[name="firstName"]');
+    if (first) setTimeout(() => first.focus(), 120);
+    const f = overlay.querySelector("form");
+    if (f && f.__update) f.__update();
+  }
+
+  button.addEventListener("click", open);
+  input.addEventListener("keydown", (e) => {
+    // Enter should run the scan, but not while a suggestion is highlighted -
+    // there Enter belongs to the autocomplete list.
+    const list = wrap && wrap.querySelector(".ac-suggestions");
+    if (e.key === "Enter" && (!list || list.hidden)) {
+      e.preventDefault();
+      open();
+    }
+  });
+}
+
+// Sticky bar and any other secondary CTA should send the visitor back to the
+// scan card rather than opening a modal that is missing its business name.
+function wireScrollToScan(selector, inputId) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  document.querySelectorAll(selector).forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const card = input.closest(".scan-card") || input;
+      card.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => input.focus(), 420);
+    });
+  });
 }
 
 // ---------- Modal open/close ----------
