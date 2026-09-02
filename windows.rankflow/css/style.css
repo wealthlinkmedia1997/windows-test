@@ -890,3 +890,109 @@ footer {
 .ac-suggestions {
   z-index: 100;
 }
+
+/* ============================================================
+   Windows homepage hero: free-scan card.
+   Everything here sits above the gold divider; the section below
+   it is unchanged.
+   ============================================================ */
+.hero-sub {
+  text-align: center;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 460px;
+  margin: 0 auto 24px;
+}
+
+.scan-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .07);
+  padding: 24px 20px;
+  margin: 0 auto;
+  max-width: 460px;
+  /* The Places dropdown hangs out of this card, so it must not clip, and it
+     needs to sit above the star row and divider that follow it. */
+  overflow: visible;
+  position: relative;
+  z-index: 5;
+}
+.scan-title {
+  text-align: center;
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 0 14px;
+}
+.scan-card input[type="text"] {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+.scan-card input[type="text"]:focus {
+  outline: none;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+}
+.scan-card .btn {
+  width: 100%;
+  min-width: 0;
+  margin: 14px 0 0;
+  border-radius: 10px;
+}
+.scan-note {
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 12px 0 0;
+}
+/* the note doubles as the error slot - see fail() in wireHeroScan() */
+.scan-card.has-error .scan-error {
+  color: #d33;
+  font-weight: 700;
+}
+.scan-card.has-error input[type="text"] {
+  border-color: #d33;
+  animation: shake .32s;
+}
+
+/* Scan modal */
+.modal-scan {
+  max-width: 460px;
+  padding: 28px 24px;
+}
+.scan-modal-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0 0 6px;
+}
+.scan-modal-sub {
+  text-align: center;
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0 0 4px;
+}
+.modal-scan .divider {
+  margin: 18px 0 20px;
+}
+.field-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin: 6px 0 0;
+}
+.modal-scan .btn {
+  width: 100%;
+  min-width: 0;
+  border-radius: 10px;
+}
+
+@media (min-width: 700px) {
+  .hero-sub { font-size: 17px; }
+  .scan-card { max-width: 500px; padding: 28px 26px; }
+  .scan-modal-title { font-size: 30px; }
+}
