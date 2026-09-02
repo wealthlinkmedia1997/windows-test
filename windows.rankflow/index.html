@@ -5,9 +5,9 @@
 <meta name="description" content="Contractors: rank top 3 in ChatGPT and Google in 90 days or you don't pay. Full refund, no questions asked.">
 <link rel="preconnect" href="https://maps.googleapis.com">
 <link rel="preconnect" href="https://connect.facebook.net">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=3">
 <link rel="preload" as="image" href="assets/logo.png">
-<script src="js/config.js"></script>
+<script src="js/config.js?v=3"></script>
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
 n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
@@ -30,11 +30,26 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
 
   <h1>Window Tint Shops Rank <span class="accent">Top 3</span> in Google and ChatGPT in 90 Days Or <span class="accent">You Don't Pay</span></h1>
 
-  <div class="guarantee">
-    <p>Not in the top 3 in 90 days? <strong>Full refund.</strong> No questions asked.</p>
+  <p class="hero-sub">Start with a free scan. See all 133 points where customers can't find you right now.</p>
+
+  <!-- Scan card. The business name is captured here, before the modal opens,
+       because it is what the CTA actually promises. The hidden placeId /
+       placeAddress inputs are filled by the Google Places picker. -->
+  <div class="scan-card">
+    <p class="scan-title">Enter your business name to run the scan</p>
+    <div class="autocomplete-wrapper">
+      <input type="text" id="heroBusinessName" name="businessName" placeholder="Business Name"
+             autocomplete="off" role="combobox" aria-autocomplete="list"
+             aria-controls="heroSuggestions" aria-expanded="false">
+      <span class="ac-spinner" hidden></span>
+      <ul class="ac-suggestions" id="heroSuggestions" role="listbox" hidden></ul>
+    </div>
+    <input type="hidden" name="placeId" value="">
+    <input type="hidden" name="placeAddress" value="">
+    <button type="button" class="btn" id="heroScanBtn">Show Me Where I Rank</button>
+    <p class="scan-note scan-error">Free · 30 seconds · no obligation</p>
   </div>
 
-  <button type="button" class="btn" data-open-modal="">Show Me My Rankings</button>
   <p class="stars-row"><span class="stars">★★★★★</span> 100+ reviews · 5 years serving window tinters</p>
 
   <hr class="gold-divider">
@@ -47,82 +62,47 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
 
 <!-- Sticky CTA bar: hidden until the user scrolls down, hides again on scroll up (see wireStickyCta in main.js) -->
 <div class="sticky-cta" id="stickyCta">
-  <button type="button" class="btn" data-open-modal="">Show Me My Rankings</button>
+  <button type="button" class="btn" data-scroll-to-scan="">Show Me Where I Rank</button>
   <p class="stars-row"><span class="stars">★★★★★</span> 100+ reviews · 5 years serving window tinters</p>
 </div>
 
 <!-- ============================================================
-     Lead qualification modal.
+     "Your Scan Is Ready" modal.
 
-     The fields are ordered by data-step, and wireProgressiveForm()
-     in main.js reveals them one at a time down a path that branches
-     on the Google Business Page answer:
-       Yes / Unverified -> first name, GBP, business name, phone, revenue
-       No               -> first name, GBP, phone, revenue
+     No Google Business Page question on this site, and no business name -
+     that was already captured in the hero scan card above. Just the three
+     things needed to deliver the report.
 
-     Note there is NO `required` attribute on any input, and the form
-     carries `novalidate`. A hidden field that is still `required`
-     makes Chrome refuse to submit with "An invalid form control is
-     not focusable" — so wireLeadForm() validates in JS instead,
-     against whichever branch the visitor is actually on.
+     No `required` attributes and the form carries `novalidate`;
+     wireLeadForm() validates in JS.
      ============================================================ -->
 <div class="modal-overlay" id="leadModal">
-  <div class="modal">
-    <button type="button" class="modal-close" data-close-modal="" aria-label="Close">×</button>
-    <h2>Where do you rank right now?</h2>
+  <div class="modal modal-scan">
+    <button type="button" class="modal-close" data-close-modal="" aria-label="Close">&times;</button>
+
+    <h2 class="scan-modal-title">Your Scan Is Ready</h2>
+    <p class="scan-modal-sub">Where should we send it?</p>
+    <hr class="divider">
 
     <form id="leadForm" novalidate>
-      <div class="form-progress"><i></i></div>
-
-      <!-- 1 — always visible -->
       <div class="field" data-step="firstName">
         <div class="field-inner">
-          <label for="firstName">Your First Name *</label>
-          <input type="text" id="firstName" name="firstName" placeholder="My name is..." autocomplete="given-name">
+          <label for="firstName">First Name *</label>
+          <input type="text" id="firstName" name="firstName" placeholder="Mike" autocomplete="given-name">
         </div>
       </div>
 
-      <!-- 2 — always visible; this answer picks the branch -->
-      <div class="field" data-step="gbp">
-        <div class="field-inner">
-          <label>Do You Have A Google Business Page? *</label>
-          <div class="radio-group">
-            <label class="radio-option"><input type="radio" name="gbp" value="yes"> Yes</label>
-            <label class="radio-option"><input type="radio" name="gbp" value="no"> No</label>
-            <label class="radio-option"><input type="radio" name="gbp" value="unverified"> I Do But It's Unverified/Suspended</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- 3 — only on the Yes / Unverified branch. The hidden inputs are
-           filled by the Google Places picker in main.js. -->
-      <div class="field is-hidden" data-step="businessName">
-        <div class="field-inner">
-          <label for="businessName">Your Business Name *</label>
-          <div class="autocomplete-wrapper">
-            <input type="text" id="businessName" name="businessName" placeholder="My business is..."
-                   autocomplete="off" role="combobox" aria-autocomplete="list"
-                   aria-controls="businessSuggestions" aria-expanded="false">
-            <span class="ac-spinner" hidden></span>
-            <ul class="ac-suggestions" id="businessSuggestions" role="listbox" hidden></ul>
-          </div>
-          <input type="hidden" name="placeId" value="">
-          <input type="hidden" name="placeAddress" value="">
-        </div>
-      </div>
-
-      <!-- 4 -->
       <div class="field" data-step="phone">
         <div class="field-inner">
-          <label for="phone">Your Mobile Phone *</label>
+          <label for="phone">Mobile Phone *</label>
           <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+          <p class="field-note">We text the report. No spam calls.</p>
         </div>
       </div>
 
-      <!-- 5 -->
-      <div class="field is-hidden" data-step="revenue">
+      <div class="field" data-step="revenue">
         <div class="field-inner">
-          <label>What's Your Current Monthly Revenue? *</label>
+          <label>Current Monthly Revenue *</label>
           <div class="radio-group">
             <label class="radio-option"><input type="radio" name="revenue" value="r0_10"> $0 - $10,000</label>
             <label class="radio-option"><input type="radio" name="revenue" value="r10_25"> $10,000 - $25,000</label>
@@ -132,23 +112,34 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
         </div>
       </div>
 
-      <!-- 6 — submit only appears once everything above it is filled -->
-      <div class="field is-hidden" data-step="submit">
+      <div class="field" data-step="submit">
         <div class="field-inner">
-          <button type="submit" class="btn">Text Me My Rankings</button>
+          <button type="submit" class="btn">Send My Scan</button>
+          <p class="scan-note">Next: see how the 90-day guarantee works</p>
         </div>
       </div>
     </form>
   </div>
 </div>
 
-<script src="js/testimonials-data.js"></script>
-<script src="js/main.js"></script>
+<script src="js/testimonials-data.js?v=3"></script>
+<script src="js/main.js?v=3"></script>
 <script>
   renderLogo(document.getElementById("logo"));
   renderTestimonials("hero-testimonials", window.HERO_TESTIMONIAL_IDS);
+
+  // Business name + autocomplete live in the hero; the button validates it
+  // and then opens the modal.
+  wireHeroScan("heroBusinessName", "heroScanBtn", "leadModal");
+  // Sticky bar sends people back up to the scan card rather than opening a
+  // modal with no business name behind it.
+  wireScrollToScan("[data-scroll-to-scan]", "heroBusinessName");
+
   wireModal("[data-open-modal]", "leadModal");
   wireLeadForm(document.getElementById("leadForm"));
+  // Every field in this modal is always visible, so this contributes only the
+  // live phone formatting and the green completion ticks - there is nothing
+  // for it to reveal or hide.
   wireProgressiveForm(document.getElementById("leadForm"));
   wireStickyCta("stickyCta");
 </script>
