@@ -270,7 +270,7 @@ h2 {
   padding: 4px;
 }
 .modal h2 {
-  margin: 0 0 5px;
+  margin: 0 0 5px !important;
   font-size: 20px;
   text-align: center;
 }
@@ -973,7 +973,7 @@ footer {
 }
 .scan-modal-sub {
   text-align: center;
-  font-size: 14px;
+  font-size: 14px !important;
   color: var(--text-muted);
   margin: 0 0 4px;
 }
