@@ -60,6 +60,14 @@ a {
 }
 
 /* Headings */
+.hero-kicker {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--text);
+  margin: 0 0 6px;
+}
 h1 {
   font-size: 28px;
   line-height: 1.2;
@@ -447,6 +455,9 @@ footer {
   .wrap {
     max-width: 640px;
     padding-top: 24px;
+  }
+  .hero-kicker {
+    font-size: 24px;
   }
   h1 {
     font-size: 34px;
