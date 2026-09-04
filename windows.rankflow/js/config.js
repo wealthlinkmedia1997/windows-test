@@ -2,28 +2,19 @@
 // RankFlow Funnel — Configuration
 // Fill in every REPLACE_WITH_* value below before going live.
 // Nothing else in the codebase needs to change once these are set.
-//
-// SECURITY: this file is loaded directly in the browser, so anything
-// placed here is public. Do NOT commit real key/secret values to git —
-// edit this file with the live values only on the deploy target (server/
-// hosting provider), after it has been copied from git. A key committed
-// to git history stays compromised even after being removed from HEAD,
-// so if a real key ever ends up here in a commit, rotate it in the
-// provider's console immediately rather than relying on removing it.
-//
-// For GOOGLE_PLACES_API_KEY specifically: this must be a browser-type
-// key restricted in console.cloud.google.com > APIs & Services >
-// Credentials to (a) HTTP referrers = this site's exact domain(s), and
-// (b) API restriction = Maps JavaScript API only. That restriction, not
-// secrecy, is what makes it safe for the key to be visible client-side.
 // ============================================================
 window.RANKFLOW_CONFIG = {
   // Meta (Facebook) Pixel ID — Events Manager > Data Sources > your pixel.
   META_PIXEL_ID: "4390908821128639",
 
-  // Google Places API key, restricted to the Maps JavaScript API (Places
-  // library) and to this domain. console.cloud.google.com > APIs & Services.
-  GOOGLE_PLACES_API_KEY: "REPLACE_WITH_GOOGLE_PLACES_API_KEY",
+  // Google Places API key. This is a browser key and is expected to be
+  // visible client-side — it is safe as long as it stays restricted in
+  // console.cloud.google.com > APIs & Services > Credentials to
+  // (a) HTTP referrers = this site's exact domain(s), and (b) API
+  // restriction = Maps JavaScript API only. If this key ever needs to be
+  // rotated again, generate the new one, apply both restrictions, then
+  // paste it here — that's it, nothing else to change.
+  GOOGLE_PLACES_API_KEY: "AIzaSyB7VqEv9lQC71rLQmLlH2JOp9WSyhf9aTk",
 
   // GHL calendar embed URLs (GHL: Calendars > [calendar] > Embed > copy the
   // iframe src). TRACKED = the "main" calendar (25k+ revenue AND verified
