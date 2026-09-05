@@ -7,9 +7,14 @@ window.RANKFLOW_CONFIG = {
   // Meta (Facebook) Pixel ID — Events Manager > Data Sources > your pixel.
   META_PIXEL_ID: "4390908821128639",
 
-  // Google Places API key, restricted to the Maps JavaScript API (Places
-  // library) and to this domain. console.cloud.google.com > APIs & Services.
-  GOOGLE_PLACES_API_KEY: "AIzaSyA8FaW5IgilCt5JeS4oZzHasO3PShjFMXk",
+  // Google Places API key. This is a browser key and is expected to be
+  // visible client-side — it is safe as long as it stays restricted in
+  // console.cloud.google.com > APIs & Services > Credentials to
+  // (a) HTTP referrers = this site's exact domain(s), and (b) API
+  // restriction = Maps JavaScript API only. If this key ever needs to be
+  // rotated again, generate the new one, apply both restrictions, then
+  // paste it here — that's it, nothing else to change.
+  GOOGLE_PLACES_API_KEY: "AIzaSyB7VqEv9lQC71rLQmLlH2JOp9WSyhf9aTk",
 
   // GHL calendar embed URLs (GHL: Calendars > [calendar] > Embed > copy the
   // iframe src). TRACKED = the "main" calendar (25k+ revenue AND verified
