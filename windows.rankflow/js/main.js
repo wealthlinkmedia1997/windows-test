@@ -340,6 +340,42 @@ function wireProgressiveForm(formEl) {
   update();
 }
 
+// ---------- Two-panel scan modal (windows homepage) ----------
+// Panel 1 is the visibility pitch (badge, map graphic, first name, phone).
+// Panel 2 is just the revenue question. Both live in the same <form> so
+// wireLeadForm()'s existing validation/routing needs no changes - this only
+// decides when panel 2 becomes visible.
+function wireScanSteps(nextBtnId, panel1Id, panel2Id) {
+  const nextBtn = document.getElementById(nextBtnId);
+  const panel1 = document.getElementById(panel1Id);
+  const panel2 = document.getElementById(panel2Id);
+  if (!nextBtn || !panel1 || !panel2) return;
+  const form = panel1.closest("form");
+  if (!form) return;
+
+  nextBtn.addEventListener("click", () => {
+    const nameField = panel1.querySelector('[data-step="firstName"]');
+    const phoneField = panel1.querySelector('[data-step="phone"]');
+    let badField = null;
+    if (form.firstName.value.trim().length < 2) badField = nameField;
+    else if (digitsOnly(form.phone.value).length < 10) badField = phoneField;
+
+    if (badField) {
+      badField.classList.add("has-error");
+      badField.scrollIntoView({ behavior: "smooth", block: "center" });
+      const inp = badField.querySelector("input");
+      if (inp) inp.focus();
+      return;
+    }
+
+    panel1.hidden = true;
+    panel2.hidden = false;
+    panel2.scrollIntoView({ behavior: "smooth", block: "start" });
+    const firstRadio = panel2.querySelector('input[type="radio"]');
+    if (firstRadio) setTimeout(() => firstRadio.focus(), 150);
+  });
+}
+
 // ---------- Human-readable labels for the webhook payload ----------
 // The radio values are internal codes (r25_100, unverified) because routing
 // switches on them. Anything leaving the browser for GHL/Slack gets the
@@ -784,11 +820,27 @@ function wireHeroScan(inputId, buttonId, overlayId) {
   }
 
   function open() {
-    if (input.value.trim().length < 2) {
+    const name = input.value.trim();
+    if (name.length < 2) {
       fail("Enter your business name to run the scan.");
       return;
     }
     overlay.classList.add("open");
+
+    // Mirror the business name typed in the hero card into the modal's
+    // top-left badge - it's the same name, just carried into the next step.
+    const bizLabel = overlay.querySelector("#scanBizName");
+    if (bizLabel) bizLabel.textContent = name;
+
+    // Reopening should always start from the visibility pitch, never leave
+    // the visitor stuck on the revenue question from a previous visit.
+    const panel1 = overlay.querySelector("#scanPanel1");
+    const panel2 = overlay.querySelector("#scanPanel2");
+    if (panel1 && panel2) {
+      panel1.hidden = false;
+      panel2.hidden = true;
+    }
+
     const first = overlay.querySelector('[name="firstName"]');
     if (first) setTimeout(() => first.focus(), 120);
     const f = overlay.querySelector("form");

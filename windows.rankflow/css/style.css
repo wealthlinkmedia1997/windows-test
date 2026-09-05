@@ -11,6 +11,10 @@
   --border: #e5e5e5;
   --bg: #ffffff;
   --max-width: 520px;
+  --green: #16a34a;
+  --red: #dc2626;
+  --amber: #d97706;
+  --teal: #0d9488;
 }
 
 * {
@@ -1001,9 +1005,121 @@ footer {
   min-width: 0;
   border-radius: 10px;
 }
+.modal-scan .scan-note {
+  margin-top: 10px;
+}
+
+/* Panel 1 of the scan modal: business badge, area pitch, map graphic. */
+.scan-biz-badge {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 13px;
+  margin: 0 0 10px;
+}
+.scan-biz-name {
+  font-weight: 800;
+  color: var(--text);
+}
+.scan-biz-sep {
+  color: var(--border);
+}
+.scan-biz-qualify {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 700;
+  color: var(--green);
+}
+.qualify-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, .15);
+  flex-shrink: 0;
+}
+
+.scan-area-title {
+  text-align: left;
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+.scan-area-title .accent {
+  color: var(--blue);
+}
+.scan-area-sub {
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-muted);
+  margin: 0 0 18px;
+}
+
+.scan-visual {
+  display: flex;
+  gap: 10px;
+  margin: 0 0 8px;
+}
+.scan-visual-col {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.scan-pin-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px 4px;
+  place-items: center;
+  padding: 12px 6px;
+  border-radius: 12px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.scan-pin-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, .55) 0 2px, transparent 2px 34px),
+    repeating-linear-gradient(25deg, rgba(255, 255, 255, .4) 0 2px, transparent 2px 46px);
+}
+.scan-pin-grid.is-good {
+  background: radial-gradient(circle at 25% 15%, #f0fdf5, #dcf5e4 65%, #cdeed9);
+}
+.scan-pin-grid.is-bad {
+  background: radial-gradient(circle at 25% 15%, #fef4f3, #fbe1df 65%, #f8d2cf);
+}
+.scan-pin {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  filter: drop-shadow(0 1px 1.5px rgba(0, 0, 0, .22));
+}
+.scan-pin--green { color: var(--green); }
+.scan-pin--red   { color: var(--red); }
+.scan-pin--amber { color: var(--amber); }
+.scan-pin--teal  { color: var(--teal); }
+
+.scan-visual-caption {
+  font-size: 12.5px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+}
+.scan-visual-caption.is-good strong { color: var(--green); }
+.scan-visual-caption.is-bad strong { color: var(--red); }
 
 @media (min-width: 700px) {
   .hero-sub { font-size: 17px; }
   .scan-card { max-width: 500px; padding: 28px 26px; }
   .scan-modal-title { font-size: 30px; }
+  .scan-area-title { font-size: 26px; }
+  .scan-pin { width: 20px; height: 20px; }
+  .scan-pin-grid { gap: 10px 6px; padding: 16px 10px; }
 }
