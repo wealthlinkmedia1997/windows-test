@@ -33,22 +33,45 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
 
   <p class="hero-sub">Without spending thousands on ads or getting locked into contracts that don't work.</p>
 
-  <!-- Scan card. The business name is captured here, before the modal opens,
-       because it is what the CTA actually promises. The hidden placeId /
-       placeAddress inputs are filled by the Google Places picker. -->
+  <!-- One-step capture card: business name, first name, and phone all live
+       right here now - no modal. wireLeadForm() validates and, on success,
+       sends the visitor to congrats.html (see main.js). -->
   <div class="scan-card">
-    <p class="scan-title">Enter your business name to see if your area supports 30+ calls a month</p>
-    <div class="autocomplete-wrapper">
-      <input type="text" id="heroBusinessName" name="businessName" placeholder="Business Name"
-             autocomplete="off" role="combobox" aria-autocomplete="list"
-             aria-controls="heroSuggestions" aria-expanded="false">
-      <span class="ac-spinner" hidden></span>
-      <ul class="ac-suggestions" id="heroSuggestions" role="listbox" hidden></ul>
-    </div>
-    <input type="hidden" name="placeId" value="">
-    <input type="hidden" name="placeAddress" value="">
-    <button type="button" class="btn" id="heroScanBtn">See If My Area Qualifies</button>
-    <p class="scan-note scan-error">Free · 10 seconds · no obligation</p>
+    <p class="scan-title">See if your area supports 30+ calls a month</p>
+
+    <form id="leadForm" novalidate>
+      <div class="field" data-step="businessName">
+        <div class="field-inner">
+          <label for="heroBusinessName">Business name</label>
+          <div class="autocomplete-wrapper">
+            <input type="text" id="heroBusinessName" name="businessName" placeholder="Business Name"
+                   autocomplete="off" role="combobox" aria-autocomplete="list"
+                   aria-controls="heroSuggestions" aria-expanded="false">
+            <span class="ac-spinner" hidden></span>
+            <ul class="ac-suggestions" id="heroSuggestions" role="listbox" hidden></ul>
+          </div>
+          <input type="hidden" name="placeId" value="">
+          <input type="hidden" name="placeAddress" value="">
+        </div>
+      </div>
+
+      <div class="field" data-step="firstName">
+        <div class="field-inner">
+          <label for="firstName">First name</label>
+          <input type="text" id="firstName" name="firstName" placeholder="Mike" autocomplete="given-name">
+        </div>
+      </div>
+
+      <div class="field" data-step="phone">
+        <div class="field-inner">
+          <label for="phone">Mobile phone</label>
+          <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+        </div>
+      </div>
+
+      <p class="scan-note">We text your results. No spam, no autodialer.</p>
+      <button type="submit" class="btn" id="heroScanBtn">See If My Area Qualifies</button>
+    </form>
   </div>
 
   <p class="stars-row"><span class="stars">★★★★★</span> 100+ reviews · 5 years serving window owners</p>
@@ -67,124 +90,18 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
   <p class="stars-row"><span class="stars">★★★★★</span> 100+ reviews · 5 years serving window owners</p>
 </div>
 
-<!-- ============================================================
-     "Your Scan Is Ready" modal.
-
-     No Google Business Page question on this site, and no revenue question
-     either - business name is captured in the hero scan card above and
-     mirrored into the badge here (see wireHeroScan's open()). Just first
-     name and phone, then straight to book-tracked.html on submit; there
-     is no revenue answer left for routeUser() to branch on.
-
-     No `required` attributes and the form carries `novalidate`;
-     wireLeadForm() validates in JS.
-     ============================================================ -->
-<div class="modal-overlay" id="leadModal">
-  <div class="modal modal-scan">
-    <button type="button" class="modal-close" data-close-modal="" aria-label="Close">&times;</button>
-
-    <form id="leadForm" novalidate>
-
-      <p class="scan-biz-badge">
-        <span class="scan-biz-name" id="scanBizName">Your business</span>
-        <span class="scan-biz-sep">&middot;</span>
-        <span class="scan-biz-qualify">area qualifies</span>
-      </p>
-
-      <h2 class="scan-area-title">Your area supports 30+ calls a month</h2>
-      <p class="scan-area-sub">We scan 133 points across your service area and text you the map in about 5 minutes. It comes back one of two ways.</p>
-
-      <div class="scan-visual">
-        <div class="scan-visual-col">
-          <div class="scan-pin-grid is-good" aria-hidden="true">
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--olive"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--olive"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--olive"></span>
-            <span class="scan-dot scan-dot--green"></span>
-            <span class="scan-dot scan-dot--green"></span>
-          </div>
-          <p class="scan-visual-caption is-good">Mostly green<br>You own your core area already.</p>
-        </div>
-
-        <div class="scan-visual-col">
-          <div class="scan-pin-grid is-bad" aria-hidden="true">
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--amber"></span>
-            <span class="scan-dot scan-dot--teal"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--teal"></span>
-            <span class="scan-dot scan-dot--amber"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-            <span class="scan-dot scan-dot--red"></span>
-          </div>
-          <p class="scan-visual-caption is-bad">Mostly red<br>Competitors are taking those calls.</p>
-        </div>
-      </div>
-
-      <hr class="divider">
-
-      <div class="field" data-step="firstName">
-        <div class="field-inner">
-          <label for="firstName">First name</label>
-          <input type="text" id="firstName" name="firstName" placeholder="Mike" autocomplete="given-name">
-        </div>
-      </div>
-
-      <div class="field" data-step="phone">
-        <div class="field-inner">
-          <label for="phone">Mobile phone</label>
-          <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
-          <p class="field-note">Scan arrives by text. No spam, no autodialer.</p>
-        </div>
-      </div>
-
-      <div class="field" data-step="submit">
-        <div class="field-inner">
-          <button type="submit" class="btn">Text me my visibility scan</button>
-          <p class="scan-note">Next: see how our 90 day guarantee works</p>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
 <script src="js/testimonials-data.js?v=3"></script>
 <script src="js/main.js?v=3"></script>
 <script>
   renderLogo(document.getElementById("logo"));
   renderTestimonials("hero-testimonials", window.HERO_TESTIMONIAL_IDS);
 
-  // Business name + autocomplete live in the hero; the button validates it
-  // and then opens the modal.
-  wireHeroScan("heroBusinessName", "heroScanBtn", "leadModal");
-  // Sticky bar sends people back up to the scan card rather than opening a
-  // modal with no business name behind it.
+  wireBusinessAutocomplete(document.getElementById("heroBusinessName"));
   wireScrollToScan("[data-scroll-to-scan]", "heroBusinessName");
 
-  wireModal("[data-open-modal]", "leadModal");
   wireLeadForm(document.getElementById("leadForm"));
-  // Every field in this modal is always visible, so this contributes only the
-  // live phone formatting and the green completion ticks - there is nothing
-  // for it to reveal or hide.
+  // Live phone formatting and the green completion ticks; every field here
+  // is always visible, so there's nothing for it to reveal or hide.
   wireProgressiveForm(document.getElementById("leadForm"));
   wireStickyCta("stickyCta");
 </script>

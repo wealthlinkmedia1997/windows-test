@@ -936,113 +936,39 @@ footer {
 }
 .scan-title {
   text-align: center;
-  font-weight: 700;
-  font-size: 16px;
-  margin: 0 0 14px;
-}
-.scan-card input[type="text"] {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  font-size: 16px;
-  transition: border-color .18s ease, box-shadow .18s ease;
-}
-.scan-card input[type="text"]:focus {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+  font-weight: 800;
+  font-size: 22px;
+  line-height: 1.3;
+  margin: 0 0 18px;
 }
 .scan-card .btn {
   width: 100%;
   min-width: 0;
-  margin: 14px 0 0;
+  margin: 4px 0 0;
   border-radius: 10px;
 }
 .scan-note {
   text-align: center;
   font-size: 13px;
   color: var(--text-muted);
-  margin: 12px 0 0;
-}
-/* the note doubles as the error slot - see fail() in wireHeroScan() */
-.scan-card.has-error .scan-error {
-  color: #d33;
-  font-weight: 700;
-}
-.scan-card.has-error input[type="text"] {
-  border-color: #d33;
-  animation: shake .32s;
+  margin: 12px 0 14px;
 }
 
-/* Scan modal */
-.modal-scan {
-  max-width: 460px;
-  padding: 28px 24px;
-}
-.scan-modal-title {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 800;
-  margin: 0 0 6px;
-}
-.scan-modal-sub {
-  text-align: center;
-  font-size: 14px !important;
-  color: var(--text-muted);
-  margin: 0 0 4px;
-}
-.modal-scan .divider {
-  margin: 18px 0 20px;
-}
 .field-note {
   font-size: 13px;
   color: var(--text-muted);
   margin: 6px 0 0;
 }
-.modal-scan .btn {
-  width: 100%;
-  min-width: 0;
-  border-radius: 10px;
-}
-.modal-scan .scan-note {
-  margin-top: 10px;
-}
 
-/* Panel 1 of the scan modal: business badge, area pitch, map graphic. */
-.scan-biz-badge {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 6px;
-  font-size: 13px;
-  margin: 0 0 10px;
-}
-.scan-biz-name {
-  font-weight: 800;
-  color: var(--text);
-}
-.scan-biz-sep {
-  color: var(--border);
+/* Congrats page: qualify badge + map graphic. */
+.congrats-badge {
+  text-align: center;
+  font-size: 14px;
+  margin: 0 0 8px;
 }
 .scan-biz-qualify {
   font-weight: 700;
   color: var(--green);
-}
-
-.scan-area-title {
-  text-align: left;
-  font-size: 22px;
-  line-height: 1.25;
-  font-weight: 800;
-  margin: 0 0 8px;
-}
-.scan-area-sub {
-  text-align: left;
-  font-size: 14px;
-  line-height: 1.5;
-  color: var(--text-muted);
-  margin: 0 0 18px;
 }
 
 .scan-visual {
@@ -1096,6 +1022,4 @@ footer {
 @media (min-width: 700px) {
   .hero-sub { font-size: 17px; }
   .scan-card { max-width: 500px; padding: 28px 26px; }
-  .scan-modal-title { font-size: 30px; }
-  .scan-area-title { font-size: 26px; }
 }

@@ -222,16 +222,11 @@ function getLeadFirstName() {
   }
 }
 
-// Which steps are on screen, given the Google Business Page answer.
-// Business name is now the ONLY conditional field - everything else,
-// phone included, is visible from the moment the modal opens.
-//   Yes / Unverified -> business name shown
-//   No / nothing yet -> business name hidden
-function visibleSteps(gbp) {
-  if (gbp === "yes" || gbp === "unverified") {
-    return ["firstName", "gbp", "businessName", "phone", "revenue", "submit"];
-  }
-  return ["firstName", "gbp", "phone", "revenue", "submit"];
+// Which steps are on screen. No page currently asks the Google Business
+// Page question, so business name (like every other field) is just always
+// visible whenever it's present in the form.
+function visibleSteps() {
+  return ["firstName", "gbp", "businessName", "phone", "revenue", "submit"];
 }
 
 function digitsOnly(v) {
@@ -294,7 +289,7 @@ function wireProgressiveForm(formEl) {
   }
 
   function update() {
-    const path = visibleSteps(gbpValue());
+    const path = visibleSteps();
 
     Object.keys(steps).forEach((name) => {
       const f = steps[name];
@@ -336,7 +331,6 @@ function wireProgressiveForm(formEl) {
 
   formEl.addEventListener("input", update);
   formEl.addEventListener("change", update);
-  formEl.__update = update;   // wireModal() calls this on open to re-sync
   update();
 }
 
@@ -432,9 +426,12 @@ function wireLeadForm(formEl) {
     }
     // The windows homepage asks no revenue question, so there is nothing for
     // routeUser()'s revenue tiers to branch on - every lead here goes
-    // straight to the main calendar.
-    const dest = hasRevenueField ? routeUser(gbp, revenueCode) : "book-tracked.html";
-    window.location.href = dest + "?fn=" + encodeURIComponent(data.firstName);
+    // through the congrats interstitial on its way to the main calendar.
+    const fn = encodeURIComponent(data.firstName);
+    const dest = hasRevenueField
+      ? routeUser(gbp, revenueCode) + "?fn=" + fn
+      : "congrats.html?fn=" + fn + "&biz=" + encodeURIComponent(data.businessName);
+    window.location.href = dest;
   });
 }
 
@@ -763,67 +760,8 @@ function wireStickyCta(barId) {
   }, { passive: true });
 }
 
-// ---------- Hero scan card (windows homepage) ----------
-// The business name is captured up front in the hero, before the modal ever
-// opens: it is the whole promise of the CTA ("run the scan"), and asking for
-// it first means the modal only has to ask three quick things.
-//
-// The value lives outside the <form>, so wireLeadForm() reaches for it via
-// document as a fallback.
-function wireHeroScan(inputId, buttonId, overlayId) {
-  const input = document.getElementById(inputId);
-  const button = document.getElementById(buttonId);
-  const overlay = document.getElementById(overlayId);
-  if (!input || !button || !overlay) return;
-
-  const wrap = input.closest(".autocomplete-wrapper");
-  if (!input.dataset.wired) {
-    input.dataset.wired = "1";
-    wireBusinessAutocomplete(input);
-  }
-
-  function fail(msg) {
-    const card = input.closest(".scan-card");
-    if (card) card.classList.add("has-error");
-    let note = card && card.querySelector(".scan-error");
-    if (note) note.textContent = msg;
-    input.focus();
-    setTimeout(() => { if (card) card.classList.remove("has-error"); }, 600);
-  }
-
-  function open() {
-    const name = input.value.trim();
-    if (name.length < 2) {
-      fail("Enter your business name to run the scan.");
-      return;
-    }
-    overlay.classList.add("open");
-
-    // Mirror the business name typed in the hero card into the modal's
-    // top-left badge - it's the same name, just carried into the next step.
-    const bizLabel = overlay.querySelector("#scanBizName");
-    if (bizLabel) bizLabel.textContent = name;
-
-    const first = overlay.querySelector('[name="firstName"]');
-    if (first) setTimeout(() => first.focus(), 120);
-    const f = overlay.querySelector("form");
-    if (f && f.__update) f.__update();
-  }
-
-  button.addEventListener("click", open);
-  input.addEventListener("keydown", (e) => {
-    // Enter should run the scan, but not while a suggestion is highlighted -
-    // there Enter belongs to the autocomplete list.
-    const list = wrap && wrap.querySelector(".ac-suggestions");
-    if (e.key === "Enter" && (!list || list.hidden)) {
-      e.preventDefault();
-      open();
-    }
-  });
-}
-
-// Sticky bar and any other secondary CTA should send the visitor back to the
-// scan card rather than opening a modal that is missing its business name.
+// Sticky bar and any other secondary CTA should send the visitor back up to
+// the scan card/form rather than duplicating it further down the page.
 function wireScrollToScan(selector, inputId) {
   const input = document.getElementById(inputId);
   if (!input) return;
@@ -834,30 +772,5 @@ function wireScrollToScan(selector, inputId) {
       card.scrollIntoView({ behavior: "smooth", block: "center" });
       setTimeout(() => input.focus(), 420);
     });
-  });
-}
-
-// ---------- Modal open/close ----------
-function wireModal(openBtnSelector, overlayId) {
-  const overlay = document.getElementById(overlayId);
-  if (!overlay) return;
-  document.querySelectorAll(openBtnSelector).forEach((btn) => {
-    btn.addEventListener("click", () => {
-      overlay.classList.add("open");
-      const input = overlay.querySelector('[name="businessName"]');
-      if (input && !input.dataset.wired) {
-        input.dataset.wired = "1";
-        wireBusinessAutocomplete(input);
-      }
-      // Re-sync which steps are revealed every time the modal opens.
-      const f = overlay.querySelector("form");
-      if (f && f.__update) f.__update();
-    });
-  });
-  overlay.querySelectorAll("[data-close-modal]").forEach((el) => {
-    el.addEventListener("click", () => overlay.classList.remove("open"));
-  });
-  overlay.addEventListener("click", (e) => {
-    if (e.target === overlay) overlay.classList.remove("open");
   });
 }
