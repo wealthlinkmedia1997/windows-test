@@ -27,8 +27,8 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=Lead&noscript=1"
 <div class="wrap">
   <div class="logo" id="logo"></div>
 
-  <p class="report-heading">📲 Your ranking report is on its way to your phone</p>
-  <p class="report-subheading">It shows where you rank — not why, or who's beating you. That's what the call is for.</p>
+  <p class="report-heading" id="reportHeading">Congrats, your area qualifies for 30+ inbound calls a month in 90 days</p>
+  <p class="report-subheading">Here's exactly how that works and what we guarantee.</p>
 
   <div class="step-bar" id="stepBar">⬇️ <u>Step 1:</u> Watch This 2 Minute Video ⬇️</div>
   <div id="explainer-video"></div>
@@ -59,6 +59,18 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=Lead&noscript=1"
 <script src="js/main.js"></script>
 <script>
   renderLogo(document.getElementById("logo"));
+
+  // Personalize with the name + business carried over from the homepage
+  // form (see wireLeadForm() in main.js) - falls back to the generic
+  // heading already in the markup if either is missing.
+  (function () {
+    var fn = getLeadFirstName();
+    var biz = getLeadBusinessName();
+    if (fn && biz) {
+      document.getElementById("reportHeading").textContent =
+        "Congrats " + fn + ", " + biz + " qualifies for 30+ inbound calls a month in 90 days";
+    }
+  })();
 
   // Hides the "Step 1" bar entirely while EXPLAINER_VIDEO.videoSrc is still
   // empty (see testimonials-data.js)...

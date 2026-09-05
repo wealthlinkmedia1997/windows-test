@@ -11,10 +11,6 @@
   --border: #e5e5e5;
   --bg: #ffffff;
   --max-width: 520px;
-  --green: #16a34a;
-  --red: #dc2626;
-  --amber: #d97706;
-  --teal: #0d9488;
 }
 
 * {
@@ -958,65 +954,6 @@ footer {
   font-size: 13px;
   color: var(--text-muted);
   margin: 6px 0 0;
-}
-
-/* Congrats page: qualify badge + map graphic. */
-.congrats-badge {
-  text-align: center;
-  font-size: 14px;
-  margin: 0 0 8px;
-}
-.scan-biz-qualify {
-  font-weight: 700;
-  color: var(--green);
-}
-
-.scan-visual {
-  display: flex;
-  gap: 10px;
-  margin: 0 0 6px;
-}
-.scan-visual-col {
-  flex: 1 1 0;
-  min-width: 0;
-}
-.scan-pin-grid {
-  aspect-ratio: 1 / 1;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8%;
-  place-items: center;
-  padding: 10%;
-  border-radius: 14px;
-}
-.scan-pin-grid.is-good {
-  background: #0f2f1f;
-}
-.scan-pin-grid.is-bad {
-  background: #3a1418;
-}
-.scan-dot {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
-}
-.scan-dot--green { background: var(--green); }
-.scan-dot--red   { background: var(--red); }
-.scan-dot--amber { background: var(--amber); }
-.scan-dot--teal  { background: var(--teal); }
-.scan-dot--olive { background: #84a828; }
-
-.scan-visual-caption {
-  font-size: 12.5px;
-  line-height: 1.4;
-  text-align: center;
-  margin: 8px 0 0;
-}
-.scan-visual-caption.is-good { color: var(--green); }
-.scan-visual-caption.is-bad { color: var(--red); }
-.scan-visual-caption::first-line {
-  font-weight: 700;
 }
 
 @media (min-width: 700px) {

@@ -222,6 +222,17 @@ function getLeadFirstName() {
   }
 }
 
+function getLeadBusinessName() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("biz")) return params.get("biz");
+  try {
+    const stored = JSON.parse(sessionStorage.getItem("rankflow_lead") || "{}");
+    return stored.businessName || "";
+  } catch (e) {
+    return "";
+  }
+}
+
 // Which steps are on screen. No page currently asks the Google Business
 // Page question, so business name (like every other field) is just always
 // visible whenever it's present in the form.
@@ -426,11 +437,12 @@ function wireLeadForm(formEl) {
     }
     // The windows homepage asks no revenue question, so there is nothing for
     // routeUser()'s revenue tiers to branch on - every lead here goes
-    // through the congrats interstitial on its way to the main calendar.
-    const fn = encodeURIComponent(data.firstName);
+    // straight to the main calendar page, which greets them by name and
+    // business (see getLeadFirstName()/getLeadBusinessName()).
+    const fn = "fn=" + encodeURIComponent(data.firstName);
     const dest = hasRevenueField
-      ? routeUser(gbp, revenueCode) + "?fn=" + fn
-      : "congrats.html?fn=" + fn + "&biz=" + encodeURIComponent(data.businessName);
+      ? routeUser(gbp, revenueCode) + "?" + fn
+      : "book-tracked.html?" + fn + "&biz=" + encodeURIComponent(data.businessName);
     window.location.href = dest;
   });
 }
