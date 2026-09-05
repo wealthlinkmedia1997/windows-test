@@ -340,42 +340,6 @@ function wireProgressiveForm(formEl) {
   update();
 }
 
-// ---------- Two-panel scan modal (windows homepage) ----------
-// Panel 1 is the visibility pitch (badge, map graphic, first name, phone).
-// Panel 2 is just the revenue question. Both live in the same <form> so
-// wireLeadForm()'s existing validation/routing needs no changes - this only
-// decides when panel 2 becomes visible.
-function wireScanSteps(nextBtnId, panel1Id, panel2Id) {
-  const nextBtn = document.getElementById(nextBtnId);
-  const panel1 = document.getElementById(panel1Id);
-  const panel2 = document.getElementById(panel2Id);
-  if (!nextBtn || !panel1 || !panel2) return;
-  const form = panel1.closest("form");
-  if (!form) return;
-
-  nextBtn.addEventListener("click", () => {
-    const nameField = panel1.querySelector('[data-step="firstName"]');
-    const phoneField = panel1.querySelector('[data-step="phone"]');
-    let badField = null;
-    if (form.firstName.value.trim().length < 2) badField = nameField;
-    else if (digitsOnly(form.phone.value).length < 10) badField = phoneField;
-
-    if (badField) {
-      badField.classList.add("has-error");
-      badField.scrollIntoView({ behavior: "smooth", block: "center" });
-      const inp = badField.querySelector("input");
-      if (inp) inp.focus();
-      return;
-    }
-
-    panel1.hidden = true;
-    panel2.hidden = false;
-    panel2.scrollIntoView({ behavior: "smooth", block: "start" });
-    const firstRadio = panel2.querySelector('input[type="radio"]');
-    if (firstRadio) setTimeout(() => firstRadio.focus(), 150);
-  });
-}
-
 // ---------- Human-readable labels for the webhook payload ----------
 // The radio values are internal codes (r25_100, unverified) because routing
 // switches on them. Anything leaving the browser for GHL/Slack gets the
@@ -418,14 +382,19 @@ function wireLeadForm(formEl) {
       ? (gbp === "yes" || gbp === "unverified")
       : !!bizEl;
 
-    const revenueCode = (formEl.querySelector('[name="revenue"]:checked') || {}).value;
+    // The windows homepage also drops the revenue question entirely - only
+    // pages that still ask it should require or route on an answer.
+    const hasRevenueField = !!formEl.querySelector('[name="revenue"]');
+    const revenueCode = hasRevenueField
+      ? (formEl.querySelector('[name="revenue"]:checked') || {}).value
+      : "";
 
     const data = {
       firstName: formEl.firstName.value.trim(),
       phone: formEl.phone.value.trim(),
       // Readable text is what GHL and Slack display.
       gbp: hasGbpField ? (GBP_LABELS[gbp] || gbp) : "",
-      revenue: REVENUE_LABELS[revenueCode] || revenueCode,
+      revenue: hasRevenueField ? (REVENUE_LABELS[revenueCode] || revenueCode) : "",
       // Raw codes kept alongside, for workflow conditions that need to match
       // on an exact value rather than display text.
       gbpCode: gbp,
@@ -440,7 +409,7 @@ function wireLeadForm(formEl) {
     if (hasGbpField && !gbp) missing.push("gbp");
     if (needsBusiness && data.businessName.length < 3) missing.push("businessName");
     if (digitsOnly(data.phone).length < 10) missing.push("phone");
-    if (!revenueCode) missing.push("revenue");
+    if (hasRevenueField && !revenueCode) missing.push("revenue");
     if (missing.length) {
       const f = formEl.querySelector('[data-step="' + missing[0] + '"]');
       if (f) {
@@ -461,7 +430,10 @@ function wireLeadForm(formEl) {
         keepalive: true,
       }).catch(() => {});
     }
-    const dest = routeUser(gbp, revenueCode);   // routing uses raw codes
+    // The windows homepage asks no revenue question, so there is nothing for
+    // routeUser()'s revenue tiers to branch on - every lead here goes
+    // straight to the main calendar.
+    const dest = hasRevenueField ? routeUser(gbp, revenueCode) : "book-tracked.html";
     window.location.href = dest + "?fn=" + encodeURIComponent(data.firstName);
   });
 }
@@ -831,15 +803,6 @@ function wireHeroScan(inputId, buttonId, overlayId) {
     // top-left badge - it's the same name, just carried into the next step.
     const bizLabel = overlay.querySelector("#scanBizName");
     if (bizLabel) bizLabel.textContent = name;
-
-    // Reopening should always start from the visibility pitch, never leave
-    // the visitor stuck on the revenue question from a previous visit.
-    const panel1 = overlay.querySelector("#scanPanel1");
-    const panel2 = overlay.querySelector("#scanPanel2");
-    if (panel1 && panel2) {
-      panel1.hidden = false;
-      panel2.hidden = true;
-    }
 
     const first = overlay.querySelector('[name="firstName"]');
     if (first) setTimeout(() => first.focus(), 120);
