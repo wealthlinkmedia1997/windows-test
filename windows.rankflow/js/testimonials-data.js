@@ -95,7 +95,7 @@ window.TESTIMONIALS = [
 // ("Step 1: Watch This 2 Minute Video"). Still a placeholder - once you
 // have this file, same pattern: assets/videos/explainer.mp4.
 window.EXPLAINER_VIDEO = {
-  videoSrc: "assets/videos/2min.mp4?v=2",
+  videoSrc: "assets/videos/2min.mp4?v=3",
   poster: "assets/videos/2min.jpg?v=1",
   caption: "",
 };
