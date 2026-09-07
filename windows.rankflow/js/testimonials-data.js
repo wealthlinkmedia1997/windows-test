@@ -12,7 +12,7 @@ window.TESTIMONIALS = [
     quote: "After 30 days I'm at an extra $6,300 in commercial and residential $2,400",
     name: "Todd",
     company: "Tint Veteran",
-    videoSrc: "assets/videos/todd.mp4?v=3",
+    videoSrc: "assets/videos/todd.mp4?v=4",
     poster: "assets/videos/todd-poster.jpg",
   },
   {
@@ -20,7 +20,7 @@ window.TESTIMONIALS = [
     quote: "Even in our slowest months in the winter our phone is STILL ringing every day",
     name: "Anthony",
     company: "Window Tint Solutions Nashville TN",
-    videoSrc: "assets/videos/anthony.mp4?v=3",
+    videoSrc: "assets/videos/anthony.mp4?v=4",
     poster: "assets/videos/anthony-poster.jpg",
   },
   {
@@ -28,15 +28,15 @@ window.TESTIMONIALS = [
     quote: "Game changer for my business, generated 8 [large] jobs and had our best month ever in a few months",
     name: "Paul",
     company: "Inland NW Windows Couer D'lane ID",
-    videoSrc: "assets/videos/paul.mp4?v=3",
-    poster: "assets/videos/paul-poster.jpg",
+    videoSrc: "assets/videos/paul.mp4?v=4",
+    poster: "assets/videos/paul.jpg",
   },
   {
     id: "jim",
     quote: "And literally within 30 days I'm at the top - I've had everyone tell me they could get me there but nobody could get me there",
     name: "Jim",
     company: "Accent Window Coverings Riverside CA",
-    videoSrc: "assets/videos/jim.mp4?v=3",
+    videoSrc: "assets/videos/jim.mp4?v=4",
     poster: "assets/videos/jim-poster.jpg",
   },
   {
@@ -44,7 +44,7 @@ window.TESTIMONIALS = [
     quote: "By the time you're 2 or 3 companies in that burned you, your done. For some reason I trusted Andre and he got us number 1. I ONLY do my own jobs now, no subcontracting",
     name: "Trevor",
     company: "Warrior Windows Casa Grande AZ",
-    videoSrc: "assets/videos/trevor.mp4?v=3",
+    videoSrc: "assets/videos/trevor.mp4?v=4",
     poster: "assets/videos/trevor-poster.jpg",
   },
   {
@@ -52,7 +52,7 @@ window.TESTIMONIALS = [
     quote: "We have our gifts, we need to focus on what we do and marketers need to focus on what they do - in that short amount of time, the growth has been PHENOMENAL",
     name: "Mindi",
     company: "Metro Tinting Shutters and Blinds of Tulsa OK",
-    videoSrc: "assets/videos/mindi.mp4?v=3",
+    videoSrc: "assets/videos/mindi.mp4?v=4",
     poster: "assets/videos/mindi-poster.jpg",
   },
   {
@@ -60,7 +60,7 @@ window.TESTIMONIALS = [
     quote: "2 months ago I wasnt getting calls, now my site presence has gone through the rough [over 100 5 star reviews] and getting calls every day",
     name: "Chris",
     company: "CK's Windows of Idaho Falls",
-    videoSrc: "assets/videos/chris.mp4?v=3",
+    videoSrc: "assets/videos/chris.mp4?v=4",
     poster: "assets/videos/chris-poster.jpg",
   },
   {
@@ -68,7 +68,7 @@ window.TESTIMONIALS = [
     quote: "We were working with another company prior and now we see what a horrible job they did because Andre's team has been amazing",
     name: "Natalie",
     company: "Window & Door Repair Champions Irvine CA",
-    videoSrc: "assets/videos/natalie.mp4?v=3",
+    videoSrc: "assets/videos/natalie.mp4?v=4",
     poster: "assets/videos/natalie-poster.jpg",
   },
   {
@@ -76,7 +76,7 @@ window.TESTIMONIALS = [
     quote: "I saw the ad and thought this would be a scammy thing and come to find out people we work with were very professional [2 new leads within one WEEK]",
     name: "Danny",
     company: "Sno King and Junk Removal - Washington",
-    videoSrc: "assets/videos/danny.mp4?v=3",
+    videoSrc: "assets/videos/danny.mp4?v=4",
     poster: "assets/videos/danny-poster.jpg",
   },
   {
@@ -95,7 +95,7 @@ window.TESTIMONIALS = [
 // ("Step 1: Watch This 2 Minute Video"). Still a placeholder - once you
 // have this file, same pattern: assets/videos/explainer.mp4.
 window.EXPLAINER_VIDEO = {
-  videoSrc: "assets/videos/2min.mp4?v=1",
+  videoSrc: "assets/videos/2min.mp4?v=2",
   poster: "assets/videos/2min.jpg?v=1",
   caption: "",
 };
