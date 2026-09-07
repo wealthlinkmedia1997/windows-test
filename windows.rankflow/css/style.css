@@ -175,9 +175,6 @@ h2 {
 .sticky-cta .stars-row {
   margin-top: 8px;
 }
-@media (max-width: 699px) {
-  .sticky-cta { display: none; }
-}
 
 /* Video testimonial card */
 .video-card {

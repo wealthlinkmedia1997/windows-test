@@ -746,15 +746,33 @@ function loadGhlCalendar(containerId, url) {
 
 // ---------- Sticky bottom CTA bar: appears on scroll-down, hides on
 // scroll-up (and stays hidden near the top, since the hero button is
-// already visible there) ----------
-function wireStickyCta(barId) {
+// already visible there). On mobile it also hides while the lead form
+// itself is on screen - otherwise the sticky button and the form's own
+// submit button double up. ----------
+function wireStickyCta(barId, formSelector) {
   const bar = document.getElementById(barId);
   if (!bar) return;
   let lastY = window.scrollY;
   let ticking = false;
-  function onScroll() {
+  let formInView = false;
+
+  const formEl = formSelector && document.querySelector(formSelector);
+  if (formEl && "IntersectionObserver" in window) {
+    new IntersectionObserver((entries) => {
+      formInView = entries[0].isIntersecting;
+      update();
+    }, { threshold: 0.15 }).observe(formEl);
+  }
+
+  function isMobile() {
+    return window.matchMedia("(max-width: 699px)").matches;
+  }
+
+  function update() {
     const y = window.scrollY;
-    if (y < 80) {
+    if (isMobile() && formInView) {
+      bar.classList.remove("visible");
+    } else if (y < 80) {
       bar.classList.remove("visible");
     } else if (y > lastY) {
       bar.classList.add("visible");
@@ -762,11 +780,11 @@ function wireStickyCta(barId) {
       bar.classList.remove("visible");
     }
     lastY = y;
-    ticking = false;
   }
+
   window.addEventListener("scroll", () => {
     if (!ticking) {
-      requestAnimationFrame(onScroll);
+      requestAnimationFrame(() => { update(); ticking = false; });
       ticking = true;
     }
   }, { passive: true });
