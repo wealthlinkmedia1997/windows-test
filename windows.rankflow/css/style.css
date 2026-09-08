@@ -123,14 +123,14 @@ h2 {
 /* Star rating + review line, shown under every CTA button */
 .stars-row {
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
   color: var(--text-muted);
   margin: 14px 0 0;
 }
 .stars-row .stars {
   color: #5a8f3d;
-  letter-spacing: 2px;
-  margin-right: 4px;
+  letter-spacing: 1px;
+  margin-right: 3px;
 }
 
 .gold-divider {
