@@ -334,8 +334,9 @@ h2 {
   color: #fff;
   text-align: center;
   font-weight: 700;
-  font-size: 11px;
-  padding: 12px 8px;
+  font-size: clamp(9px, 3.4vw, 15px);
+  white-space: nowrap;
+  padding: 12px 6px;
   border-radius: 4px;
   margin-bottom: 4px;
 }
