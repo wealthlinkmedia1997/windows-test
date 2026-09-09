@@ -18,21 +18,12 @@ document,'script','https://connect.facebook.net/en_US/fbevents.js');
 if (window.RANKFLOW_CONFIG && !window.RANKFLOW_CONFIG.META_PIXEL_ID.startsWith('REPLACE')) {
   fbq('init', window.RANKFLOW_CONFIG.META_PIXEL_ID);
   fbq('track', 'PageView');
-  fbq('track', 'Lead');
   fbq('track', 'Schedule');
 }
 </script>
 <noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=4390908821128639&ev=Lead&noscript=1"
-/></noscript>
-<noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=4390908821128639&ev=Schedule&noscript=1"
 /></noscript>
-<!-- The Lead pixel used to fire on book-tracked.html's load, since a lead
-     reaching that page was the qualifying event. Now that the homepage
-     routes straight here on form submit (see wireLeadForm() in main.js)
-     instead of to a separate booking page, this is that same qualifying
-     moment, so the Lead event moved here with it. -->
 </head>
 <body>
 <div class="wrap">
