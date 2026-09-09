@@ -83,15 +83,6 @@ function buildCardVideo(card) {
   v.playsInline = true;
   v.preload = "metadata";
   v.addEventListener("ended", () => releaseCard(card));
-  // Swap the poster back in on any pause (native controls' own pause
-  // button included, not just ours) - "ended" already handles the final
-  // pause that precedes it, via releaseCard(), so this only needs to cover
-  // a genuine mid-playback pause.
-  v.addEventListener("pause", () => {
-    if (v.ended) return;
-    card.classList.remove("is-previewing");
-  });
-  v.addEventListener("play", () => card.classList.add("is-previewing"));
   card.appendChild(v);
   card._video = v;
   return v;
@@ -157,27 +148,6 @@ function unmuteCard(card) {
   }
 }
 
-// Resumes a committed card that's paused (poster showing again, video
-// pointer-events off - see the CSS). Called only from a real click that
-// landed on the poster/play-btn rather than the video itself, so this is
-// always a genuine user gesture and unmuted play() can be trusted to work.
-function resumeCard(card) {
-  const v = card._video;
-  if (!v) return;
-  card.classList.add("is-previewing");
-  v.muted = false;
-  v.volume = 1;
-  card.classList.remove("is-muted");
-  const p = v.play();
-  if (p && p.catch) {
-    p.catch(() => {
-      v.muted = true;
-      card.classList.add("is-muted");
-      v.play().catch(() => {});
-    });
-  }
-}
-
 function wireVideoCards(scopeEl, opts) {
   const hoverEnabled = !opts || opts.hoverPreview !== false;
   (scopeEl || document).querySelectorAll(".video-card").forEach((card) => {
@@ -200,7 +170,7 @@ function wireVideoCards(scopeEl, opts) {
       });
     }
 
-    card.addEventListener("click", function (e) {
+    card.addEventListener("click", function () {
       // A click always wins over a pending hover-preview: without this, a
       // click landing within the 140ms hover delay above could be silently
       // undone moments later when that timer's own (uncommitted) playCard()
@@ -208,26 +178,13 @@ function wireVideoCards(scopeEl, opts) {
       // set.
       clearTimeout(card._hoverT);
 
-      // Once committed, the native controls live inside this same element
-      // and their clicks bubble up here too. e.target tells them apart from
-      // a click on the poster: the video only ever receives the click at all
-      // while it has pointer-events (i.e. while actually playing - see the
-      // CSS), so e.target lands inside it exactly when this was a native
-      // controls interaction (pause, seek, fullscreen...), and bailing out
-      // is what keeps that from being hijacked and restarting the video -
-      // except when it's still muted (e.g. left over from an
-      // autoplay-on-load fallback), where a click means "turn the sound
-      // on", not "restart playback". A target OUTSIDE the video, while
-      // still committed, only happens because it's paused and pointer-events
-      // is off - that's the poster, and a click there means "resume".
+      // Once committed, the native controls live inside this same element and
+      // their clicks bubble up here. Bailing out is what keeps pause, seek and
+      // fullscreen from being hijacked and restarting the video - except when
+      // it's still muted (e.g. left over from an autoplay-on-load fallback),
+      // where a click means "turn the sound on", not "restart playback".
       if (card.classList.contains("is-committed")) {
-        const v = card._video;
-        const clickedVideo = v && (e.target === v || v.contains(e.target));
-        if (clickedVideo) {
-          if (card.classList.contains("is-muted")) unmuteCard(card);
-        } else {
-          resumeCard(card);
-        }
+        if (card.classList.contains("is-muted")) unmuteCard(card);
         return;
       }
       playCard(card, true);
