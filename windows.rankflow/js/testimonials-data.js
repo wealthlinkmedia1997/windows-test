@@ -8,6 +8,18 @@
 // ============================================================
 window.TESTIMONIALS = [
   {
+    // Homepage-only variant of the "chris" testimonial below - separate id
+    // and asset filenames (chriss.mp4/chriss.jpg) so it can sit in its own
+    // spot (first) in HOME_TESTIMONIAL_IDS without touching the "chris"
+    // entry still used on thank-you.html.
+    id: "chriss",
+    quote: "2 months ago I wasnt getting calls, now my site presence has gone through the rough [over 100 5 star reviews] and getting calls every day",
+    name: "Chris",
+    company: "CK's Windows of Idaho Falls",
+    videoSrc: "assets/videos/chriss.mp4",
+    poster: "assets/videos/chriss.jpg",
+  },
+  {
     id: "todd",
     quote: "After 30 days I'm at an extra $6,300 in commercial and residential $2,400",
     name: "Todd",
@@ -72,6 +84,16 @@ window.TESTIMONIALS = [
     poster: "assets/videos/natalie-poster.jpg",
   },
   {
+    // Homepage-only variant of the "natalie" testimonial below - see the
+    // "chriss" entry above for why this has its own id/assets.
+    id: "natalies",
+    quote: "We were working with another company prior and now we see what a horrible job they did because Andre's team has been amazing",
+    name: "Natalie",
+    company: "Window & Door Repair Champions Irvine CA",
+    videoSrc: "assets/videos/natalies.mp4",
+    poster: "assets/videos/natalies.jpg",
+  },
+  {
     id: "danny",
     quote: "I saw the ad and thought this would be a scammy thing and come to find out people we work with were very professional [2 new leads within one WEEK]",
     name: "Danny",
@@ -107,8 +129,9 @@ window.HERO_TESTIMONIAL_IDS = ["todd", "anthony", "paul"];
 window.BOOKING_TESTIMONIAL_IDS = ["jim", "trevor", "mindi"];
 // Homepage (index.html) "P.S. Check Out..." section, now that the booking
 // flow lives on the homepage itself: the original 3 hero testimonials plus
-// the 3 that used to live on book-tracked.html, combined into one 6-up grid.
-window.HOME_TESTIMONIAL_IDS = ["todd", "anthony", "paul", "jim", "trevor", "mindi"];
+// the 3 that used to live on book-tracked.html, plus chriss/natalies
+// bookending the row.
+window.HOME_TESTIMONIAL_IDS = ["chriss", "todd", "anthony", "paul", "jim", "trevor", "mindi", "natalies"];
 // Thank-you page: Danny first, then everything from the booking pages, then
 // Chris and Natalie
 window.THANK_YOU_TESTIMONIAL_IDS = ["danny", "jim", "trevor", "mindi", "chris", "natalie"];
