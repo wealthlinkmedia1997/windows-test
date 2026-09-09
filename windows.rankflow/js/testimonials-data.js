@@ -102,16 +102,12 @@ window.TESTIMONIALS = [
     poster: "assets/videos/danny-poster.jpg",
   },
   {
-    // Not yet placed on any page - waiting on the actual 23.mp4 video file
-    // (only a Google Drive link was given, which this environment's network
-    // policy blocks; needs to be attached directly). Once videoSrc/poster
-    // are filled in, add "bryan" to the end of HOME_TESTIMONIAL_IDS below.
     id: "bryan",
     quote: "People think when the economy is bad, they should stop all advertising- this is really when you should double down on all advertising to the RIGHT PEOPLE",
     name: "Bryan",
     company: "Golden State Tint",
-    videoSrc: "",
-    poster: "",
+    videoSrc: "assets/videos/bryan.mp4",
+    poster: "assets/videos/bryan.jpg",
   },
 ];
 
@@ -133,7 +129,7 @@ window.BOOKING_TESTIMONIAL_IDS = ["jim", "trevor", "mindi"];
 // flow lives on the homepage itself: the original 3 hero testimonials plus
 // the 3 that used to live on book-tracked.html, plus chriss/natalies
 // bookending the row.
-window.HOME_TESTIMONIAL_IDS = ["chriss", "todd", "anthony", "paul", "jim", "trevor", "mindi", "natalies"];
+window.HOME_TESTIMONIAL_IDS = ["chriss", "bryan", "todd", "anthony", "paul", "jim", "trevor", "mindi", "natalies"];
 // Thank-you page: Danny first, then everything from the booking pages, then
 // Chris and Natalie
 window.THANK_YOU_TESTIMONIAL_IDS = ["danny", "jim", "trevor", "mindi", "chris", "natalie"];
