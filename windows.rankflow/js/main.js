@@ -228,17 +228,7 @@ function renderExplainerVideo(containerId, stepBarId, opts) {
     // autoplay with the existing "Click for sound" badge, which no site can
     // get around - there's no trick that forces real sound before a click.
     const card = el.querySelector(".video-card");
-    if (card) {
-      playCard(card, true);
-      // Unlike the testimonial cards (which keep their native controls live
-      // on pause - see main.js history), this explainer video is meant to
-      // fall back to its poster/play-btn the moment playback stops for any
-      // reason, "ended" included - releaseCard() already handles both.
-      const explainerVideo = card._video;
-      if (explainerVideo) {
-        explainerVideo.addEventListener("pause", () => releaseCard(card));
-      }
-    }
+    if (card) playCard(card, true);
   }
 }
 
