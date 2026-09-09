@@ -718,8 +718,12 @@ footer {
 .video-card.is-previewing .hover-video {
   opacity: 1;
 }
-/* controls only need to receive clicks once the card is committed */
-.video-card.is-committed .hover-video {
+/* Controls only need to receive clicks while actually playing. Once paused
+   (is-previewing removed, poster back on top - see the video's own "pause"
+   listener in main.js), pointer-events goes back to none so a click lands
+   on the poster/play-btn underneath instead of the invisible native
+   controls, and resumeCard() in main.js owns turning it back on. */
+.video-card.is-committed.is-previewing .hover-video {
   pointer-events: auto;
 }
 
