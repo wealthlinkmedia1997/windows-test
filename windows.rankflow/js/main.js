@@ -162,7 +162,7 @@ function wireVideoCards(scopeEl, opts) {
   });
 }
 
-function renderExplainerVideo(containerId, stepBarId) {
+function renderExplainerVideo(containerId, stepBarId, opts) {
   const el = document.getElementById(containerId);
   if (!el || !window.EXPLAINER_VIDEO) return;
   const v = window.EXPLAINER_VIDEO;
@@ -189,6 +189,18 @@ function renderExplainerVideo(containerId, stepBarId) {
   // with sound, pauses and rewinds on mouse-out, click commits it with
   // controls. On touch devices it stays tap-to-play.
   wireVideoCards(el);
+
+  if (opts && opts.autoplay) {
+    // Starts playing the instant the page loads, no hover/click needed.
+    // playCard() already does the right thing here: it tries unmuted first
+    // (works for a returning visitor with a high Media Engagement Index),
+    // and every browser's autoplay policy blocks a fresh page load from
+    // making sound with zero user interaction, so it falls back to a muted
+    // autoplay with the existing "Click for sound" badge, which no site can
+    // get around - there's no trick that forces real sound before a click.
+    const card = el.querySelector(".video-card");
+    if (card) playCard(card, true);
+  }
 }
 
 // ---------- Lead routing ----------

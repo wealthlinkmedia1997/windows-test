@@ -70,7 +70,7 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
 
   // Hides the "Step 1" bar entirely while EXPLAINER_VIDEO.videoSrc is still
   // empty (see testimonials-data.js)...
-  renderExplainerVideo("explainer-video", "stepBar");
+  renderExplainerVideo("explainer-video", "stepBar", { autoplay: true });
 
   // ...which would otherwise leave a lone "Step 2" with no Step 1 above it.
   if (!window.EXPLAINER_VIDEO || !window.EXPLAINER_VIDEO.videoSrc) {
