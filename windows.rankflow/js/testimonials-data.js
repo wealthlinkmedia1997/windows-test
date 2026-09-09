@@ -102,12 +102,14 @@ window.TESTIMONIALS = [
     poster: "assets/videos/danny-poster.jpg",
   },
   {
-    // Not currently placed on any page — kept in case you want to bring it back.
-    // No local video file downloaded for this one yet.
+    // Not yet placed on any page - waiting on the actual 23.mp4 video file
+    // (only a Google Drive link was given, which this environment's network
+    // policy blocks; needs to be attached directly). Once videoSrc/poster
+    // are filled in, add "bryan" to the end of HOME_TESTIMONIAL_IDS below.
     id: "bryan",
-    quote: "When the economy is bad, people think you need to hold onto your money, what you need to do is fork over as much of it into the RIGHT marketing at this time... these past 2.5 months I have seen a HUGE difference in jobs",
+    quote: "People think when the economy is bad, they should stop all advertising- this is really when you should double down on all advertising to the RIGHT PEOPLE",
     name: "Bryan",
-    company: "Golden State Tinting Las Vegas",
+    company: "Golden State Tint",
     videoSrc: "",
     poster: "",
   },
