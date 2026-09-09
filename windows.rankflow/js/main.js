@@ -210,6 +210,7 @@ function renderExplainerVideo(containerId, stepBarId, opts) {
       <div class="video-card" data-video-src="${v.videoSrc}" data-poster="${v.poster || ""}" style="aspect-ratio:16/9;max-height:none;">
         ${v.poster ? `<img src="${v.poster}" alt="Explainer video" loading="lazy">` : ""}
         <div class="play-btn">${ICON_PLAY}</div>
+        <div class="sound-hint">Click for sound</div>
       </div>
       <div class="explainer-caption">${v.caption || ""}</div>
     </div>
