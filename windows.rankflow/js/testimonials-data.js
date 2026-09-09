@@ -107,7 +107,7 @@ window.TESTIMONIALS = [
     name: "Bryan",
     company: "Golden State Tint",
     videoSrc: "assets/videos/bryan.mp4",
-    poster: "assets/videos/bryan.jpg?v=2",
+    poster: "assets/videos/bryan.jpg?v=3",
   },
 ];
 
