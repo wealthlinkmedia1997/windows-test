@@ -83,6 +83,15 @@ function buildCardVideo(card) {
   v.playsInline = true;
   v.preload = "metadata";
   v.addEventListener("ended", () => releaseCard(card));
+  // Keeps the "Click for sound" badge honest against the video's real muted
+  // state - not just the state our own playCard()/unmuteCard() last set it
+  // to. Desktop shows native controls with their own volume/mute icon (the
+  // click target the badge is standing in for anyway), and toggling that
+  // natively bypasses our code entirely; without this the badge could keep
+  // showing after a native unmute, or never reappear after a native re-mute.
+  v.addEventListener("volumechange", () => {
+    card.classList.toggle("is-muted", v.muted);
+  });
   card.appendChild(v);
   card._video = v;
   return v;
