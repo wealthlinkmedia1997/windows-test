@@ -5,11 +5,30 @@
 <link rel="apple-touch-icon" href="assets/favicon.png">
 <title>Your Call Is Booked | WealthLink Media</title>
 <meta name="robots" content="noindex">
+<link rel="preconnect" href="https://connect.facebook.net">
 <link rel="stylesheet" href="css/style.css">
 <link rel="preload" as="image" href="assets/logo.png">
-<!-- No Meta Pixel here by default, matching the "pixel only on landing +
-     qualified booking page" spec. If you later want a distinct booking-
-     confirmed conversion event, this is the natural place to add it. -->
+<script src="js/config.js"></script>
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+if (window.RANKFLOW_CONFIG && !window.RANKFLOW_CONFIG.META_PIXEL_ID.startsWith('REPLACE')) {
+  fbq('init', window.RANKFLOW_CONFIG.META_PIXEL_ID);
+  fbq('track', 'PageView');
+  fbq('track', 'Lead');
+}
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=4390908821128639&ev=Lead&noscript=1"
+/></noscript>
+<!-- The Lead pixel used to fire on book-tracked.html's load, since a lead
+     reaching that page was the qualifying event. Now that the homepage
+     routes straight here on form submit (see wireLeadForm() in main.js)
+     instead of to a separate booking page, this is that same qualifying
+     moment, so the Lead event moved here with it. -->
 </head>
 <body>
 <div class="wrap">
@@ -36,7 +55,6 @@
   <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
 </div>
 
-<script src="js/config.js"></script>
 <script src="js/testimonials-data.js"></script>
 <script src="js/main.js"></script>
 <script>

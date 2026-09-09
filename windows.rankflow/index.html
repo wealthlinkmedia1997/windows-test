@@ -35,8 +35,10 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
 
   <!-- One-step capture card: business name, first name, and phone all live
        right here now - no modal. wireLeadForm() validates and, on success,
-       sends the visitor straight to book-tracked.html (see main.js), which
-       greets them by name and business. -->
+       sends the visitor straight to thank-you.html (see main.js). Everything
+       that used to live on book-tracked.html/book-untracked.html (the Step 1
+       video, Step 2 calendar, and booking testimonials) is now built directly
+       into this page below instead of being a separate destination. -->
   <div class="scan-card">
     <p class="scan-title">See if your area supports 30+ calls a month</p>
 
@@ -76,10 +78,27 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
 
   <p class="stars-row"><span class="stars">★★★★★</span> 100+ reviews · 5 years serving window companies</p>
 
-  <hr class="gold-divider">
-  <h2 class="section-heading">Check out what other window treatment/installation owners are saying</h2>
+  <div class="step-bar" id="stepBar">⬇️ <u>Step 1:</u> Watch This 2 Minute Video ⬇️</div>
+  <div id="explainer-video"></div>
 
-  <div id="hero-testimonials"></div>
+  <p class="step2-heading" id="step2Heading"><u>Step 2:</u> Book a Call Below</p>
+
+  <div class="calendar-card">
+    <div class="calendar-embed-container" id="calendarEmbed">
+      <p class="calendar-loading">Loading calendar…</p>
+    </div>
+  </div>
+
+  <h2 id="testimonials">P.S. Check Out What Our Contractor Clients Have To Say</h2>
+  <div id="booking-testimonials"></div>
+
+  <!-- Second copy of the same calendar, so someone who has scrolled all the
+       way through the testimonials doesn't have to scroll back up to book. -->
+  <div class="calendar-card" id="calendarCardBottom">
+    <div class="calendar-embed-container" id="calendarEmbedBottom">
+      <p class="calendar-loading">Loading calendar…</p>
+    </div>
+  </div>
 
   <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
 </div>
@@ -94,7 +113,6 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
 <script src="js/main.js?v=3"></script>
 <script>
   renderLogo(document.getElementById("logo"));
-  renderTestimonials("hero-testimonials", window.HERO_TESTIMONIAL_IDS);
 
   wireBusinessAutocomplete(document.getElementById("heroBusinessName"));
   wireScrollToScan("[data-scroll-to-scan]", "heroBusinessName");
@@ -104,6 +122,22 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
   // is always visible, so there's nothing for it to reveal or hide.
   wireProgressiveForm(document.getElementById("leadForm"));
   wireStickyCta("stickyCta", ".scan-card");
+
+  // Everything below used to be book-tracked.html's own page - now built
+  // straight into the homepage instead of being a separate destination.
+
+  // Hides the "Step 1" bar entirely while EXPLAINER_VIDEO.videoSrc is still
+  // empty (see testimonials-data.js)...
+  renderExplainerVideo("explainer-video", "stepBar");
+
+  // ...which would otherwise leave a lone "Step 2" with no Step 1 above it.
+  if (!window.EXPLAINER_VIDEO || !window.EXPLAINER_VIDEO.videoSrc) {
+    document.getElementById("step2Heading").textContent = "Book a Call Below";
+  }
+
+  loadGhlCalendar("calendarEmbed", window.RANKFLOW_CONFIG.GHL_CALENDAR_TRACKED_URL);
+  renderTestimonials("booking-testimonials", window.HOME_TESTIMONIAL_IDS);
+  loadGhlCalendar("calendarEmbedBottom", window.RANKFLOW_CONFIG.GHL_CALENDAR_TRACKED_URL);
 </script>
 
 </body></html>

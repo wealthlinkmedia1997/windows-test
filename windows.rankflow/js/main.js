@@ -437,12 +437,13 @@ function wireLeadForm(formEl) {
     }
     // The windows homepage asks no revenue question, so there is nothing for
     // routeUser()'s revenue tiers to branch on - every lead here goes
-    // straight to the main calendar page, which greets them by name and
-    // business (see getLeadFirstName()/getLeadBusinessName()).
+    // straight to the thank-you page. The Step 1 video + Step 2 calendar are
+    // already built into this same homepage above, so there's no separate
+    // booking page left to route to.
     const fn = "fn=" + encodeURIComponent(data.firstName);
     const dest = hasRevenueField
       ? routeUser(gbp, revenueCode) + "?" + fn
-      : "book-tracked.html?" + fn + "&biz=" + encodeURIComponent(data.businessName);
+      : "thank-you.html?" + fn + "&biz=" + encodeURIComponent(data.businessName);
     window.location.href = dest;
   });
 }

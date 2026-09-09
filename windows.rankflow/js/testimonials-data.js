@@ -105,6 +105,10 @@ window.HERO_TESTIMONIAL_IDS = ["todd", "anthony", "paul"];
 // Booking pages (book-tracked.html + book-untracked.html), "P.S. check out
 // what our contractor clients have to say" section, in order
 window.BOOKING_TESTIMONIAL_IDS = ["jim", "trevor", "mindi"];
+// Homepage (index.html) "P.S. Check Out..." section, now that the booking
+// flow lives on the homepage itself: the original 3 hero testimonials plus
+// the 3 that used to live on book-tracked.html, combined into one 6-up grid.
+window.HOME_TESTIMONIAL_IDS = ["todd", "anthony", "paul", "jim", "trevor", "mindi"];
 // Thank-you page: Danny first, then everything from the booking pages, then
 // Chris and Natalie
 window.THANK_YOU_TESTIMONIAL_IDS = ["danny", "jim", "trevor", "mindi", "chris", "natalie"];
