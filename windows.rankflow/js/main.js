@@ -130,6 +130,24 @@ function playCard(card, committed) {
   }
 }
 
+// Turns the sound on for a card that's already committed and playing muted
+// (the autoplay-on-load fallback). Doesn't restart playback or fight a
+// pause the visitor just triggered via the native controls - v.paused
+// already reflects that by the time this runs, since native control clicks
+// resolve before the click event bubbles out to us.
+function unmuteCard(card) {
+  const v = card._video;
+  if (!v) return;
+  const wasPaused = v.paused;
+  v.muted = false;
+  v.volume = 1;
+  card.classList.remove("is-muted");
+  if (!wasPaused) {
+    const p = v.play();
+    if (p && p.catch) p.catch(() => {});
+  }
+}
+
 function wireVideoCards(scopeEl, opts) {
   const hoverEnabled = !opts || opts.hoverPreview !== false;
   (scopeEl || document).querySelectorAll(".video-card").forEach((card) => {
@@ -155,8 +173,13 @@ function wireVideoCards(scopeEl, opts) {
     card.addEventListener("click", function () {
       // Once committed, the native controls live inside this same element and
       // their clicks bubble up here. Bailing out is what keeps pause, seek and
-      // fullscreen from being hijacked and restarting the video.
-      if (card.classList.contains("is-committed")) return;
+      // fullscreen from being hijacked and restarting the video - except when
+      // it's still muted (e.g. left over from an autoplay-on-load fallback),
+      // where a click means "turn the sound on", not "restart playback".
+      if (card.classList.contains("is-committed")) {
+        if (card.classList.contains("is-muted")) unmuteCard(card);
+        return;
+      }
       playCard(card, true);
     });
   });
