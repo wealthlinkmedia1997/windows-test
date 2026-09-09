@@ -118,7 +118,7 @@ window.TESTIMONIALS = [
 // have this file, same pattern: assets/videos/explainer.mp4.
 window.EXPLAINER_VIDEO = {
   videoSrc: "assets/videos/2min.mp4?v=6",
-  poster: "assets/videos/2min.jpg?v=2",
+  poster: "assets/videos/2min.jpg?v=3",
   caption: "",
 };
 
