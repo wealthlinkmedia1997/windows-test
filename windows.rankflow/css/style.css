@@ -73,7 +73,6 @@ a {
   letter-spacing: .3px;
   margin: 0 0 20px;
   padding: 18px 20px;
-  border-radius: 0 0 16px 16px;
 }
 
 /* Small caption under the explainer video, and the divider/CTA-box pattern
@@ -97,34 +96,6 @@ a {
   margin: 0 0 16px;
 }
 
-/* Service icon row under the kicker */
-.service-icons {
-  display: flex;
-  gap: 8px;
-  margin: 0 0 16px;
-}
-.service-icon-item {
-  flex: 1;
-  min-width: 0;
-  background: #eef4ff;
-  border: 1px solid #dde9fc;
-  border-radius: 14px;
-  padding: 16px 4px 12px;
-  text-align: center;
-}
-.service-icon-item svg {
-  width: 26px;
-  height: 26px;
-  color: var(--blue);
-  margin-bottom: 8px;
-}
-.service-icon-item span {
-  display: block;
-  font-size: clamp(9px, 2.8vw, 12px);
-  font-weight: 700;
-  color: var(--text);
-  white-space: nowrap;
-}
 h1 {
   font-size: 28px;
   line-height: 1.2;
