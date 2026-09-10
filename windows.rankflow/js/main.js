@@ -217,7 +217,7 @@ function renderExplainerVideo(containerId, stepBarId, opts) {
   el.innerHTML = `
     <div class="explainer-video-wrap">
       <div class="video-card" data-video-src="${v.videoSrc}" data-poster="${v.poster || ""}" style="aspect-ratio:16/9;max-height:none;">
-        ${v.poster ? `<img src="${v.poster}" alt="Explainer video" loading="lazy">` : ""}
+        ${v.poster ? `<img src="${v.poster}" alt="Explainer video" fetchpriority="high">` : ""}
         <div class="play-btn">${ICON_PLAY}</div>
         <div class="sound-hint">Click for sound</div>
       </div>
@@ -230,15 +230,42 @@ function renderExplainerVideo(containerId, stepBarId, opts) {
   wireVideoCards(el);
 
   if (opts && opts.autoplay) {
-    // Starts playing the instant the page loads, no hover/click needed.
-    // playCard() already does the right thing here: it tries unmuted first
-    // (works for a returning visitor with a high Media Engagement Index),
-    // and every browser's autoplay policy blocks a fresh page load from
-    // making sound with zero user interaction, so it falls back to a muted
-    // autoplay with the existing "Click for sound" badge, which no site can
-    // get around - there's no trick that forces real sound before a click.
+    // Starts playing on its own, no hover/click needed - but not starting
+    // the moment renderExplainerVideo() runs. This card sits near the top
+    // of the page, and beginning a multi-MB video download immediately
+    // competes with the page's own critical-path resources (CSS, above-
+    // the-fold images) for bandwidth right when Lighthouse/PageSpeed's
+    // FCP/LCP/TBT metrics are measured, tanking mobile Performance scores
+    // for a visual difference of well under a second. Deferring the actual
+    // .play() call to after window "load" (with an idle-callback nudge, so
+    // it isn't starved indefinitely) keeps the poster image doing the job
+    // of looking like a finished page while the rest of the load completes
+    // first - same pattern loadGhlCalendar() already uses below.
+    //
+    // playCard() itself already does the right thing once called: it tries
+    // unmuted first (works for a returning visitor with a high Media
+    // Engagement Index), and every browser's autoplay policy blocks a
+    // fresh page load from making sound with zero user interaction, so it
+    // falls back to a muted autoplay with the existing "Click for sound"
+    // badge, which no site can get around - there's no trick that forces
+    // real sound before a click.
     const card = el.querySelector(".video-card");
-    if (card) playCard(card, true);
+    if (card) {
+      const start = () => playCard(card, true);
+      const schedule = () => {
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(start, { timeout: 1500 });
+        } else {
+          setTimeout(start, 200);
+        }
+      };
+      if (document.readyState === "complete") {
+        schedule();
+      } else {
+        window.addEventListener("load", schedule);
+        setTimeout(schedule, 3000);
+      }
+    }
   }
 }
 
