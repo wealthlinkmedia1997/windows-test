@@ -66,14 +66,14 @@ a {
   line-height: 1.25;
   text-align: center;
   color: var(--text);
-  margin: 0 0 16px;
+  margin: 0 0 10px;
 }
 
 /* Service icon row under the kicker */
 .service-icons {
   display: flex;
   gap: 8px;
-  margin: 0 0 28px;
+  margin: 0 0 16px;
 }
 .service-icon-item {
   flex: 1;
@@ -101,7 +101,7 @@ h1 {
   font-size: 28px;
   line-height: 1.2;
   text-align: center;
-  margin: 0 0 16px;
+  margin: 0 0 8px;
 }
 h1 .accent {
   color: var(--blue);
@@ -375,7 +375,7 @@ h2 {
 
 .explainer-video-wrap {
   position: relative;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 .explainer-caption {
   position: absolute;
@@ -392,7 +392,7 @@ h2 {
   text-align: center;
   font-weight: 700;
   font-size: 18px;
-  margin: 24px 0 16px;
+  margin: 16px 0 12px;
 }
 
 .calendar-card {
@@ -944,7 +944,7 @@ footer {
   line-height: 1.5;
   color: var(--text-muted);
   max-width: 460px;
-  margin: 0 auto 24px;
+  margin: 0 auto 14px;
 }
 
 .scan-card {
