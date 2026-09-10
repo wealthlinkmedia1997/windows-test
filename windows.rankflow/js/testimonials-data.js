@@ -129,7 +129,7 @@ window.BOOKING_TESTIMONIAL_IDS = ["jim", "trevor", "mindi"];
 // flow lives on the homepage itself: the original 3 hero testimonials plus
 // the 3 that used to live on book-tracked.html, plus chriss/natalies
 // bookending the row.
-window.HOME_TESTIMONIAL_IDS = ["trevor", "todd", "bryan", "natalies", "jim", "paul"];
+window.HOME_TESTIMONIAL_IDS = ["trevor", "todd", "anthony", "bryan", "natalies", "jim", "mindi", "chriss", "paul"];
 // Thank-you page: Danny first, then everything from the booking pages, then
 // Chris and Natalie
 window.THANK_YOU_TESTIMONIAL_IDS = ["danny", "jim", "trevor", "mindi", "chris", "natalie"];
