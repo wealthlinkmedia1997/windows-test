@@ -796,6 +796,38 @@ function loadGhlCalendar(containerId, url) {
   }
 }
 
+// Wires every [data-open-modal="<modalId>"] button on the page to open a
+// calendar popup instead of the calendar sitting inline on the page. The
+// calendar iframe is only built the first time the modal is actually
+// opened (loadGhlCalendar's own container.dataset.ghlStarted guard makes
+// repeat opens a no-op), not on page load.
+function wireCalendarModal(modalId, embedContainerId, calendarUrl) {
+  const modal = document.getElementById(modalId);
+  if (!modal) return;
+  const openModal = () => {
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+    loadGhlCalendar(embedContainerId, calendarUrl);
+  };
+  const closeModal = () => {
+    modal.classList.remove("open");
+    document.body.style.overflow = "";
+  };
+  document.querySelectorAll('[data-open-modal="' + modalId + '"]').forEach((btn) => {
+    btn.addEventListener("click", openModal);
+  });
+  modal.querySelectorAll("[data-close-modal]").forEach((btn) => {
+    btn.addEventListener("click", closeModal);
+  });
+  // Clicking the dark backdrop (not the modal card itself) also closes it.
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+  });
+}
+
 // ---------- Sticky bottom CTA bar: appears on scroll-down, hides on
 // scroll-up (and stays hidden near the top, since the hero button is
 // already visible there). On mobile it also hides while the lead form
