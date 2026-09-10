@@ -60,6 +60,8 @@ a {
 }
 
 /* Headings */
+/* Full-bleed banner bar - lives outside .wrap in the markup so it isn't
+   constrained by its padding on any side (top included). */
 .hero-kicker {
   background: var(--blue);
   color: #fff;
@@ -69,8 +71,8 @@ a {
   text-align: center;
   text-transform: uppercase;
   letter-spacing: .3px;
-  margin: 0 -20px 20px;
-  padding: 14px 20px;
+  margin: 0 0 20px;
+  padding: 18px 20px;
   border-radius: 0 0 16px 16px;
 }
 
