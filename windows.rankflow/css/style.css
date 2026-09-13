@@ -287,32 +287,42 @@ h2 {
 }
 .modal {
   background: #fff;
-  border-radius: 8px;
-  padding: 24px;
+  border-radius: 20px;
+  padding: 28px 24px;
   width: 100%;
   max-width: 420px;
   position: relative;
 }
 .modal-close {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  background: none;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f1f3;
+  border-radius: 50%;
   border: none;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1;
   cursor: pointer;
   color: var(--text-muted);
-  padding: 4px;
+  padding: 0;
 }
 .modal h2 {
-  margin: 0 0 5px !important;
-  font-size: 20px;
+  margin: 0 0 10px !important;
+  font-size: 26px;
+  font-weight: 800;
   text-align: center;
 }
-.modal-calendar {
-  max-width: 560px;
-  padding: 20px 16px;
+.modal-sub {
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--text-muted);
+  margin: 0 0 24px;
 }
 
 .field {

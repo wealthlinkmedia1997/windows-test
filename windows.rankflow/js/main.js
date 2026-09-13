@@ -855,6 +855,33 @@ function wireCalendarModal(modalId, embedContainerId, calendarUrl) {
   });
 }
 
+// Same open/close mechanics as wireCalendarModal(), for a modal that isn't
+// loading a calendar - e.g. a plain lead-capture form.
+function wireModal(modalId) {
+  const modal = document.getElementById(modalId);
+  if (!modal) return;
+  const openModal = () => {
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+  };
+  const closeModal = () => {
+    modal.classList.remove("open");
+    document.body.style.overflow = "";
+  };
+  document.querySelectorAll('[data-open-modal="' + modalId + '"]').forEach((btn) => {
+    btn.addEventListener("click", openModal);
+  });
+  modal.querySelectorAll("[data-close-modal]").forEach((btn) => {
+    btn.addEventListener("click", closeModal);
+  });
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && modal.classList.contains("open")) closeModal();
+  });
+}
+
 // ---------- Sticky bottom CTA bar: appears on scroll-down, hides on
 // scroll-up (and stays hidden near the top, since the hero button is
 // already visible there). On mobile it also hides while the lead form

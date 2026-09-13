@@ -4,7 +4,7 @@
 <title>Rank Top 3 in Google &amp; ChatGPT in 90 Days | WealthLink Media</title>
 <meta name="description" content="Contractors: rank top 3 in ChatGPT and Google in 90 days or you don't pay. Full refund, no questions asked.">
 <link rel="preconnect" href="https://connect.facebook.net">
-<link rel="stylesheet" href="css/style.css?v=13">
+<link rel="stylesheet" href="css/style.css?v=14">
 <script src="js/config.js?v=3"></script>
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -32,7 +32,7 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
   <div id="explainer-video"></div>
   <p class="video-caption">Watch how we do it (2 min)</p>
 
-  <button type="button" class="btn" data-open-modal="calendarModal">Schedule Your Free Strategy Call</button>
+  <button type="button" class="btn" data-open-modal="leadModal">Schedule Your Free Strategy Call</button>
   <p class="fine-print">No commitment. Just a conversation.</p>
 
   <hr class="divider">
@@ -42,36 +42,56 @@ src="https://www.facebook.com/tr?id=4390908821128639&ev=PageView&noscript=1"
 
   <div class="cta-box">
     <p class="cta-box-heading">Ready to get more calls?</p>
-    <button type="button" class="btn" data-open-modal="calendarModal">Schedule Your Free Strategy Call</button>
+    <button type="button" class="btn" data-open-modal="leadModal">Schedule Your Free Strategy Call</button>
   </div>
 
   <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
 </div>
 
-<!-- Calendar now lives in a popup instead of embedded inline - opened by
-     any [data-open-modal="calendarModal"] button above. The iframe itself
-     is only built the first time it's opened (see wireCalendarModal /
-     loadGhlCalendar's own start-once guard). -->
-<div class="modal-overlay" id="calendarModal">
-  <div class="modal modal-calendar">
+<!-- Lead-capture popup - opened by any [data-open-modal="leadModal"]
+     button above. Submitting it (wireLeadForm in main.js) posts to the
+     lead webhook and sends the visitor to thank-you.html; there's no
+     revenue/GBP question on this form, so wireLeadForm's own defensive
+     checks skip straight to that redirect. -->
+<div class="modal-overlay" id="leadModal">
+  <div class="modal">
     <button type="button" class="modal-close" data-close-modal="" aria-label="Close">&times;</button>
-    <div class="calendar-embed-container" id="calendarModalEmbed">
-      <p class="calendar-loading">Loading calendar…</p>
-    </div>
+    <h2>We'll Call You</h2>
+    <p class="modal-sub">Leave your info and we'll give you a call to see if we'd be a good fit.</p>
+    <form id="leadForm" novalidate>
+      <div class="field" data-step="firstName">
+        <div class="field-inner">
+          <label for="modalFirstName">Full Name</label>
+          <input type="text" id="modalFirstName" name="firstName" placeholder="John Smith" autocomplete="name">
+        </div>
+      </div>
+      <div class="field" data-step="phone">
+        <div class="field-inner">
+          <label for="modalPhone">Phone Number</label>
+          <input type="tel" id="modalPhone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+        </div>
+      </div>
+      <div class="field" data-step="submit">
+        <div class="field-inner">
+          <button type="submit" class="btn">Get My Free Strategy Call</button>
+          <p class="fine-print">We'll call you within 24 hours. No commitment required.</p>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
 
 <script src="js/testimonials-data.js?v=10"></script>
-<script src="js/main.js?v=13"></script>
+<script src="js/main.js?v=14"></script>
 <script>
   // Everything below used to be book-tracked.html's own page - now built
   // straight into the homepage instead of being a separate destination.
-  // There's no lead form on this page anymore, so the calendar popup below
-  // is the only conversion point.
   renderExplainerVideo("explainer-video", null, { autoplay: true });
 
   renderTestimonials("booking-testimonials", window.HOME_TESTIMONIAL_IDS);
-  wireCalendarModal("calendarModal", "calendarModalEmbed", window.RANKFLOW_CONFIG.GHL_CALENDAR_TRACKED_URL);
+  wireModal("leadModal");
+  wireLeadForm(document.getElementById("leadForm"));
+  wireProgressiveForm(document.getElementById("leadForm"));
 </script>
 
 </body></html>
