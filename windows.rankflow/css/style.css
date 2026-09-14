@@ -563,7 +563,7 @@ footer {
    back to visible once the animation is done - otherwise the
    Places dropdown gets cut off by its own parent.
    ============================================================ */
-#leadForm .field {
+.lead-form .field {
   display: grid;
   grid-template-rows: 1fr;
   margin-bottom: 18px;
@@ -573,33 +573,33 @@ footer {
               margin-bottom .38s cubic-bezier(.22,.61,.36,1),
               filter .26s ease;
 }
-#leadForm .field > .field-inner {
+.lead-form .field > .field-inner {
   min-height: 0;
   overflow: hidden;
   transform: translateY(0);
   transition: transform .38s cubic-bezier(.22,.61,.36,1), visibility 0s;
 }
-#leadForm .field.is-open > .field-inner {
+.lead-form .field.is-open > .field-inner {
   overflow: visible;
 }
-#leadForm .field.is-hidden {
+.lead-form .field.is-hidden {
   grid-template-rows: 0fr;
   opacity: 0;
   margin-bottom: 0;
   filter: blur(3px);
   pointer-events: none;
 }
-#leadForm .field.is-hidden > .field-inner {
+.lead-form .field.is-hidden > .field-inner {
   transform: translateY(-10px);
   visibility: hidden;
   transition: transform .38s cubic-bezier(.22,.61,.36,1), visibility 0s linear .38s;
 }
 
 /* green tick on a completed field */
-#leadForm .field > .field-inner > label {
+.lead-form .field > .field-inner > label {
   transition: color .2s ease;
 }
-#leadForm .field.is-done > .field-inner > label::after {
+.lead-form .field.is-done > .field-inner > label::after {
   content: "✓";
   color: #2e9e4f;
   margin-left: 7px;
@@ -632,17 +632,17 @@ footer {
 }
 
 /* focus polish */
-#leadForm input[type="text"]:focus,
-#leadForm input[type="tel"]:focus {
+.lead-form input[type="text"]:focus,
+.lead-form input[type="tel"]:focus {
   outline: none;
   border-color: var(--blue);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
 }
-#leadForm input[type="text"],
-#leadForm input[type="tel"] {
+.lead-form input[type="text"],
+.lead-form input[type="tel"] {
   transition: border-color .18s ease, box-shadow .18s ease;
 }
-#leadForm .field.has-error input {
+.lead-form .field.has-error input {
   border-color: #d33;
   animation: shake .32s;
 }
@@ -809,8 +809,8 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #leadForm .field,
-  #leadForm .field > .field-inner,
+  .lead-form .field,
+  .lead-form .field > .field-inner,
   .form-progress i,
   .ac-suggestions,
   .video-card,
@@ -821,7 +821,7 @@ footer {
 }
 
 /* springy pop when a conditional field appears */
-#leadForm .field.just-revealed > .field-inner {
+.lead-form .field.just-revealed > .field-inner {
   animation: fieldPop .5s cubic-bezier(.34, 1.45, .64, 1);
 }
 @keyframes fieldPop {
@@ -829,8 +829,8 @@ footer {
   55%  { transform: translateY(3px) scale(1.015); }
   100% { transform: translateY(0) scale(1); }
 }
-#leadForm .field.just-revealed .radio-option,
-#leadForm .field.just-revealed input {
+.lead-form .field.just-revealed .radio-option,
+.lead-form .field.just-revealed input {
   animation: fieldFade .45s ease both .06s;
 }
 @keyframes fieldFade {
@@ -866,9 +866,9 @@ footer {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #leadForm .field.just-revealed > .field-inner,
-  #leadForm .field.just-revealed input,
-  #leadForm .field.just-revealed .radio-option { animation: none; }
+  .lead-form .field.just-revealed > .field-inner,
+  .lead-form .field.just-revealed input,
+  .lead-form .field.just-revealed .radio-option { animation: none; }
 }
 /* ============================================================
    Thank-you page: the 2-minute video heading and the
@@ -914,7 +914,7 @@ footer {
    Raising the whole field instead puts the trapped context above
    its later siblings, and the dropdown escapes with it.
    ------------------------------------------------------------ */
-#leadForm .field {
+.lead-form .field {
   position: relative;
   z-index: 1;
 }
@@ -924,7 +924,7 @@ footer {
    is trapped any more. The hidden state keeps its translateY so the reveal
    animation is unaffected - transitions between `none` and a translate
    interpolate correctly. */
-#leadForm .field.is-open > .field-inner {
+.lead-form .field.is-open > .field-inner {
   transform: none;
 }
 
@@ -932,12 +932,12 @@ footer {
    business-name field outranks every field below it explicitly. Relying on
    `z-index: auto` for the later fields is what let this slip through the
    first time. */
-#leadForm .field[data-step="businessName"] {
+.lead-form .field[data-step="businessName"] {
   z-index: 60;
 }
-#leadForm .field[data-step="phone"],
-#leadForm .field[data-step="revenue"],
-#leadForm .field[data-step="submit"] {
+.lead-form .field[data-step="phone"],
+.lead-form .field[data-step="revenue"],
+.lead-form .field[data-step="submit"] {
   z-index: 1;
 }
 

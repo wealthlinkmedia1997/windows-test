@@ -4,7 +4,7 @@
 <title>Rank Top 3 in Google &amp; ChatGPT in 90 Days | WealthLink Media</title>
 <meta name="description" content="Contractors: rank top 3 in ChatGPT and Google in 90 days or you don't pay. Full refund, no questions asked.">
 <link rel="preconnect" href="https://connect.facebook.net">
-<link rel="stylesheet" href="css/style.css?v=14">
+<link rel="stylesheet" href="css/style.css?v=15">
 <script src="js/config.js?v=4"></script>
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -32,8 +32,32 @@ src="https://www.facebook.com/tr?id=1397099401876391&ev=PageView&noscript=1"
   <div id="explainer-video"></div>
   <p class="video-caption">Watch how we do it (2 min)</p>
 
-  <button type="button" class="btn" data-open-modal="leadModal">Get Your Free Strategy Call</button>
-  <p class="fine-print">No commitment. Just a conversation.</p>
+  <!-- Lead form, right on the page - no popup. Submitting it (wireLeadForm
+       in main.js) posts to the lead webhook and sends the visitor to
+       thank-you.html; there's no revenue/GBP question on this form, so
+       wireLeadForm's own defensive checks skip straight to that redirect. -->
+  <p class="cta-box-heading">We'll call you to see if we'd be a good fit.</p>
+  <p class="modal-sub">Leave your info and we'll reach out within 24 hours.</p>
+  <form id="leadFormTop" class="lead-form" novalidate>
+    <div class="field" data-step="firstName">
+      <div class="field-inner">
+        <label for="topFirstName">Full Name</label>
+        <input type="text" id="topFirstName" name="firstName" placeholder="John Smith" autocomplete="name">
+      </div>
+    </div>
+    <div class="field" data-step="phone">
+      <div class="field-inner">
+        <label for="topPhone">Phone Number</label>
+        <input type="tel" id="topPhone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+      </div>
+    </div>
+    <div class="field" data-step="submit">
+      <div class="field-inner">
+        <button type="submit" class="btn">Get My Free Strategy Call</button>
+        <p class="fine-print">No commitment required. Just a conversation.</p>
+      </div>
+    </div>
+  </form>
 
   <hr class="divider">
 
@@ -42,43 +66,30 @@ src="https://www.facebook.com/tr?id=1397099401876391&ev=PageView&noscript=1"
 
   <div class="cta-box">
     <p class="cta-box-heading">Ready to get more calls?</p>
-    <button type="button" class="btn" data-open-modal="leadModal">Get Your Free Strategy Call</button>
-  </div>
-
-  <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
-</div>
-
-<!-- Lead-capture popup - opened by any [data-open-modal="leadModal"]
-     button above. Submitting it (wireLeadForm in main.js) posts to the
-     lead webhook and sends the visitor to thank-you.html; there's no
-     revenue/GBP question on this form, so wireLeadForm's own defensive
-     checks skip straight to that redirect. -->
-<div class="modal-overlay" id="leadModal">
-  <div class="modal">
-    <button type="button" class="modal-close" data-close-modal="" aria-label="Close">&times;</button>
-    <h2>We'll Call You</h2>
-    <p class="modal-sub">Leave your info and we'll give you a call to see if we'd be a good fit.</p>
-    <form id="leadForm" novalidate>
+    <p class="modal-sub">Leave your info and we'll call you to see if we'd be a good fit.</p>
+    <form id="leadFormBottom" class="lead-form" novalidate>
       <div class="field" data-step="firstName">
         <div class="field-inner">
-          <label for="modalFirstName">Full Name</label>
-          <input type="text" id="modalFirstName" name="firstName" placeholder="John Smith" autocomplete="name">
+          <label for="bottomFirstName">Full Name</label>
+          <input type="text" id="bottomFirstName" name="firstName" placeholder="John Smith" autocomplete="name">
         </div>
       </div>
       <div class="field" data-step="phone">
         <div class="field-inner">
-          <label for="modalPhone">Phone Number</label>
-          <input type="tel" id="modalPhone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
+          <label for="bottomPhone">Phone Number</label>
+          <input type="tel" id="bottomPhone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
         </div>
       </div>
       <div class="field" data-step="submit">
         <div class="field-inner">
           <button type="submit" class="btn">Get My Free Strategy Call</button>
-          <p class="fine-print">We'll call you within 24 hours. No commitment required.</p>
+          <p class="fine-print">No commitment required. Just a conversation.</p>
         </div>
       </div>
     </form>
   </div>
+
+  <footer>© Copyright WealthLink Media 2026 | All Rights Reserved</footer>
 </div>
 
 <script src="js/testimonials-data.js?v=10"></script>
@@ -89,9 +100,10 @@ src="https://www.facebook.com/tr?id=1397099401876391&ev=PageView&noscript=1"
   renderExplainerVideo("explainer-video", null, { autoplay: true });
 
   renderTestimonials("booking-testimonials", window.HOME_TESTIMONIAL_IDS);
-  wireModal("leadModal");
-  wireLeadForm(document.getElementById("leadForm"));
-  wireProgressiveForm(document.getElementById("leadForm"));
+  [document.getElementById("leadFormTop"), document.getElementById("leadFormBottom")].forEach((f) => {
+    wireLeadForm(f);
+    wireProgressiveForm(f);
+  });
 </script>
 
 </body></html>
