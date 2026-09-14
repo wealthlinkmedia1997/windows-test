@@ -330,6 +330,7 @@ h2 {
 }
 .field label {
   display: block;
+  text-align: left;
   font-weight: 700;
   font-size: 14px;
   margin-bottom: 6px;
@@ -337,6 +338,7 @@ h2 {
 .field input[type="text"],
 .field input[type="tel"] {
   width: 100%;
+  text-align: left;
   padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
