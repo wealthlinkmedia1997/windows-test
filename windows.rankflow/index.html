@@ -4,7 +4,7 @@
 <title>Rank Top 3 in Google &amp; ChatGPT in 90 Days | WealthLink Media</title>
 <meta name="description" content="Contractors: rank top 3 in ChatGPT and Google in 90 days or you don't pay. Full refund, no questions asked.">
 <link rel="preconnect" href="https://connect.facebook.net">
-<link rel="stylesheet" href="css/style.css?v=17">
+<link rel="stylesheet" href="css/style.css?v=18">
 <script src="js/config.js?v=4"></script>
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -42,9 +42,24 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
        thank-you.html; there's no revenue/GBP question on this form, so
        wireLeadForm's own defensive checks skip straight to that redirect. -->
   <div class="cta-box">
-    <p class="cta-box-heading">We'll call you to see if we'd be a good fit.</p>
-    <p class="modal-sub">Leave your info and we'll reach out within 24 hours.</p>
+    <span class="cta-badge">1 Company Per Area</span>
+    <p class="cta-box-heading">Get Your Free Google Visibility Report</p>
+    <p class="modal-sub">Tell us your business name and we'll show you exactly where you're ranking, where your competitors are beating you, and what it's costing you every month.</p>
     <form id="leadFormTop" class="lead-form" novalidate>
+      <div class="field" data-step="businessName">
+        <div class="field-inner">
+          <label for="topBusinessName">Business Name</label>
+          <div class="autocomplete-wrapper">
+            <input type="text" id="topBusinessName" name="businessName" placeholder="CK's Windows"
+                   autocomplete="off" role="combobox" aria-autocomplete="list"
+                   aria-controls="topSuggestions" aria-expanded="false">
+            <span class="ac-spinner" hidden></span>
+            <ul class="ac-suggestions" id="topSuggestions" role="listbox" hidden></ul>
+          </div>
+          <input type="hidden" name="placeId" value="">
+          <input type="hidden" name="placeAddress" value="">
+        </div>
+      </div>
       <div class="field" data-step="firstName">
         <div class="field-inner">
           <label for="topFirstName">Full Name</label>
@@ -59,8 +74,8 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
       </div>
       <div class="field" data-step="submit">
         <div class="field-inner">
-          <button type="submit" class="btn">Get My Free Strategy Call</button>
-          <p class="fine-print">No commitment required. Just a conversation.</p>
+          <button type="submit" class="btn">Get My Free Report</button>
+          <p class="fine-print">We'll call you today with your results.</p>
         </div>
       </div>
     </form>
@@ -72,9 +87,24 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
   <div id="booking-testimonials"></div>
 
   <div class="cta-box">
-    <p class="cta-box-heading">Ready to get more calls?</p>
-    <p class="modal-sub">Leave your info and we'll call you to see if we'd be a good fit.</p>
+    <span class="cta-badge">1 Company Per Area</span>
+    <p class="cta-box-heading">Ready For Your Free Report?</p>
+    <p class="modal-sub">Same deal. Tell us your business name and we'll run the scan, show you where you stand, and show you exactly what to fix.</p>
     <form id="leadFormBottom" class="lead-form" novalidate>
+      <div class="field" data-step="businessName">
+        <div class="field-inner">
+          <label for="bottomBusinessName">Business Name</label>
+          <div class="autocomplete-wrapper">
+            <input type="text" id="bottomBusinessName" name="businessName" placeholder="CK's Windows"
+                   autocomplete="off" role="combobox" aria-autocomplete="list"
+                   aria-controls="bottomSuggestions" aria-expanded="false">
+            <span class="ac-spinner" hidden></span>
+            <ul class="ac-suggestions" id="bottomSuggestions" role="listbox" hidden></ul>
+          </div>
+          <input type="hidden" name="placeId" value="">
+          <input type="hidden" name="placeAddress" value="">
+        </div>
+      </div>
       <div class="field" data-step="firstName">
         <div class="field-inner">
           <label for="bottomFirstName">Full Name</label>
@@ -89,8 +119,8 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
       </div>
       <div class="field" data-step="submit">
         <div class="field-inner">
-          <button type="submit" class="btn">Get My Free Strategy Call</button>
-          <p class="fine-print">No commitment required. Just a conversation.</p>
+          <button type="submit" class="btn">Get My Free Report</button>
+          <p class="fine-print">We'll call you today with your results.</p>
         </div>
       </div>
     </form>
@@ -111,6 +141,8 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
     wireLeadForm(f);
     wireProgressiveForm(f);
   });
+  wireBusinessAutocomplete(document.getElementById("topBusinessName"));
+  wireBusinessAutocomplete(document.getElementById("bottomBusinessName"));
 </script>
 
 </body></html>

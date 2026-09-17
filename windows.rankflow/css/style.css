@@ -84,18 +84,31 @@ a {
   margin: 8px 0 20px;
 }
 .cta-box {
-  background: #f5f5f7;
-  border-radius: 16px;
+  background: #eef4fd;
+  border: 1.5px solid var(--blue);
+  border-radius: 20px;
   padding: 28px 20px;
   text-align: center;
   margin: 8px 0 28px;
 }
+.cta-badge {
+  display: inline-block;
+  background: var(--blue);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin: 0 0 14px;
+}
 .cta-box-heading {
-  font-size: clamp(9px, calc(4.3vw - 3.5px), 20px);
-  white-space: nowrap;
+  font-size: clamp(22px, 6vw, 28px);
+  line-height: 1.15;
   text-align: center;
   font-weight: 800;
-  margin: 0 0 16px;
+  margin: 0 0 12px;
 }
 
 h1 {
@@ -602,6 +615,10 @@ footer {
 /* green tick on a completed field */
 .lead-form .field > .field-inner > label {
   transition: color .2s ease;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  font-size: 12px;
+  font-weight: 800;
 }
 .lead-form .field.is-done > .field-inner > label::after {
   content: "✓";
@@ -645,6 +662,9 @@ footer {
 .lead-form input[type="text"],
 .lead-form input[type="tel"] {
   transition: border-color .18s ease, box-shadow .18s ease;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1.5px solid #d8dce3;
 }
 .lead-form .field.has-error input {
   border-color: #d33;
