@@ -3,11 +3,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
      <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/favicon.png">
-<title>Your Call Is Booked | WealthLink Media</title>
+<title>Your Google Visibility Report Is Ready | WealthLink Media</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://connect.facebook.net">
-<link rel="stylesheet" href="css/style.css?v=18">
-<link rel="preload" as="image" href="assets/logo.png">
+<link rel="stylesheet" href="css/style.css?v=19">
+<link rel="preload" as="image" href="assets/logo-transparent.png">
 <script src="js/config.js"></script>
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -30,20 +30,35 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
 /></noscript>
 </head>
 <body>
+<div class="thankyou-header">
+  <img src="assets/logo-transparent.png" alt="WealthLink Media" class="logo-img">
+</div>
 <div class="wrap">
-  <div class="logo" id="logo" style="display:flex; align-items:center; justify-content:center;"></div>
+  <div class="success-icon">
+    <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="3"
+         stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+  </div>
 
-  <h1 style="text-align:center;">Your Call With Angie Has Been Booked</h1>
-  <p class="page-copy" style="text-align:center; max-width:460px; margin:0 auto;">Please respond to Angie's personal text at
-    <span class="confirmed-phone" style="white-space:nowrap">(410) 824-5796</span></p>
+  <h1>Your Google Visibility Report Is Ready</h1>
+  <p class="page-copy"><strong>Angie</strong> will call you today at the number you provided to walk you
+    through your results and show you exactly what's costing you calls every month.</p>
 
   <hr class="divider">
 
   <!-- renderExplainerVideo() hides this heading entirely while
        EXPLAINER_VIDEO.videoSrc is still empty in testimonials-data.js, so
        there's no orphaned title sitting above nothing. -->
-  <h2 id="stepBar">Watch This 2-Minute Video To See Exactly How We Help You Rank #1 In ChatGPT And Google In 90 Days Below</h2>
+  <h2 id="stepBar">Watch This 2-Minute Video To See Exactly How We Rank Window Companies #1 On Google &amp; ChatGPT</h2>
   <div id="explainer-video"></div>
+  <p class="video-caption">2 min watch</p>
+
+  <hr class="divider">
+
+  <div class="cta-box">
+    <p class="cta-box-heading">Need To Reach Angie Now?</p>
+    <p class="modal-sub">Respond to her personal text or call her directly.</p>
+    <p class="confirmed-phone-big"><a href="tel:+14108245796">(410) 824-5796</a></p>
+  </div>
 
   <h2 id="testimonials">What Window Owners Are Saying</h2>
   <div id="booking-testimonials"></div>
@@ -57,7 +72,6 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
 <script src="js/testimonials-data.js?v=11"></script>
 <script src="js/main.js?v=14"></script>
 <script>
-  renderLogo(document.getElementById("logo"));
   renderExplainerVideo("explainer-video", "stepBar", { autoplay: true });
   renderTestimonials("booking-testimonials", window.HOME_TESTIMONIAL_IDS);
 </script>

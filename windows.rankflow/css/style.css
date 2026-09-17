@@ -75,6 +75,40 @@ a {
   padding: 18px 20px;
 }
 
+/* Full-bleed banner carrying the real logo, used at the top of the
+   thank-you page - same "lives outside .wrap" pattern as .hero-kicker. */
+.thankyou-header {
+  background: var(--blue);
+  text-align: center;
+  padding: 22px 20px;
+  margin: 0 0 28px;
+}
+.thankyou-header .logo-img {
+  width: 190px;
+}
+
+/* Big circular checkmark on the thank-you page */
+.success-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.confirmed-phone-big {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+.confirmed-phone-big a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
 /* Small caption under the explainer video, and the divider/CTA-box pattern
    that replaces the inline calendar embeds below */
 .video-caption {
