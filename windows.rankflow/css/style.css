@@ -85,6 +85,7 @@ a {
 }
 .thankyou-header .logo-img {
   width: 190px;
+  margin: 0 auto;
 }
 
 /* Big circular checkmark on the thank-you page */
