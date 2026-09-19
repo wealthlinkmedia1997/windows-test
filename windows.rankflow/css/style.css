@@ -528,6 +528,10 @@ footer {
   color: var(--text-muted);
   margin-top: 32px;
 }
+footer a {
+  color: var(--text-muted);
+  text-decoration: underline;
+}
 
 .divider {
   border: none;
@@ -1062,4 +1066,34 @@ footer {
 @media (min-width: 700px) {
   .hero-sub { font-size: 17px; }
   .scan-card { max-width: 500px; padding: 28px 26px; }
+}
+
+/* ============================================================
+   Legal pages (privacy policy, terms, etc.) - plain left-aligned
+   document layout, distinct from the marketing pages' centered style.
+   ============================================================ */
+.legal-page h1 {
+  text-align: left;
+  font-size: 24px;
+  letter-spacing: .02em;
+}
+.legal-page .legal-updated {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin: 0 0 28px;
+}
+.legal-page h2 {
+  text-align: left;
+  font-size: 17px;
+  margin: 30px 0 8px;
+}
+.legal-page p {
+  text-align: left;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+.legal-page p a {
+  color: var(--blue);
 }
