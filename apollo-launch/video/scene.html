@@ -1,0 +1,404 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Apollo Launch</title>
+<style>
+@font-face{font-family:"Inter Tight";font-weight:400;src:url(fonts/InterTight-400.ttf)}
+@font-face{font-family:"Inter Tight";font-weight:500;src:url(fonts/InterTight-500.ttf)}
+@font-face{font-family:"Inter Tight";font-weight:600;src:url(fonts/InterTight-600.ttf)}
+@font-face{font-family:"Inter Tight";font-weight:700;src:url(fonts/InterTight-700.ttf)}
+@font-face{font-family:"Inter Tight";font-weight:800;src:url(fonts/InterTight-800.ttf)}
+/* Brand tokens — swap for Apollo's verified values once apollo.io is reachable. */
+:root{
+  --bg:#0c0c0d; --ink:#0f1012; --paper:#ffffff; --canvas:#f6f6f4;
+  --line:#e7e6e2; --muted:#6b6b70; --accent:#f7e04b; --accent-ink:#1a1700;
+  --good:#1f9d55; --side:#111214;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);font-family:"Inter Tight",system-ui,sans-serif;color:var(--ink)}
+#stage{position:absolute;inset:0;overflow:hidden}
+#grid{position:absolute;inset:-200px;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:80px 80px}
+#glow{position:absolute;width:1400px;height:1400px;left:260px;top:-160px;border-radius:50%;background:radial-gradient(circle,rgba(247,224,75,.22),rgba(247,224,75,0) 60%)}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:50}
+
+/* Intro type */
+#intro{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5}
+.word{position:absolute;font-size:220px;font-weight:800;letter-spacing:-.045em;color:#fff;white-space:nowrap}
+.word .hl{color:var(--accent)}
+#bar{position:absolute;left:0;bottom:0;height:6px;background:var(--accent);z-index:6}
+
+/* App window */
+#cam{position:absolute;left:0;top:0;width:1920px;height:1080px;perspective:2200px;z-index:10}
+#app{position:absolute;left:160px;top:110px;width:1600px;height:900px;border-radius:20px;background:var(--canvas);overflow:hidden;
+  box-shadow:0 60px 140px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08);transform-origin:50% 50%;display:flex}
+#side{width:84px;background:var(--side);display:flex;flex-direction:column;align-items:center;padding-top:22px;gap:10px}
+.logo-sq{width:44px;height:44px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:24px;color:var(--accent-ink);margin-bottom:18px}
+.nav{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#9a9aa0}
+.nav svg{width:24px;height:24px}
+.nav.on{background:#26272b;color:#fff}
+#main{flex:1;display:flex;flex-direction:column;min-width:0}
+#top{height:68px;background:var(--paper);border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 28px;gap:16px}
+#top .title{font-size:22px;font-weight:700}
+#top .search{margin-left:24px;width:520px;height:40px;border-radius:10px;background:var(--canvas);border:1px solid var(--line);display:flex;align-items:center;padding:0 14px;color:var(--muted);font-size:16px;gap:10px}
+#top .sp{flex:1}
+.avatar{width:36px;height:36px;border-radius:50%;background:#d9d6cf;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+.view{position:absolute;inset:68px 0 0 84px;display:flex}
+.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:10px;font-weight:600;font-size:16px;border:1px solid var(--line);background:var(--paper);color:var(--ink);white-space:nowrap}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+
+/* People view */
+#filters{width:300px;background:var(--paper);border-right:1px solid var(--line);padding:22px 20px}
+#filters h4{font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px}
+.f{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;font-size:16px;font-weight:600;display:flex;justify-content:space-between;align-items:center}
+.f .chip{display:inline-block;margin-top:8px;font-size:14px;font-weight:600;background:var(--accent);color:var(--accent-ink);padding:4px 10px;border-radius:999px}
+#results{flex:1;padding:22px 26px;min-width:0}
+.rhead{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.rhead .count{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.rhead .sub{color:var(--muted);font-size:16px}
+table{width:100%;border-collapse:separate;border-spacing:0;background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:16px}
+th{text-align:left;font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;padding:14px 16px;border-bottom:1px solid var(--line);background:#fbfbfa}
+td{padding:14px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.cb{width:20px;height:20px;border-radius:6px;border:2px solid #c9c7c0;display:inline-flex;align-items:center;justify-content:center}
+.cb.on{background:var(--ink);border-color:var(--ink)}
+.cb.on::after{content:"";width:9px;height:5px;border-left:2.5px solid #fff;border-bottom:2.5px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+.pp{display:flex;align-items:center;gap:12px}
+.pp .av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff}
+.pp b{display:block;font-weight:700}
+.pp span{color:var(--muted);font-size:14px}
+.email{display:inline-flex;align-items:center;gap:8px;font-weight:600}
+.ver{font-size:12px;font-weight:700;color:var(--good);background:#e5f5ec;padding:3px 8px;border-radius:999px}
+.mask{color:#b3b1aa;letter-spacing:.06em}
+#toast{position:absolute;right:30px;bottom:30px;background:var(--ink);color:#fff;border-radius:14px;padding:18px 22px;font-size:17px;font-weight:600;display:flex;align-items:center;gap:12px;box-shadow:0 20px 50px rgba(0,0,0,.3)}
+#toast i{width:26px;height:26px;border-radius:50%;background:var(--accent);display:inline-block}
+
+/* Sequence view */
+#seqv{padding:26px 34px;flex-direction:column;gap:18px}
+.seqhead{display:flex;align-items:center;gap:14px}
+.seqhead h2{font-size:30px;font-weight:800;letter-spacing:-.02em}
+.pill{font-size:14px;font-weight:700;padding:5px 12px;border-radius:999px;background:#ecebe6;color:var(--muted)}
+.pill.live{background:#e5f5ec;color:var(--good)}
+.steps{display:flex;gap:18px}
+.step{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px}
+.step .d{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.step .n{font-size:20px;font-weight:700;margin:8px 0 14px}
+.step .ic{width:44px;height:44px;border-radius:12px;background:#f2f1ec;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.compose{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px 26px;font-size:19px;line-height:1.55;flex:1}
+.compose .subj{font-weight:700;font-size:20px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:14px}
+.caret{display:inline-block;width:2px;height:22px;background:var(--ink);vertical-align:-4px;margin-left:2px}
+.var{background:#fff7c2;border-radius:4px;padding:0 4px}
+
+/* Analytics view */
+#dashv{padding:26px 34px;flex-direction:column;gap:20px}
+.kpis{display:flex;gap:18px}
+.kpi{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.kpi .l{font-size:15px;font-weight:600;color:var(--muted)}
+.kpi .v{font-size:56px;font-weight:800;letter-spacing:-.04em;margin-top:6px}
+.kpi .delta{font-size:15px;font-weight:700;color:var(--good)}
+.kpi.sel{border:2px solid var(--ink)}
+.chart{flex:1;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px 26px;display:flex;flex-direction:column}
+.chart .ct{font-size:18px;font-weight:700;display:flex;align-items:center;gap:12px}
+.bars{flex:1;display:flex;align-items:flex-end;gap:16px;padding-top:20px}
+.bars div{flex:1;background:#e4e2db;border-radius:8px 8px 0 0}
+.bars div.hi{background:var(--accent)}
+.badge{font-size:15px;font-weight:800;background:var(--accent);color:var(--accent-ink);padding:5px 12px;border-radius:999px}
+
+/* Cursor */
+#cursor{position:absolute;left:0;top:0;width:34px;height:34px;z-index:40;filter:drop-shadow(0 4px 8px rgba(0,0,0,.35))}
+.ripple{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:3px solid var(--accent);z-index:39;opacity:0}
+
+/* Outro */
+#outro{position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px}
+.wm{display:flex;align-items:center;gap:24px;font-size:150px;font-weight:800;letter-spacing:-.05em;color:#fff}
+.wm .sq{width:130px;height:130px;border-radius:32px;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;font-size:96px}
+.tag{font-size:46px;font-weight:600;color:#d8d8da;letter-spacing:-.02em}
+.tag b{color:var(--accent);font-weight:700}
+#cta{height:76px;padding:0 40px;font-size:28px;border-radius:16px}
+.url{font-size:24px;color:#8d8d92;font-weight:500;letter-spacing:.02em}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="grid"></div>
+  <div id="glow"></div>
+
+  <div id="intro">
+    <div class="word" id="w0">Find<span class="hl">.</span></div>
+    <div class="word" id="w1">Engage<span class="hl">.</span></div>
+    <div class="word" id="w2">Close<span class="hl">.</span></div>
+    <div class="word" id="w3">All in <span class="hl">one.</span></div>
+  </div>
+  <div id="bar"></div>
+
+  <div id="cam"><div id="app">
+    <div id="side">
+      <div class="logo-sq">A</div>
+      <div class="nav" id="nav-home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg></div>
+      <div class="nav" id="nav-people"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6"/><circle cx="18" cy="9" r="3"/><path d="M17 15c3 0 5 2 5 5"/></svg></div>
+      <div class="nav" id="nav-seq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h10M4 12h16M4 18h7"/><circle cx="18" cy="6" r="2"/><circle cx="15" cy="18" r="2"/></svg></div>
+      <div class="nav" id="nav-dash"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+      <div class="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></div>
+    </div>
+    <div id="main">
+      <div id="top">
+        <div class="title" id="vtitle">People</div>
+        <div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><span id="q">Search people, companies, signals…</span></div>
+        <div class="sp"></div>
+        <div class="btn" id="btn-seq-add"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg>Add to sequence</div>
+        <div class="avatar">JM</div>
+      </div>
+
+      <div class="view" id="peoplev">
+        <div id="filters">
+          <h4>Filters</h4>
+          <div class="f" id="f-title"><div>Job titles<br><span class="chip" id="chip">VP of Sales</span></div><span>⌄</span></div>
+          <div class="f"><div>Company size</div><span>51–500</span></div>
+          <div class="f"><div>Industry</div><span>SaaS</span></div>
+          <div class="f"><div>Buying intent</div><span>High</span></div>
+          <div class="f"><div>Location</div><span>North America</span></div>
+        </div>
+        <div id="results">
+          <div class="rhead"><div class="count" id="cnt">0</div><div class="sub">people match your filters</div></div>
+          <table>
+            <thead><tr><th style="width:56px"><span class="cb" id="cb-all"></span></th><th>Name</th><th>Company</th><th>Email</th><th>Intent</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <div id="toast"><i></i><span>5 contacts added to <b>Q4 Outbound</b></span></div>
+      </div>
+
+      <div class="view" id="seqv">
+        <div class="seqhead"><h2>Q4 Outbound</h2><span class="pill" id="seqpill">Draft</span><div style="flex:1"></div><div class="btn pri" id="btn-launch">Launch sequence</div></div>
+        <div class="steps" id="steps"></div>
+        <div class="compose">
+          <div class="subj">Subject: <span id="subj"></span></div>
+          <div id="body"></div>
+        </div>
+      </div>
+
+      <div class="view" id="dashv">
+        <div class="seqhead"><h2>Performance</h2><span class="pill">Last 30 days</span></div>
+        <div class="kpis">
+          <div class="kpi"><div class="l">Emails sent</div><div class="v" id="k0">0</div><div class="delta">▲ 21%</div></div>
+          <div class="kpi"><div class="l">Open rate</div><div class="v" id="k1">0%</div><div class="delta">▲ 12%</div></div>
+          <div class="kpi"><div class="l">Reply rate</div><div class="v" id="k2">0%</div><div class="delta">▲ 9%</div></div>
+          <div class="kpi" id="kpi-mtg"><div class="l">Meetings booked</div><div class="v" id="k3">0</div><div class="delta">▲ 38%</div></div>
+        </div>
+        <div class="chart"><div class="ct">Meetings booked per week <span class="badge" id="badge">+38%</span></div><div class="bars" id="bars"></div></div>
+      </div>
+    </div>
+  </div></div>
+
+  <div id="outro">
+    <div class="wm"><div class="sq">A</div><span>Apollo.io</span></div>
+    <div class="tag">The <b>AI sales platform</b> for every go-to-market team.</div>
+    <div class="btn pri" id="cta">Start for free</div>
+    <div class="url">apollo.io</div>
+  </div>
+
+  <div class="ripple" id="rip"></div>
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l16 9.5-7 1.6 4 7.4-3 1.5-4-7.4L5 19z" fill="#fff" stroke="#000" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  <div id="flash"></div>
+</div>
+
+<script>
+const B = 60/128;                      // one beat, seconds
+const DUR = 15;
+const $ = s => document.querySelector(s);
+const clamp = (x,a=0,b=1) => Math.min(b,Math.max(a,x));
+const lerp = (a,b,k) => a+(b-a)*k;
+const prog = (t,a,b) => clamp((t-a)/(b-a));
+const eo = k => 1-Math.pow(1-k,3);
+const eio = k => k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+const back = k => { const c=1.9; return 1+(c+1)*Math.pow(k-1,3)+c*Math.pow(k-1,2); };
+
+// Fictional sample records (no real people).
+const PEOPLE = [
+  ["Maya Chen","VP of Sales","Northwind","maya@northwind.io","#e2725b","High"],
+  ["Daniel Ortiz","VP of Sales","Brightlane","d.ortiz@brightlane.com","#4a7bd0","High"],
+  ["Priya Nair","VP of Sales","Cobalt Labs","priya@cobaltlabs.ai","#2f9e7a","High"],
+  ["Sam Okafor","VP of Sales","Fieldstone","sam@fieldstone.co","#9a5bd0","Med"],
+  ["Lena Fischer","VP of Sales","Quantive","lena.f@quantive.io","#d0a23a","High"],
+  ["Tom Becker","VP of Sales","Helix Cloud","tbecker@helixcloud.com","#5a6b7d","Med"],
+];
+$('#rows').innerHTML = PEOPLE.map((p,i)=>`<tr id="r${i}">
+  <td><span class="cb" id="cb${i}"></span></td>
+  <td><div class="pp"><div class="av" style="background:${p[4]}">${p[0].split(' ').map(s=>s[0]).join('')}</div><div><b>${p[0]}</b><span>${p[1]}</span></div></div></td>
+  <td>${p[2]}</td>
+  <td id="em${i}"><span class="btn" id="acc${i}" style="height:34px;font-size:14px;padding:0 12px">Access email</span></td>
+  <td><span class="pill ${p[5]==='High'?'live':''}">${p[5]}</span></td></tr>`).join('');
+
+const STEPS = [["Day 1","Automatic email","✉"],["Day 3","Phone call","☏"],["Day 5","LinkedIn message","in"],["Day 8","AI follow-up","✦"]];
+$('#steps').innerHTML = STEPS.map((s,i)=>`<div class="step" id="st${i}"><div class="ic">${s[2]}</div><div class="d">${s[0]}</div><div class="n">${s[1]}</div><div class="btn ${i==0?'dark':''}" id="stb${i}" style="height:34px;font-size:14px">${i==0?'✦ Write with AI':'Edit'}</div></div>`).join('');
+
+const BARS=[22,28,26,34,31,40,38,47,45,58,62,74];
+$('#bars').innerHTML = BARS.map((v,i)=>`<div id="b${i}"></div>`).join('');
+
+const SUBJ = "Quick idea for {{company}}'s Q4 pipeline";
+const BODY = "Hi {{first_name}}, saw {{company}} is hiring 6 AEs — teams scaling that fast usually hit a pipeline wall in Q4. We help sales leaders book 38% more meetings with verified data and AI-written sequences. Worth a 15-min look?";
+const fmtVars = s => s.replace(/\{\{(\w+)\}\}/g,'<span class="var">{{$1}}</span>');
+function typed(s,k){ const n=Math.floor(s.length*k); let out=s.slice(0,n); // don't split a {{var}}
+  const o=out.lastIndexOf('{{'), c=out.lastIndexOf('}}'); if(o>c) out=out.slice(0,o); return fmtVars(out); }
+
+// Click cues on the beat — must match audio/beats.json clickBeats.
+const CLICKS = [
+  {b:8,  sel:'#nav-people'},
+  {b:10, sel:'#chip'},
+  {b:12, sel:'#cb-all'},
+  {b:14, sel:'#acc0'},
+  {b:16, sel:'#btn-seq-add'},
+  {b:18, sel:'#stb0'},
+  {b:20, sel:'#btn-launch'},
+  {b:22, sel:'#nav-dash'},
+  {b:24, sel:'#kpi-mtg'},
+  {b:26, sel:'#nav-home'},
+  {b:28, sel:'#cta'},
+];
+function centerOf(sel){ const r=$(sel).getBoundingClientRect(); return [r.left+r.width/2, r.top+r.height/2]; }
+function show(el,on){ el.style.display = on ? '' : 'none'; }
+
+function render(t){
+  const beat = t/B;
+  // ---------- background ----------
+  $('#grid').style.transform = `translate(${-(t*40)%80}px,${-(t*24)%80}px)`;
+  const kickPulse = (beat>=4 && beat<30) ? Math.exp(-((beat%1)*B)/0.09) : 0;
+  $('#glow').style.opacity = 0.5 + 0.5*kickPulse;
+  $('#stage').style.transform = `scale(${1+0.006*kickPulse})`;
+
+  // ---------- intro words (beats 0..8) ----------
+  const words=['#w0','#w1','#w2','#w3'];
+  words.forEach((w,i)=>{
+    const s=i*2, e=s+2; const el=$(w);
+    if(beat<s||beat>=e||beat>=8){ el.style.opacity=0; return; }
+    const k=eo(prog(beat,s,s+0.5)); const out=prog(beat,e-0.35,e);
+    el.style.opacity = 1-out;
+    el.style.filter = `blur(${(1-k)*18 + out*10}px)`;
+    el.style.transform = `scale(${lerp(1.45,1,k) + out*0.12}) translateY(${(1-k)*30}px)`;
+  });
+  $('#bar').style.width = beat<8 ? (beat/8*100)+'%' : '0%';
+  $('#intro').style.display = beat<8 ? 'flex' : 'none';
+
+  // ---------- flash ----------
+  const flashAt=[8,30]; let fl=0;
+  flashAt.forEach(f=>{ if(beat>=f) fl=Math.max(fl, Math.exp(-(beat-f)*B/0.09)*0.85); });
+  $('#flash').style.opacity = fl;
+
+  // ---------- app window camera ----------
+  const app=$('#app');
+  const inApp = beat>=8 && beat<27.2;
+  show($('#cam'), inApp);
+  if(inApp){
+    const k=back(prog(beat,8,9.1));
+    let sc=lerp(0.72,1,k), rx=lerp(24,0,eo(prog(beat,8,9.4))), ry=0, tx=0, ty=lerp(220,0,eo(prog(beat,8,9)));
+    // push-in on email reveal (beats 13.5–16)
+    const z1 = eio(prog(beat,13.2,14.2)) * (1-eio(prog(beat,15.4,16.4)));
+    sc += 0.18*z1; tx += -210*z1; ty += -40*z1;
+    // whip between views
+    const w1 = Math.sin(Math.PI*prog(beat,16.6,17.4)); ry += 7*w1; sc -= 0.05*w1;
+    const w2 = Math.sin(Math.PI*prog(beat,21.6,22.4)); ry -= 7*w2; sc -= 0.05*w2;
+    // push-in on meetings KPI (beats 23.6–25.6)
+    const z2 = eio(prog(beat,23.4,24.4)) * (1-eio(prog(beat,25.4,26.2)));
+    sc += 0.12*z2; tx += -330*z2; ty += 60*z2;
+    // exit (beats 26–27.2)
+    const ex = eio(prog(beat,26.1,27.2));
+    sc *= lerp(1,0.55,ex); ty += -60*ex; rx += -14*ex;
+    app.style.opacity = 1-prog(beat,26.6,27.2);
+    app.style.transform = `translate(${tx}px,${ty}px) rotateX(${rx}deg) rotateY(${ry}deg) scale(${sc})`;
+  }
+
+  // view selection
+  const view = beat<17 ? 'people' : beat<22 ? 'seq' : 'dash';
+  show($('#peoplev'), view==='people'); show($('#seqv'), view==='seq'); show($('#dashv'), view==='dash');
+  $('#vtitle').textContent = {people:'People',seq:'Sequences',dash:'Analytics'}[view];
+  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('on'));
+  $({people:'#nav-people',seq:'#nav-seq',dash:'#nav-dash'}[view]).classList.add('on');
+  show($('#btn-seq-add'), view==='people');
+
+  // ---------- People view ----------
+  // chip appears on click @10; rows cascade from 10
+  $('#chip').style.opacity = beat<10 ? 0.25 : 1;
+  $('#chip').style.transform = `scale(${beat<10?1: 1+0.25*Math.exp(-(beat-10)*B/0.08)})`;
+  const cnt = beat<10 ? 0 : Math.round(12480*eo(prog(beat,10,11.6)));
+  $('#cnt').textContent = beat<10 ? '—' : cnt.toLocaleString('en-US');
+  PEOPLE.forEach((p,i)=>{
+    const r=$('#r'+i); const k=eo(prog(beat,10+i*0.12,10.7+i*0.12));
+    r.style.opacity = beat<8.3 ? (beat<10?0.0:k) : (beat<10?0:k);
+    r.style.transform = `translateY(${(1-k)*24}px)`;
+    // select-all @12 with stagger
+    $('#cb'+i).classList.toggle('on', beat>=12+i*0.08);
+  });
+  $('#cb-all').classList.toggle('on', beat>=12);
+  // email reveal @14
+  const em = $('#em0');
+  if(beat>=14){
+    const k=prog(beat,14,15.1); const full=PEOPLE[0][3]; const n=Math.ceil(full.length*k);
+    em.innerHTML = `<span class="email">${full.slice(0,n)}<span class="mask">${'•'.repeat(full.length-n)}</span>${k>=1?'<span class="ver">✓ Verified</span>':''}</span>`;
+  } else {
+    em.innerHTML = `<span class="btn" id="acc0" style="height:34px;font-size:14px;padding:0 12px">Access email</span>`;
+  }
+  const tk = beat<16 ? 0 : eo(prog(beat,16,16.5)) * (1-prog(beat,16.7,17));
+  $('#toast').style.opacity = tk; $('#toast').style.transform = `translateY(${(1-tk)*30}px)`;
+
+  // ---------- Sequence view ----------
+  STEPS.forEach((s,i)=>{ const k=back(prog(beat,17.1+i*0.18,17.9+i*0.18)); const el=$('#st'+i);
+    el.style.opacity=clamp(k); el.style.transform=`translateY(${(1-clamp(k))*40}px) scale(${lerp(.92,1,clamp(k))})`; });
+  $('#subj').innerHTML = beat<18 ? '' : typed(SUBJ, prog(beat,18,19));
+  $('#body').innerHTML = (beat<18 ? '' : typed(BODY, prog(beat,18.5,21.2))) + ((beat>=18 && Math.floor(t*4)%2==0)?'<span class="caret"></span>':'');
+  const live = beat>=20;
+  $('#seqpill').textContent = live?'● Active':'Draft'; $('#seqpill').classList.toggle('live',live);
+  $('#btn-launch').textContent = live?'✓ Launched':'Launch sequence';
+  $('#btn-launch').className = 'btn '+(live?'dark':'pri');
+  $('#btn-launch').style.transform = `scale(${live?1+0.12*Math.exp(-(beat-20)*B/0.1):1})`;
+
+  // ---------- Analytics view ----------
+  const kk = eo(prog(beat,22,23.6));
+  $('#k0').textContent = Math.round(18420*kk).toLocaleString('en-US');
+  $('#k1').textContent = Math.round(68*kk)+'%';
+  $('#k2').textContent = Math.round(24*kk)+'%';
+  $('#k3').textContent = Math.round(142*kk);
+  BARS.forEach((v,i)=>{ const k=eo(prog(beat,22.2+i*0.06,23.2+i*0.06)); const b=$('#b'+i);
+    b.style.height = (v*k)+'%'; b.classList.toggle('hi', beat>=24 && i>=9); });
+  $('#kpi-mtg').classList.toggle('sel', beat>=24);
+  const bk = beat<24?0:back(prog(beat,24,24.6));
+  $('#badge').style.transform = `scale(${bk})`;
+
+  // ---------- Outro ----------
+  const oIn = beat>=27;
+  show($('#outro'), oIn);
+  if(oIn){
+    const wm = $('.wm'); const k=back(prog(beat,27,28));
+    wm.style.opacity = clamp(prog(beat,27,27.5));
+    wm.style.transform = `scale(${lerp(.6,1,clamp(k,0,1.2)) + (beat>=30?0.06*Math.exp(-(beat-30)*B/0.15):0)})`;
+    const tg=$('.tag'); const k2=eo(prog(beat,27.4,28.2)); tg.style.opacity=k2; tg.style.transform=`translateY(${(1-k2)*30}px)`;
+    const c=$('#cta'); const k3=eo(prog(beat,27.6,28)); c.style.opacity=k3;
+    c.style.transform = `scale(${beat>=28 ? 1-0.08*Math.exp(-(beat-28)*B/0.06)+0.08*(1-Math.exp(-(beat-28)*B/0.06))*Math.exp(-(beat-28)*B/0.2) : lerp(.85,1,k3)})`;
+    $('.url').style.opacity = eo(prog(beat,28.5,29.2));
+    $('#outro').style.opacity = 1-prog(beat,31.4,32);
+  }
+
+  // ---------- Cursor + click ripples ----------
+  const cur=$('#cursor'), rip=$('#rip');
+  let prev=null, next=null;
+  for(const c of CLICKS){ if(c.b<=beat) prev=c; else { next=c; break; } }
+  const visible = beat>=6.6 && beat<29.4 && $(next? next.sel : prev.sel) && (!next || $(next.sel).offsetParent!==null || true);
+  let x=1500,y=1200;
+  const safe = sel => { const el=$(sel); if(!el || el.getClientRects().length===0) return null; return centerOf(sel); };
+  if(!prev && next){ const p=safe(next.sel)||[960,540]; const k=eio(prog(beat,6.6,next.b-0.15)); x=lerp(1700,p[0],k); y=lerp(1150,p[1],k); }
+  else if(prev && next){ const a=safe(prev.sel), b=safe(next.sel)||a; const k=eio(prog(beat,prev.b+0.35,next.b-0.12));
+    const A=a||b; x=lerp(A[0],b[0],k); y=lerp(A[1],b[1],k) - Math.sin(Math.PI*k)*40; }
+  else if(prev){ const a=safe(prev.sel)||[960,700]; x=a[0]; y=a[1]; }
+  // press: dip right on the beat
+  let press=0; if(prev) press=Math.exp(-(beat-prev.b)*B/0.07);
+  cur.style.display = visible?'block':'none';
+  cur.style.transform = `translate(${x-6}px,${y-4}px) scale(${1-0.22*press})`;
+  if(prev && beat-prev.b<1.1){ const k=prog(beat,prev.b,prev.b+1.0); const p=safe(prev.sel)||[x,y];
+    rip.style.opacity = (1-k)*0.95; rip.style.left=p[0]+'px'; rip.style.top=p[1]+'px';
+    rip.style.transform=`scale(${1+eo(k)*3.2})`; } else rip.style.opacity=0;
+}
+window.render = render;
+render(0);
+</script>
+</body>
+</html>
