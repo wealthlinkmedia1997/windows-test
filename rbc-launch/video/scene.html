@@ -1,0 +1,478 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Rabbit Breeding Calculator Launch</title>
+<style>
+@font-face{font-family:"PJS";font-weight:400;src:url(fonts/PlusJakartaSans-400.ttf)}
+@font-face{font-family:"PJS";font-weight:500;src:url(fonts/PlusJakartaSans-500.ttf)}
+@font-face{font-family:"PJS";font-weight:600;src:url(fonts/PlusJakartaSans-600.ttf)}
+@font-face{font-family:"PJS";font-weight:700;src:url(fonts/PlusJakartaSans-700.ttf)}
+@font-face{font-family:"PJS";font-weight:800;src:url(fonts/PlusJakartaSans-800.ttf)}
+/* Brand tokens: stand-ins until rabbitbreedingcalculator.com's real values can be sampled. */
+:root{
+  --brand:#1f8a5b; --brand-dk:#166b46; --brand-tint:#e6f4ec; --carrot:#f2994a;
+  --ink:#1f2328; --muted:#5f6670; --faint:#c9ced4; --line:#e6e8eb; --paper:#fff;
+  --glow:rgba(31,138,91,.20); --glow2:rgba(242,153,74,.16);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#fff;font-family:"PJS",system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.scene{position:absolute;inset:0;overflow:hidden;display:none}
+.abs{position:absolute}
+.card{position:absolute;background:var(--paper);border-radius:22px;border:1px solid #eef0f2;
+  box-shadow:0 30px 70px -10px var(--glow),0 8px 24px rgba(20,30,40,.06)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:999px;background:var(--brand);color:#fff;font-weight:600;white-space:nowrap}
+.lbl{color:var(--brand);font-weight:600}
+.mark{border-radius:28%;background:linear-gradient(140deg,#2bb673 0%,#1f8a5b 45%,#0f5e3c 100%);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 18px 40px -8px var(--glow),inset 0 2px 0 rgba(255,255,255,.25)}
+.mark svg{width:62%;height:62%}
+.caret{display:inline-block;width:5px;background:var(--ink);margin-left:6px;vertical-align:-10%}
+#cursor{position:absolute;left:0;top:0;width:120px;height:120px;z-index:90;transform-origin:30% 10%;display:none;filter:drop-shadow(0 8px 14px rgba(0,0,0,.25))}
+.ripple{position:absolute;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:4px solid var(--brand);z-index:89;opacity:0}
+
+/* A: hero cluster */
+#A .head{position:absolute;left:0;right:0;top:470px;text-align:center;font-size:100px;font-weight:600;letter-spacing:-.035em}
+.mini-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;font-size:17px;font-weight:600;margin-bottom:10px}
+.dot{width:12px;height:12px;border-radius:50%}
+.bars{display:flex;align-items:flex-end;gap:10px;height:110px}
+.bars i{display:block;width:30px;border-radius:8px 8px 3px 3px;background:linear-gradient(#2bb673,#1f8a5b)}
+.stat{font-size:40px;font-weight:700;color:var(--brand);line-height:1.05;letter-spacing:-.02em}
+.stat small{font-size:18px;color:var(--muted);font-weight:600;margin-left:6px}
+
+/* B: site UI */
+#site{position:absolute;left:110px;top:70px;width:1700px;height:1000px;border-radius:26px;background:#f7f8f6;overflow:hidden;
+  box-shadow:0 50px 120px -20px var(--glow),0 0 0 1px #e9ece8}
+#site .nav{height:92px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 44px;gap:18px}
+#site .nav .name{font-size:24px;font-weight:800;letter-spacing:-.02em}
+#site .nav .links{display:flex;gap:34px;margin-left:60px;font-size:19px;font-weight:600;color:var(--muted)}
+#site .nav .links .on{color:var(--brand)}
+.field{border:1.5px solid var(--line);border-radius:14px;padding:16px 20px;font-size:22px;font-weight:600;background:#fff}
+.flabel{font-size:15px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:24px 0 10px}
+.seg{display:flex;gap:10px}
+.seg span{flex:1;text-align:center;padding:14px 0;border-radius:12px;border:1.5px solid var(--line);font-weight:600;font-size:18px;background:#fff}
+.seg span.on{background:var(--brand-tint);border-color:var(--brand);color:var(--brand-dk)}
+.track{position:relative;height:12px;border-radius:99px;background:#edf0ee;margin:58px 0 18px}
+.track .fill{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#2bb673,#1f8a5b)}
+.ms{position:absolute;top:-44px;transform:translateX(-50%);font-size:15px;font-weight:700;color:var(--muted);white-space:nowrap;text-align:center}
+.ms b{display:block;width:16px;height:16px;border-radius:50%;background:#fff;border:3px solid var(--brand);margin:8px auto 0}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;font-size:16px;font-weight:600;text-align:center;color:var(--muted)}
+.cal span{padding:9px 0;border-radius:10px}
+.cal span.hl{background:var(--brand);color:#fff}
+
+/* C typing */
+#C .line{position:absolute;top:470px;left:0;white-space:nowrap;font-size:118px;font-weight:500;letter-spacing:-.035em}
+#C .caret{height:118px}
+
+/* D sentence with inline card */
+#D .w{position:absolute;top:478px;font-size:104px;font-weight:600;letter-spacing:-.035em;white-space:nowrap}
+
+/* F word wall */
+.col{position:absolute;top:0;font-size:124px;font-weight:600;letter-spacing:-.03em;color:#cfd4da;line-height:1.08;text-align:center}
+#F .hero{position:absolute;left:0;right:0;top:468px;text-align:center;font-size:124px;font-weight:600;letter-spacing:-.03em}
+.brk{position:absolute;width:44px;height:44px;border:9px solid var(--brand)}
+
+/* G checklist */
+.ck{display:flex;align-items:center;gap:30px;font-size:76px;font-weight:600;letter-spacing:-.03em;height:116px}
+.ck .c{width:62px;height:62px;border-radius:50%;border:4px solid #c9ced4;position:relative;flex:none}
+.ck .c svg{position:absolute;inset:-4px}
+.ck .sub{font-size:28px;color:var(--muted);font-weight:600;letter-spacing:0;margin-left:10px}
+
+/* J icons */
+.ico{position:absolute;width:112px;height:112px;margin:-56px 0 0 -56px}
+.ico svg{width:100%;height:100%}
+</style>
+</head>
+<body>
+
+<!-- ============ A: hero cluster ============ -->
+<div class="scene" id="A"><div class="abs" id="Acam" style="inset:0;transform-origin:50% 50%">
+  <div class="card" id="a1" style="left:250px;top:90px;width:380px;padding:20px">
+    <div class="lbl" style="font-size:15px;margin-bottom:12px">Gestation timeline</div>
+    <div class="mini-row"><span class="dot" style="background:#2bb673"></span>Day 0 · Bred</div>
+    <div class="mini-row"><span class="dot" style="background:#f2c94c"></span>Day 12 · Palpate</div>
+    <div class="mini-row"><span class="dot" style="background:var(--carrot)"></span>Day 28 · Nest box in</div>
+  </div>
+  <div class="mark abs" id="a2" style="left:820px;top:170px;width:126px;height:126px;border-radius:50%"><svg viewBox="0 0 64 64"><use href="#rabbit"/></svg></div>
+  <div class="card" id="a3" style="left:1390px;top:70px;width:320px;height:290px;padding:24px;overflow:visible">
+    <div style="height:14px;width:70%;background:#eef0f2;border-radius:6px;margin-bottom:12px"></div>
+    <div style="height:14px;width:90%;background:#eef0f2;border-radius:6px;margin-bottom:12px"></div>
+    <div style="height:14px;width:55%;background:#eef0f2;border-radius:6px;margin-bottom:28px"></div>
+    <div style="font-size:24px;font-weight:700;letter-spacing:-.02em;line-height:1.2">How to Sex a Rabbit</div>
+    <div style="font-size:16px;color:var(--muted);margin-top:8px;font-weight:500">Blog · 4 min guide</div>
+    <div class="card" style="right:-70px;bottom:26px;padding:12px 18px;font-size:16px;font-weight:600;display:flex;gap:10px;align-items:center;border-radius:14px"><span class="dot" style="background:var(--brand)"></span>Read guide</div>
+  </div>
+  <div class="mark abs" id="a4" style="left:200px;top:440px;width:120px;height:120px;background:linear-gradient(140deg,#f6b26b,#f2994a 45%,#2bb673)"><svg viewBox="0 0 64 64"><use href="#rabbit"/></svg></div>
+  <div class="card" id="a5" style="left:250px;top:690px;width:540px;padding:24px 26px">
+    <div class="lbl" style="font-size:17px">Breeding date</div>
+    <div style="font-size:24px;font-weight:600;margin-top:8px" id="a5t"></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:20px"><span class="btn" style="height:46px;padding:0 22px;font-size:17px">Calculate</span></div>
+  </div>
+  <div class="card" id="a6" style="left:1160px;top:650px;width:420px;padding:24px 26px">
+    <div style="font-size:20px;font-weight:700">Litter size</div>
+    <div style="display:flex;gap:30px;align-items:flex-end;margin-top:16px">
+      <div class="bars" id="a6b"><i></i><i></i><i></i><i></i></div>
+      <div><div class="stat" id="s1">0<small>kits</small></div><div class="stat" style="color:#2bb673" id="s2">0<small>kits</small></div><div class="stat" style="color:var(--carrot)" id="s3">0<small>kits</small></div></div>
+    </div>
+  </div>
+  <div class="abs" id="a7" style="left:1610px;top:590px;width:104px;height:104px"><svg viewBox="0 0 64 64"><use href="#i-cal"/></svg></div>
+  <div class="head" id="Ahead">Smarter rabbit breeding</div>
+</div></div>
+
+<!-- ============ B: site UI ============ -->
+<div class="scene" id="B"><div class="abs" id="Bcam" style="inset:0;transform-origin:0 0">
+  <div id="site">
+    <div class="nav">
+      <div class="mark" style="width:52px;height:52px"><svg viewBox="0 0 64 64"><use href="#rabbit"/></svg></div>
+      <div class="name">Rabbit Breeding Calculator</div>
+      <div class="links"><span class="on">Calculator</span><span>Gestation Chart</span><span>Breeds Hub</span><span>Blog</span></div>
+      <div style="flex:1"></div>
+      <span class="btn" style="height:52px;padding:0 26px;font-size:18px">Get the App</span>
+    </div>
+    <div style="display:flex;gap:36px;padding:40px 44px">
+      <div class="card" style="position:relative;width:700px;padding:36px 38px;box-shadow:0 20px 50px -10px rgba(31,138,91,.12)">
+        <div style="font-size:36px;font-weight:800;letter-spacing:-.03em">Due Date Calculator</div>
+        <div style="font-size:19px;color:var(--muted);margin-top:8px;font-weight:500">Enter the breeding date to get the exact kindling date.</div>
+        <div class="flabel">Breed size</div>
+        <div class="seg"><span>Dwarf</span><span>Medium</span><span>Commercial</span><span class="on">Giant</span></div>
+        <div class="flabel">Breeding date</div>
+        <div class="field">10 / 08 / 2026</div>
+        <div class="flabel">Breed</div>
+        <div class="field">Flemish Giant</div>
+        <span class="btn" id="calcBtn" style="width:100%;height:76px;font-size:24px;margin-top:30px;border-radius:16px">Calculate due date</span>
+      </div>
+      <div class="card" id="res" style="position:relative;flex:1;padding:36px 40px;box-shadow:0 20px 50px -10px rgba(31,138,91,.12)">
+        <div class="lbl" style="font-size:18px;text-transform:uppercase;letter-spacing:.08em">Expected kindling date</div>
+        <div style="font-size:84px;font-weight:800;letter-spacing:-.045em;margin-top:6px" id="due">— — —</div>
+        <div style="font-size:21px;color:var(--muted);font-weight:600" id="dueSub">Giant breeds: 31–33 day window</div>
+        <div class="track"><div class="fill" id="fill"></div>
+          <div class="ms" style="left:0%">Bred<b></b></div><div class="ms" style="left:37%">Palpate<b></b></div>
+          <div class="ms" style="left:85%">Nest box<b></b></div><div class="ms" style="left:100%;transform:translateX(-100%)">Kindle<b></b></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin:30px 0 14px;font-size:20px;font-weight:700"><span>November 2026</span><span style="color:var(--muted)">‹ ›</span></div>
+        <div class="cal" id="cal"></div>
+      </div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ============ C: typing ============ -->
+<div class="scene" id="C">
+  <div class="line" id="Cline"><span id="Cty"></span><span class="caret" id="Ccar"></span></div>
+  <div class="line" id="Cmeasure" style="visibility:hidden"><span id="Cpre">for every breed in </span><span id="Cbh">Breeds Hub</span></div>
+</div>
+
+<!-- ============ D: sentence + inline card ============ -->
+<div class="scene" id="D"><div class="abs" id="Dcam" style="inset:0;transform-origin:960px 540px">
+  <div class="w" id="Dl" style="right:1220px">Plan</div>
+  <div class="card" id="Dcard" style="left:740px;top:440px;width:440px;height:200px;padding:22px 24px;border-radius:20px">
+    <div class="lbl" style="font-size:17px">Calculate a due date</div>
+    <div id="Dtxt" style="font-size:20px;font-weight:500;margin-top:10px;line-height:1.45;min-height:58px"></div>
+    <div style="position:absolute;right:20px;bottom:18px"><span class="btn" style="height:44px;padding:0 20px;font-size:16px">✦ Calculate</span></div>
+  </div>
+  <div class="w" id="Dr" style="left:1220px">every litter</div>
+</div></div>
+
+<!-- ============ E: compare matrix ============ -->
+<div class="scene" id="E">
+  <div class="abs" id="Ew" style="left:150px;top:478px;font-size:104px;font-weight:600;letter-spacing:-.035em">Compare</div>
+  <div class="card" id="Etable" style="left:760px;top:250px;width:1000px;padding:28px 32px">
+    <div class="lbl" style="font-size:17px;margin-bottom:16px">Breed gestation &amp; comparison</div>
+    <table style="width:100%;border-collapse:collapse;font-size:22px">
+      <thead><tr style="color:var(--muted);font-size:15px;text-transform:uppercase;letter-spacing:.07em;text-align:left">
+        <th style="padding:10px 14px">Breed</th><th>Gestation</th><th>Litter</th><th>First breeding</th><th>Nest box</th></tr></thead>
+      <tbody id="Erows"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ F: word wall ============ -->
+<div class="scene" id="F"><div class="abs" id="Fcam" style="inset:0;transform-origin:960px 540px">
+  <div class="col" id="Fc0" style="left:-130px;width:640px"></div>
+  <div class="col" id="Fc1" style="left:640px;width:640px"></div>
+  <div class="col" id="Fc2" style="left:1410px;width:640px"></div>
+  <div class="abs" id="Fmask" style="left:600px;top:420px;width:720px;height:250px;background:#fff"></div>
+  <div class="hero" id="Fhero">Predict</div>
+  <div class="brk" id="bk0" style="border-right:0;border-bottom:0;border-radius:14px 0 0 0"></div>
+  <div class="brk" id="bk1" style="border-left:0;border-top:0;border-radius:0 0 14px 0"></div>
+  <svg class="abs" id="Fstar" viewBox="0 0 64 64" style="width:96px;height:96px"><path d="M32 2C34 22 42 30 62 32 42 34 34 42 32 62 30 42 22 34 2 32 22 30 30 22 32 2Z" fill="var(--carrot)"/></svg>
+</div></div>
+
+<!-- ============ G: checklist ============ -->
+<div class="scene" id="G"><div class="abs" id="Gcam" style="left:520px;top:300px;transform-origin:0 50%">
+  <div class="ck" id="g0"><div class="c"></div><span>Dwarf &amp; Mini</span><span class="sub">2–4 kits</span></div>
+  <div class="ck" id="g1"><div class="c"></div><span>Commercial Meat</span><span class="sub">7–11 kits</span></div>
+  <div class="ck" id="g2"><div class="c"></div><span>Giant</span><span class="sub">31–33 days</span></div>
+  <div class="ck" id="g3"><div class="c"></div><span>Fancy &amp; Fur</span><span class="sub">pelt care</span></div>
+</div></div>
+
+<!-- ============ H: calculate button ============ -->
+<div class="scene" id="H"><div class="abs" id="Hcam" style="inset:0;transform-origin:900px 700px">
+  <div class="abs" style="left:-40px;top:250px;font-size:84px;font-weight:500;letter-spacing:-.03em;white-space:nowrap">Giant doe, bred Oct 8. When is she due?</div>
+  <div class="abs" style="left:-100px;top:440px;width:1260px;height:760px;border-radius:40px;background:#fff;box-shadow:60px 60px 120px -20px var(--glow)"></div>
+  <span class="btn abs" id="Hbtn" style="left:560px;top:620px;width:620px;height:180px;font-size:72px;letter-spacing:-.02em;box-shadow:0 30px 60px -12px rgba(31,138,91,.45)">✦ Calculate</span>
+</div></div>
+
+<!-- ============ I: lockup ============ -->
+<div class="scene" id="I">
+  <div class="abs" id="Inow" style="left:0;right:0;top:470px;text-align:center;font-size:120px;font-weight:600;letter-spacing:-.035em">Now in one app</div>
+  <div class="abs" id="Ilock" style="left:0;right:0;top:420px;display:flex;flex-direction:column;align-items:center;gap:18px">
+    <div style="display:flex;align-items:center;gap:26px"><div class="mark" style="width:120px;height:120px"><svg viewBox="0 0 64 64"><use href="#rabbit"/></svg></div>
+      <div style="font-size:84px;font-weight:700;letter-spacing:-.04em">Rabbit Breeding Calculator</div></div>
+    <div style="font-size:40px;font-weight:600;color:var(--muted)">with <span style="color:var(--brand)">✦ Breeds Hub</span></div>
+  </div>
+</div>
+
+<!-- ============ J: icon ring ============ -->
+<div class="scene" id="J"><div class="abs" id="Jcam" style="inset:0;transform-origin:960px 500px">
+  <div class="mark abs" id="Jmark" style="left:860px;top:400px;width:200px;height:200px"><svg viewBox="0 0 64 64"><use href="#rabbit"/></svg></div>
+  <div id="ring"></div>
+  <div class="abs" id="Jurl" style="left:0;right:0;top:940px;text-align:center;font-size:34px;font-weight:600;color:var(--muted);letter-spacing:-.01em">rabbitbreedingcalculator.com</div>
+</div></div>
+
+<div class="ripple" id="rip"></div>
+<svg id="cursor" viewBox="0 0 24 24"><path d="M9 2.5c-1 0-1.8.8-1.8 1.8V13l-1.4-1.5c-.7-.7-1.9-.7-2.6 0-.6.6-.7 1.6-.1 2.3l4.6 5.8c1.2 1.5 3 2.4 4.9 2.4h2.6c3 0 5.4-2.4 5.4-5.4v-4.8c0-1-.8-1.8-1.8-1.8s-1.8.8-1.8 1.8v-.6c0-1-.8-1.8-1.8-1.8s-1.8.8-1.8 1.8v-.6c0-1-.8-1.8-1.8-1.8s-1.6.7-1.7 1.6V4.3C10.8 3.3 10 2.5 9 2.5z" fill="#fff" stroke="#111" stroke-width="1.2" stroke-linejoin="round"/></svg>
+
+<!-- symbol library -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <g id="rabbit" fill="#fff"><ellipse cx="24" cy="19" rx="6" ry="15" transform="rotate(-14 24 19)"/><ellipse cx="40" cy="19" rx="6" ry="15" transform="rotate(14 40 19)"/><circle cx="32" cy="41" r="15"/><circle cx="26.5" cy="39" r="2.2" fill="#0f5e3c"/><circle cx="37.5" cy="39" r="2.2" fill="#0f5e3c"/></g>
+  <g id="i-cal"><rect x="6" y="10" width="52" height="48" rx="9" fill="#fff" stroke="#e1e5e8" stroke-width="2"/><path d="M6 19a9 9 0 0 1 9-9h34a9 9 0 0 1 9 9v6H6z" fill="#1f8a5b"/><text x="32" y="51" font-family="PJS" font-weight="800" font-size="22" text-anchor="middle" fill="#1f8a5b">31</text></g>
+  <g id="i-calc"><rect x="10" y="4" width="44" height="56" rx="9" fill="#2bb673"/><rect x="16" y="11" width="32" height="12" rx="3" fill="#fff"/><g fill="#fff"><circle cx="22" cy="33" r="3.4"/><circle cx="32" cy="33" r="3.4"/><circle cx="42" cy="33" r="3.4"/><circle cx="22" cy="45" r="3.4"/><circle cx="32" cy="45" r="3.4"/><circle cx="42" cy="45" r="3.4" fill="#f2994a"/></g></g>
+  <g id="i-chart"><rect x="8" y="34" width="12" height="22" rx="3" fill="#f2c94c"/><rect x="26" y="20" width="12" height="36" rx="3" fill="#2bb673"/><rect x="44" y="8" width="12" height="48" rx="3" fill="#1f8a5b"/></g>
+  <g id="i-book"><path d="M8 12c8-4 16-4 24 2v42c-8-6-16-6-24-2z" fill="#4a90d9"/><path d="M56 12c-8-4-16-4-24 2v42c8-6 16-6 24-2z" fill="#6aa9ea"/></g>
+  <g id="i-nest"><path d="M8 30L32 10l24 20v24a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4z" fill="#f2994a"/><rect x="22" y="36" width="20" height="22" rx="10" fill="#8a4b14"/></g>
+  <g id="i-phone"><rect x="16" y="4" width="32" height="56" rx="8" fill="#1f2328"/><rect x="20" y="10" width="24" height="40" rx="3" fill="#2bb673"/><circle cx="32" cy="55" r="2" fill="#fff"/></g>
+  <g id="i-yt"><rect x="4" y="14" width="56" height="38" rx="11" fill="#ff0033"/><path d="M27 24l14 9-14 9z" fill="#fff"/></g>
+  <g id="i-fb"><circle cx="32" cy="32" r="27" fill="#1877f2"/><path d="M35 54V36h6l1-7h-7v-4c0-2 .6-3.4 3.5-3.4H42v-6.3c-.7-.1-3-.3-5.6-.3-5.6 0-9.4 3.4-9.4 9.6V29h-6v7h6v18z" fill="#fff"/></g>
+  <g id="i-ig"><defs><linearGradient id="igg" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#feda75"/><stop offset=".4" stop-color="#fa7e1e"/><stop offset=".7" stop-color="#d62976"/><stop offset="1" stop-color="#4f5bd5"/></linearGradient></defs><rect x="6" y="6" width="52" height="52" rx="15" fill="url(#igg)"/><circle cx="32" cy="32" r="11" fill="none" stroke="#fff" stroke-width="4.5"/><circle cx="45" cy="19" r="3" fill="#fff"/></g>
+  <g id="i-tt"><circle cx="32" cy="32" r="27" fill="#111"/><path d="M35 14h6c.5 5 3.6 8 8 8.3v6.2c-3 0-5.7-1-8-2.6V39a11 11 0 1 1-11-11v6.4a4.7 4.7 0 1 0 5 4.6z" fill="#fff"/></g>
+</defs></svg>
+
+<script>
+const $ = s => document.querySelector(s);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,k)=>a+(b-a)*k;
+const P=(t,a,b)=>clamp((t-a)/(b-a));
+const eo=k=>1-Math.pow(1-k,3);
+const eo5=k=>1-Math.pow(1-k,5);
+const eio=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+const back=k=>{const c=1.6;return 1+(c+1)*Math.pow(k-1,3)+c*Math.pow(k-1,2)};
+// damped spring 0→1, for "settle" moves
+const spring=(k)=>k<=0?0:1-Math.exp(-6*k)*Math.cos(9*k);
+const CUES = window.CUES || {clicks:[3,7,8.5,10,10.25,10.5,10.75,11.5],typing:[{start:4.25,end:5.35,text:"for every breed in Breeds Hub"},{start:7.6,end:8.3,text:"Flemish Giant doe, bred Oct 8. When is she due?"}]};
+
+// ---------- static content ----------
+const ROWS=[["Holland Lop","30–31 d","2–4","5–6 mo","12×10×8 in"],["New Zealand White","31 d","7–11","6 mo","18×12×10 in"],
+  ["Flemish Giant","31–33 d","6–12","8–10 mo","24×14×12 in"],["Mini Rex","31 d","3–5","5 mo","14×10×8 in"],["Champagne d'Argent","31–32 d","5–8","6–7 mo","18×12×10 in"]];
+$('#Erows').innerHTML=ROWS.map((r,i)=>`<tr id="er${i}" style="border-top:1px solid var(--line)">${r.map((c,j)=>`<td style="padding:16px 14px;${j==0?'font-weight:700':'font-weight:500;color:#3b4148'}">${c}</td>`).join('')}</tr>`).join('');
+let cal='';['S','M','T','W','T','F','S'].forEach(d=>cal+=`<span style="font-weight:700">${d}</span>`);
+for(let d=1;d<=28;d++) cal+=`<span id="cd${d}">${d}</span>`;
+$('#cal').innerHTML=cal;
+const W=Array.from({length:9},()=> 'predict').join('<br>');
+['#Fc0','#Fc1','#Fc2'].forEach(s=>$(s).innerHTML=W+'<br>'+W);
+const ICONS=['i-calc','i-cal','i-chart','i-book','i-nest','i-phone','i-yt','i-fb','i-ig','i-tt'];
+$('#ring').innerHTML=ICONS.map((id,i)=>`<div class="ico" id="ic${i}"><svg viewBox="0 0 64 64"><use href="#${id}"/></svg></div>`).join('');
+const CHECK='<svg viewBox="0 0 70 70"><circle cx="35" cy="35" r="33" fill="none" stroke="var(--brand)" stroke-width="4"/><path d="M21 36l10 10 19-21" fill="none" stroke="var(--brand)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" class="tick"/></svg>';
+
+function scene(id,on){ $(id).style.display=on?'block':'none'; return on; }
+function setT(el,s){ el.style.transform=s; }
+function center(el){ const r=el.getBoundingClientRect(); return [r.left+r.width/2,r.top+r.height/2]; }
+let cursorState=null; // {x,y,press,show}
+
+function render(t){
+  cursorState={show:false,x:0,y:0,press:0};
+  let ripple=null;
+
+  // ================= A 0–2.5 =================
+  if(scene('#A', t<2.6)){
+    const ex=eio(P(t,2.2,2.6));
+    setT($('#Acam'),`scale(${lerp(1,1.09,eo(P(t,0,2.3)))+ex*0.7})`);
+    $('#Acam').style.filter=`blur(${ex*14}px)`; $('#Acam').style.opacity=1-P(t,2.35,2.6);
+    const items=[['#a1',0.05,[-60,-40]],['#a2',0.18,[0,-50]],['#a3',0.12,[60,-40]],['#a4',0.25,[-70,0]],['#a5',0.3,[-50,50]],['#a6',0.22,[60,50]],['#a7',0.36,[70,20]]];
+    items.forEach(([s,d,[dx,dy]],i)=>{ const k=P(t,d,d+0.75), e=eo5(k);
+      const drift=Math.sin(t*1.3+i)*6;
+      $(s).style.opacity=clamp(k*2.2); $(s).style.filter=`blur(${(1-e)*10}px)`;
+      setT($(s),`translate(${dx*(1-e)}px,${dy*(1-e)+drift}px) scale(${lerp(.86,1,e)})`); });
+    const hk=eo5(P(t,0.35,1.05));
+    $('#Ahead').style.opacity=hk; $('#Ahead').style.filter=`blur(${(1-hk)*16}px)`; setT($('#Ahead'),`scale(${lerp(1.08,1,hk)})`);
+    const d='Oct 8, 2026'; $('#a5t').innerHTML=d.slice(0,Math.floor(d.length*P(t,0.7,1.3)))+(t>0.6&&t<1.6&&Math.floor(t*5)%2==0?'<span class="caret" style="height:24px;width:2px"></span>':'');
+    const bk=eo(P(t,0.6,1.6)); [...$('#a6b').children].forEach((b,i)=>b.style.height=([40,62,88,110][i]*eo(P(t,0.55+i*0.08,1.4+i*0.08)))+'px');
+    $('#s1').innerHTML=Math.round(12*bk)+'<small>max</small>'; $('#s2').innerHTML=Math.round(9*bk)+'<small>avg</small>'; $('#s3').innerHTML=Math.round(2*bk)+'<small>min</small>';
+  }
+
+  // ================= B 2.4–4.1 =================
+  if(scene('#B', t>=2.4 && t<4.15)){
+    const k0=eo5(P(t,2.4,2.95));
+    // camera: start pushed-in, settle, then pan + push to the result panel after the click
+    const k1=eio(P(t,3.1,4.1));
+    const sc=lerp(lerp(1.35,1.0,k0),1.42,k1);
+    const tx=lerp(lerp(-160,0,k0),-1050,k1), ty=lerp(lerp(-120,0,k0),-220,k1);
+    setT($('#Bcam'),`translate(${tx}px,${ty}px) scale(${sc})`);
+    $('#Bcam').style.opacity=clamp(P(t,2.4,2.6))*(1-P(t,3.95,4.15));
+    $('#Bcam').style.filter=`blur(${(1-k0)*8 + P(t,3.95,4.15)*10}px)`;
+    const clicked=t>=3.0;
+    const pk=clicked?Math.exp(-(t-3.0)/0.06):0;
+    setT($('#calcBtn'),`scale(${1-0.05*pk})`);
+    $('#calcBtn').style.background=clicked&&t<3.15?'var(--brand-dk)':'';
+    // result
+    const rk=eo(P(t,3.05,3.55));
+    const days=Math.round(32*rk);
+    $('#due').textContent=t<3.05?'— — —':(rk<1?`Day ${days}`:'Nov 9, 2026');
+    $('#dueSub').textContent=rk<1?'Giant breeds: 31–33 day window':'32 days · Giant breed window 31–33';
+    $('#fill').style.width=(100*eo(P(t,3.05,3.7)))+'%';
+    for(let d=1;d<=28;d++){ $('#cd'+d).className = (d==9 && t>=3.45)?'hl':''; }
+    if(t>=3.45) setT($('#cd9'),`scale(${1+0.35*Math.exp(-(t-3.45)/0.08)})`);
+    // cursor path to button
+    const b=center($('#calcBtn'));
+    const mk=eio(P(t,2.45,2.96));
+    cursorState={show:t<3.9,x:lerp(1500,b[0]+40,mk),y:lerp(1200,b[1]+10,mk)-Math.sin(Math.PI*mk)*60,press:pk};
+    if(clicked) ripple={t0:3.0,x:b[0]+40,y:b[1]+10};
+  }
+
+  // ================= C 4.0–6.0 =================
+  if(scene('#C', t>=4.0 && t<6.0)){
+    const ty=CUES.typing[0]; const full=ty.text; const split=full.indexOf('Breeds Hub');
+    const n=Math.floor(full.length*P(t,ty.start,ty.end));
+    const s=full.slice(0,n);
+    $('#Cty').innerHTML = s.length>split ? s.slice(0,split)+`<span style="color:var(--brand)">${s.slice(split)}</span>` : s;
+    const blinkOn = t<ty.end+0.05 || Math.floor((t-ty.end)*3.4)%2==0;
+    $('#Ccar').style.opacity = (t<5.75 && blinkOn)?1:0;
+    const tw=$('#Cty').offsetWidth;
+    const Lgrow = 960 - tw + Math.min(tw,700)/2;      // centered while short, then tail leads
+    const pre=$('#Cpre').offsetWidth, bh=$('#Cbh').offsetWidth;
+    const Lend = 960 - (pre + bh/2);
+    const k=eio(P(t,ty.end+0.05,5.85));
+    const L=lerp(Lgrow,Lend,k);
+    setT($('#Cline'),`translateX(${L}px) scale(${1+0.04*k})`);
+    $('#Cline').style.transformOrigin=`${pre+bh/2}px 60px`;
+    $('#Cline').style.opacity=clamp(P(t,4.0,4.12));
+  }
+
+  // ================= D 6.0–7.5 =================
+  if(scene('#D', t>=6.0 && t<7.5)){
+    const k0=eo5(P(t,6.0,6.45));
+    const z=eio(P(t,6.95,7.5));
+    const sc=lerp(0.94,1.04,P(t,6,7))*lerp(1,2.3,z);
+    setT($('#Dcam'),`scale(${sc})`);
+    $('#Dl').style.opacity=k0*(1-z*1.4); $('#Dr').style.opacity=k0*(1-z*1.4);
+    setT($('#Dl'),`translateX(${(1-k0)*-60 - z*400}px)`); setT($('#Dr'),`translateX(${(1-k0)*60 + z*400}px)`);
+    const ck=eo5(P(t,6.08,6.55));
+    $('#Dcard').style.opacity=ck; setT($('#Dcard'),`translateY(${(1-ck)*40}px) scale(${lerp(.9,1,ck)*(1+0.03*Math.exp(-Math.max(0,t-7.0)/0.08)*(t>=7?1:0))})`);
+    $('#Dcard').style.filter=`blur(${(1-ck)*8}px)`;
+    $('#Dtxt').innerHTML='<span style="color:#9aa1a9">Flemish Giant doe, bred Oct 8…</span>';
+  }
+
+  // ================= E 7.4–9.0 (prompt card → compare) =================
+  if(scene('#E', t>=7.5 && t<9.0)){
+    const phaseA = t<8.35;
+    // reuse D's card style via a big prompt card drawn in E for 7.5–8.35
+    if(!$('#Ebig')){ const c=document.createElement('div'); c.className='card'; c.id='Ebig';
+      c.style.cssText='left:410px;top:330px;width:1100px;height:420px;padding:44px 52px;border-radius:34px';
+      c.innerHTML='<div class="lbl" style="font-size:34px">Calculate a due date</div><div id="Ebtxt" style="font-size:44px;font-weight:500;margin-top:20px;line-height:1.35;letter-spacing:-.015em"></div><div style="position:absolute;right:40px;bottom:36px"><span class="btn" style="height:86px;padding:0 40px;font-size:32px">✦ Calculate</span></div>';
+      $('#E').appendChild(c); }
+    $('#Ebig').style.display=phaseA?'block':'none';
+    $('#Ew').style.display=phaseA?'none':'block'; $('#Etable').style.display=phaseA?'none':'block';
+    if(phaseA){
+      const ty=CUES.typing[1]; const s=ty.text.slice(0,Math.floor(ty.text.length*P(t,ty.start,ty.end)));
+      $('#Ebtxt').innerHTML=s+(Math.floor(t*5)%2==0||t<ty.end?'<span class="caret" style="height:46px;width:3px"></span>':'');
+      setT($('#Ebig'),`scale(${lerp(1,1.04,P(t,7.5,8.35))})`);
+    } else {
+      const k=eo5(P(t,8.35,8.75));
+      $('#Ew').style.opacity=k; setT($('#Ew'),`translateX(${(1-k)*-50}px)`);
+      $('#Etable').style.opacity=k; setT($('#Etable'),`translateY(${(1-k)*80}px) scale(${lerp(.94,1,k)})`);
+      $('#Etable').style.filter=`blur(${(1-k)*8}px)`;
+      ROWS.forEach((r,i)=>{ const rk=eo5(P(t,8.4+i*0.04,8.75+i*0.04)); const row=$('#er'+i);
+        row.style.opacity=rk; row.style.background = (i==2 && t>=8.5)?'var(--brand-tint)':'';
+        setT(row,`translateY(${(1-rk)*20}px)`); });
+      const ex=P(t,8.85,9.0); $('#E').style.opacity=1-ex;
+    }
+    if(t<8.35) $('#E').style.opacity=1;
+  }
+
+  // ================= F 9.0–10.0 word wall =================
+  if(scene('#F', t>=9.0 && t<10.0)){
+    const u=t-9.0;
+    setT($('#Fc0'),`translateY(${-300 - u*260}px)`); setT($('#Fc2'),`translateY(${-300 - u*260}px)`);
+    setT($('#Fc1'),`translateY(${-700 + u*260}px)`);
+    const k=eo5(P(t,9.0,9.35));
+    setT($('#Fcam'),`scale(${lerp(1.25,1,k)*lerp(1,0.94,P(t,9.35,10))})`);
+    $('#Fmask').style.opacity=1;
+    const hk=back(P(t,9.05,9.45));
+    setT($('#Fhero'),`scale(${hk})`);
+    const hr=$('#Fhero'); const w=560, h=180, cx=960, cy=540;
+    const bk=eo5(P(t,9.15,9.5)), gap=lerp(70,0,bk);
+    $('#bk0').style.left=(cx-w/2-gap)+'px'; $('#bk0').style.top=(cy-h/2-gap)+'px';
+    $('#bk1').style.left=(cx+w/2-44+gap)+'px'; $('#bk1').style.top=(cy+h/2-44+gap)+'px';
+    $('#bk0').style.opacity=$('#bk1').style.opacity=bk;
+    const sk=back(P(t,9.3,9.7));
+    $('#Fstar').style.left=(cx+w/2-30)+'px'; $('#Fstar').style.top=(cy-h/2-80)+'px';
+    setT($('#Fstar'),`scale(${sk}) rotate(${(1-clamp(sk))*-120 + u*30}deg)`);
+  }
+
+  // ================= G 10.0–11.0 checklist =================
+  if(scene('#G', t>=10.0 && t<11.0)){
+    const k=eo5(P(t,10.0,10.3));
+    setT($('#Gcam'),`translateY(${(1-k)*40}px) scale(${lerp(1.05,1,k)})`);
+    $('#Gcam').style.opacity=k;
+    [10.0,10.25,10.5,10.75].forEach((c,i)=>{
+      const row=$('#g'+i), circ=row.querySelector('.c'); const on=t>=c;
+      row.style.color = on?'var(--ink)':'#b9bfc6';
+      row.querySelector('.sub').style.opacity = on?eo(P(t,c,c+0.2)):0;
+      if(on){ if(!circ.innerHTML) circ.innerHTML=CHECK; circ.style.borderColor='transparent';
+        const tick=circ.querySelector('.tick'); tick.style.strokeDasharray=40; tick.style.strokeDashoffset=40*(1-eo(P(t,c,c+0.15)));
+        setT(circ,`scale(${1+0.25*Math.exp(-(t-c)/0.07)})`);
+      } else { circ.innerHTML=''; circ.style.borderColor='#c9ced4'; setT(circ,'scale(1)'); }
+    });
+    $('#G').style.opacity=1-P(t,10.88,11.0);
+  }
+
+  // ================= H 11.0–12.0 calculate click =================
+  if(scene('#H', t>=11.0 && t<12.0)){
+    const k=eo5(P(t,11.0,11.35));
+    setT($('#Hcam'),`translate(${lerp(-120,0,k)+P(t,11,12)*-30}px,${lerp(80,0,k)}px) scale(${lerp(1.15,1,k)*lerp(1,1.05,P(t,11.5,12))})`);
+    $('#H').style.opacity=clamp(P(t,11.0,11.12));
+    const pk=t>=11.5?Math.exp(-(t-11.5)/0.07):0;
+    setT($('#Hbtn'),`scale(${1-0.06*pk + (t>=11.5?0.03*Math.sin(Math.min(1,(t-11.5)/0.3)*Math.PI):0)})`);
+    const b=center($('#Hbtn')); const mk=eio(P(t,11.05,11.46));
+    cursorState={show:true,x:lerp(1500,b[0]+120,mk)*1,y:lerp(1150,b[1]+40,mk)-Math.sin(Math.PI*mk)*50,press:pk};
+    if(t>=11.5) ripple={t0:11.5,x:b[0]+120,y:b[1]+40};
+  }
+
+  // ================= I 12.0–13.5 lockup =================
+  if(scene('#I', t>=12.0 && t<13.55)){
+    const k=eo5(P(t,12.0,12.3)), out=eio(P(t,12.45,12.75));
+    $('#Inow').style.opacity=k*(1-out); setT($('#Inow'),`scale(${lerp(1.12,1,k)*lerp(1,.75,out)})`);
+    $('#Inow').style.filter=`blur(${out*10}px)`;
+    const lk=eo5(P(t,12.6,13.05));
+    $('#Ilock').style.opacity=lk; setT($('#Ilock'),`translateY(${(1-lk)*30}px) scale(${lerp(.92,1,lk)*lerp(1,.9,eio(P(t,13.2,13.55)))})`);
+    $('#Ilock').style.filter=`blur(${(1-lk)*10 + P(t,13.3,13.55)*12}px)`;
+    $('#I').style.opacity=1-P(t,13.35,13.55);
+  }
+
+  // ================= J 13.5–15 icon ring =================
+  if(scene('#J', t>=13.45)){
+    const mk=back(P(t,13.45,13.9));
+    setT($('#Jmark'),`scale(${mk}) rotate(${(1-clamp(mk))*-25}deg)`);
+    const R=330, rot=(t-13.5)*14;
+    ICONS.forEach((id,i)=>{ const d=13.6+i*0.05; const k=back(P(t,d,d+0.45));
+      const a=(i/ICONS.length*360 - 90 + rot)*Math.PI/180;
+      const r=lerp(120,R,eo5(P(t,d,d+0.5)));
+      const el=$('#ic'+i); el.style.left=(960+Math.cos(a)*r)+'px'; el.style.top=(500+Math.sin(a)*r)+'px';
+      el.style.opacity=clamp(k*1.5); setT(el,`scale(${clamp(k,0,1.2)})`); });
+    $('#Jurl').style.opacity=eo(P(t,14.0,14.4)); setT($('#Jurl'),`translateY(${(1-eo(P(t,14,14.4)))*20}px)`);
+    setT($('#Jcam'),`scale(${lerp(1.05,1,eo(P(t,13.45,14)))*lerp(1,.94,eio(P(t,14.3,15)))})`);
+  }
+
+  // ================= cursor + ripple =================
+  const cur=$('#cursor');
+  cur.style.display=cursorState.show?'block':'none';
+  if(cursorState.show) setT(cur,`translate(${cursorState.x-36}px,${cursorState.y-12}px) scale(${1-0.14*cursorState.press}) rotate(${-4*cursorState.press}deg)`);
+  const rp=$('#rip');
+  if(ripple && t-ripple.t0<0.6){ const k=P(t,ripple.t0,ripple.t0+0.55);
+    rp.style.opacity=(1-k)*0.9; rp.style.left=ripple.x+'px'; rp.style.top=ripple.y+'px'; setT(rp,`scale(${1+eo(k)*4})`);
+  } else rp.style.opacity=0;
+}
+window.render=render;
+render(0);
+</script>
+</body>
+</html>

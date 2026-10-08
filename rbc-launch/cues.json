@@ -1,0 +1,11 @@
+{
+  "bpm": 120,
+  "duration": 15,
+  "clicks": [3.0, 7.0, 8.5, 10.0, 10.25, 10.5, 10.75, 11.5],
+  "typing": [
+    {"start": 4.25, "end": 5.35, "text": "for every breed in Breeds Hub"},
+    {"start": 7.6, "end": 8.3, "text": "Flemish Giant doe, bred Oct 8. When is she due?"}
+  ],
+  "whoosh": [2.25, 4.0, 6.0, 7.0, 9.0, 12.0, 13.5],
+  "impacts": [2.5, 9.0, 12.0, 13.5]
+}
