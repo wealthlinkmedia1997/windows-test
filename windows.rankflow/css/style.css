@@ -145,6 +145,21 @@ a {
   font-weight: 800;
   margin: 0 0 12px;
 }
+/* The 5-step qualifier card runs noticeably more compact than the other
+   cta-boxes on the page - more questions means every bit of padding and
+   margin here compounds into a lot of scroll. */
+.qualifier-page .cta-box:has(.qualifier-form) {
+  padding: 20px 16px;
+}
+.qualifier-page .cta-box:has(.qualifier-form) .cta-badge {
+  padding: 5px 12px;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+.qualifier-page .cta-box:has(.qualifier-form) .cta-box-heading {
+  font-size: clamp(19px, 5.2vw, 24px);
+  margin-bottom: 6px;
+}
 
 h1 {
   font-size: 28px;
@@ -1308,42 +1323,50 @@ footer a {
 /* ---------- 5-step qualifier form ---------- */
 .qualifier-form .q-label {
   text-align: center;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--muted2, #5b6472);
-  margin: 0 0 10px;
+  margin: 0 0 6px;
+}
+.qualifier-form .form-progress {
+  margin: 0 0 12px;
 }
 .qualifier-form .q-text {
   text-align: center;
-  font-size: 17px;
+  font-size: 15.5px;
+  line-height: 1.3;
   font-weight: 700;
-  margin: 0 0 14px;
+  margin: 0 0 10px;
 }
 .q-options {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 .q-option {
   display: flex;
   align-items: center;
   gap: 10px;
   border: 1.5px solid var(--card-border, #e2e6ea);
-  border-radius: 10px;
-  padding: 14px 16px;
+  border-radius: 9px;
+  padding: 11px 14px;
   text-align: left;
-  font-size: 14px;
+  font-size: 13.5px;
+  line-height: 1.25;
   font-weight: 600;
   cursor: pointer;
   transition: border-color .15s ease, background .15s ease;
 }
 .q-option input {
-  width: 17px;
-  height: 17px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
   accent-color: var(--teal, #1b6977);
+}
+.qualifier-form.lead-form .field {
+  margin-bottom: 12px;
 }
 .q-option:has(input:checked) {
   border-color: var(--teal, #1b6977);
@@ -1370,4 +1393,41 @@ footer a {
   font-family: inherit;
   background: #fff;
   color: var(--text);
+}
+
+/* Video-testimonial carousel, homepage only (thank-you.html keeps the
+   plain stacked list). Edge-to-edge swipeable cards on mobile; the
+   existing 3-column grid above 900px (defined earlier in this file)
+   is untouched since this only applies under that breakpoint. */
+@media (max-width: 899px) {
+  .qualifier-page .testimonial-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 0;
+    margin: 0 0 20px;
+    padding: 0;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .qualifier-page .testimonial-grid::-webkit-scrollbar {
+    display: none;
+  }
+  .qualifier-page .testimonial-item {
+    flex: 0 0 100vw;
+    max-width: 100vw;
+    scroll-snap-align: center;
+  }
+  .qualifier-page .testimonial-item .video-card {
+    border-radius: 0;
+    margin-bottom: 10px;
+  }
+  .qualifier-page .testimonial-item .testimonial-quote,
+  .qualifier-page .testimonial-item .testimonial-attribution {
+    padding: 0 20px;
+  }
 }
