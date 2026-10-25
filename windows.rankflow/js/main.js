@@ -942,3 +942,163 @@ function wireScrollToScan(selector, inputId) {
     });
   });
 }
+
+// ---------- 5-step qualifying application form ----------
+// Business type/job type/crew count/revenue, then phone. Reuses the same
+// .field/.field-inner reveal animation as wireProgressiveForm (one question
+// unlocks at a time, answered ones stay visible with a checkmark), but the
+// completion check and the disqualify-on-answer logic are specific to this
+// question set, so it's its own function rather than bolted onto the old one.
+//
+// Disqualifiers (redirect straight to sorry.html, same page already used for
+// the old revenue disqualifier): single-window-only jobs, 1 crew, and
+// under-$25K current revenue. Business type has no disqualifier - cleaning/
+// "Other" answers still move the visitor forward, just tagged as such in the
+// webhook payload.
+const QUALIFIER_LABELS = {
+  businessType: {
+    installation: "Window installation",
+    coverings: "Window coverings (blinds, shades, shutters)",
+    tinting: "Window tinting",
+    cleaning: "Window cleaning",
+    other: "Other",
+  },
+  jobType: {
+    fullhome: "Full-home window replacement jobs ($10,000+)",
+    single: "Single-window replacement jobs",
+    mix: "A mix of both",
+  },
+  crews: {
+    "1": "1 crew",
+    "2-3": "2-3 crews",
+    "4+": "4+ crews",
+  },
+  revenue: {
+    under25k: "Under $25K",
+    "25_50": "$25K–$50K",
+    "50_100": "$50K–$100K",
+    "100_250": "$100K–$250K",
+    "250_500": "$250K–$500K",
+    "500plus": "$500K+",
+  },
+};
+
+function wireQualifierForm(formEl) {
+  if (!formEl) return;
+  const steps = [];
+  formEl.querySelectorAll("[data-step]").forEach((f) => steps.push(f));
+  const bar = formEl.querySelector(".form-progress i");
+
+  function isAnswered(step) {
+    const name = step.dataset.step;
+    if (name === "revenue") {
+      return !!formEl.currentRevenue.value && !!formEl.targetRevenue.value;
+    }
+    if (name === "contact") return false; // only ever "done" via actual submit
+    return !!formEl.querySelector('[name="' + name + '"]:checked');
+  }
+
+  function setVisible(field, show) {
+    const wasHidden = field.classList.contains("is-hidden");
+    if (show) {
+      field.classList.remove("is-hidden");
+      clearTimeout(field._openT);
+      field._openT = setTimeout(() => field.classList.add("is-open"), 400);
+      if (wasHidden) {
+        field.classList.remove("just-revealed");
+        void field.offsetWidth;
+        field.classList.add("just-revealed");
+        setTimeout(() => field.scrollIntoView({ behavior: "smooth", block: "nearest" }), 280);
+      }
+    } else {
+      clearTimeout(field._openT);
+      field.classList.add("is-hidden");
+      field.classList.remove("is-open");
+    }
+  }
+
+  function update() {
+    let unlocked = true;
+    steps.forEach((step) => {
+      setVisible(step, unlocked);
+      if (unlocked) {
+        const done = isAnswered(step);
+        step.classList.toggle("is-done", done);
+        if (done) step.classList.remove("has-error");
+      }
+      unlocked = unlocked && isAnswered(step);
+    });
+    if (bar) {
+      const required = steps.filter((s) => s.dataset.step !== "contact");
+      const filled = required.filter(isAnswered).length;
+      bar.style.width = Math.round((filled / required.length) * 100) + "%";
+    }
+  }
+
+  function disqualify() {
+    window.location.href = "sorry.html";
+  }
+
+  formEl.addEventListener("change", (e) => {
+    const t = e.target;
+    if (t.name === "jobType" && t.value === "single") return disqualify();
+    if (t.name === "crews" && t.value === "1") return disqualify();
+    if (t.name === "currentRevenue" && t.value === "under25k") return disqualify();
+    update();
+  });
+
+  // Live phone formatting -> (555) 123-4567
+  if (formEl.phone) {
+    formEl.phone.addEventListener("input", function () {
+      const d = digitsOnly(this.value).slice(0, 10);
+      this.value = d.length > 6 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`
+                 : d.length > 3 ? `(${d.slice(0, 3)}) ${d.slice(3)}`
+                 : d.length > 0 ? `(${d}`
+                 : "";
+    });
+  }
+
+  formEl.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const phone = formEl.phone.value.trim();
+    if (digitsOnly(phone).length < 10) {
+      const f = formEl.querySelector('[data-step="contact"]');
+      f.classList.add("has-error");
+      formEl.phone.focus();
+      return;
+    }
+
+    const businessType = (formEl.querySelector('[name="businessType"]:checked') || {}).value || "";
+    const jobType = (formEl.querySelector('[name="jobType"]:checked') || {}).value || "";
+    const crews = (formEl.querySelector('[name="crews"]:checked') || {}).value || "";
+    const currentRevenue = formEl.currentRevenue.value;
+    const targetRevenue = formEl.targetRevenue.value;
+
+    const data = {
+      phone: phone,
+      businessType: QUALIFIER_LABELS.businessType[businessType] || businessType,
+      jobType: QUALIFIER_LABELS.jobType[jobType] || jobType,
+      crews: QUALIFIER_LABELS.crews[crews] || crews,
+      currentRevenue: QUALIFIER_LABELS.revenue[currentRevenue] || currentRevenue,
+      targetRevenue: QUALIFIER_LABELS.revenue[targetRevenue] || targetRevenue,
+      businessTypeCode: businessType,
+      jobTypeCode: jobType,
+      crewsCode: crews,
+      currentRevenueCode: currentRevenue,
+      targetRevenueCode: targetRevenue,
+    };
+
+    sessionStorage.setItem("rankflow_lead", JSON.stringify(data));
+    if (window.RANKFLOW_CONFIG.LEAD_WEBHOOK_URL) {
+      fetch(window.RANKFLOW_CONFIG.LEAD_WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        keepalive: true,
+      }).catch(() => {});
+    }
+    window.location.href = "thank-you.html?phone=" + encodeURIComponent(phone);
+  });
+
+  update();
+}

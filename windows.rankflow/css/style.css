@@ -1097,3 +1097,277 @@ footer a {
 .legal-page p a {
   color: var(--blue);
 }
+
+/* ============================================================
+   Homepage v2 ("qualifier page") - matches the water-damage-
+   restoration sister funnel's look: rounded Poppins type, deep
+   navy headings, dark teal buttons, gold highlighter accents.
+   Scoped to .qualifier-page (set on index.html's <body>) so the
+   rest of the site keeps its original system-font/blue look.
+   ============================================================ */
+.qualifier-page {
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --navy: #17263d;
+  --teal: #1b6977;
+  --teal-dark: #124f59;
+  --gold-hl: #f6c453;
+  --muted2: #5b6472;
+  --card-border: #e2e6ea;
+  --stat-bg: #f3f6f9;
+}
+.qualifier-page h1,
+.qualifier-page h2,
+.qualifier-page .cta-box-heading,
+.qualifier-page .mechanism-heading,
+.qualifier-page .results-heading,
+.qualifier-page .proof-name,
+.qualifier-page .stat-num {
+  color: var(--navy);
+  font-weight: 800;
+}
+.qualifier-page .hero-sub,
+.qualifier-page .mechanism-copy,
+.qualifier-page .sound-on-line,
+.qualifier-page .proof-quote,
+.qualifier-page .stat-label,
+.qualifier-page .q-text,
+.qualifier-page .modal-sub {
+  color: var(--muted2);
+}
+.qualifier-page .btn {
+  background: var(--teal);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .2);
+}
+.qualifier-page .btn:hover,
+.qualifier-page .btn:focus {
+  background: var(--teal-dark);
+}
+.qualifier-page .accent {
+  color: var(--teal);
+}
+.qualifier-page .cta-box {
+  background: #fff;
+  border: 1.5px solid var(--card-border);
+  border-radius: 16px;
+}
+.qualifier-page .cta-badge {
+  background: var(--teal);
+}
+
+/* Visually-hidden skip link, revealed on keyboard focus */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--navy, #17263d);
+  color: #fff;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 0 0 8px 0;
+  z-index: 999;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+/* Qualifier banner - plain gray uppercase text, no colored box */
+.qualifier-page .hero-kicker {
+  background: none;
+  color: var(--muted2);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 20px 20px 0;
+  margin: 0 0 4px;
+}
+
+.qualifier-page .sound-on-line {
+  text-align: center;
+  font-size: 14px;
+  margin: 10px 0 24px;
+}
+
+/* Mechanism section, above the application form */
+.mechanism-box {
+  text-align: center;
+  margin: 0 0 20px;
+}
+.mechanism-heading {
+  font-size: clamp(20px, 5.5vw, 26px);
+  line-height: 1.2;
+  margin: 0 0 12px;
+}
+.mechanism-copy {
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Highlighter-marker accent, used on "Match Method" and proof-card stats */
+.qualifier-page .highlight {
+  background: var(--gold-hl);
+  color: var(--navy);
+  padding: 2px 6px;
+  border-radius: 4px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.results-heading {
+  text-align: center;
+  margin: 0 0 20px;
+}
+.results-eyebrow {
+  display: block;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--muted2, #5b6472);
+  margin: 32px 0 10px;
+}
+
+/* Stats bar: 4 light boxes in a row, wraps to 2x2 on mobile */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin: 0 0 28px;
+}
+.stat-box {
+  background: var(--stat-bg, #f3f6f9);
+  border-radius: 12px;
+  padding: 16px 10px;
+  text-align: center;
+}
+.stat-num {
+  display: block;
+  font-size: 19px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+.stat-label {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+/* Proof cards: named results with a photo, above the video testimonials */
+.proof-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 0 0 32px;
+}
+.proof-card {
+  border: 1.5px solid var(--card-border, #e2e6ea);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+}
+.proof-photo {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+.proof-photo.is-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy, #17263d);
+  color: #fff;
+  font-size: 40px;
+  font-weight: 800;
+}
+.proof-body {
+  padding: 16px 18px 20px;
+  text-align: center;
+}
+.proof-name {
+  font-size: 17px;
+  margin: 0 0 8px;
+}
+.proof-stat {
+  margin: 0 0 10px;
+}
+.proof-quote {
+  font-size: 14px;
+  line-height: 1.5;
+  font-style: italic;
+  margin: 0;
+}
+
+@media (min-width: 700px) {
+  .stats-bar { grid-template-columns: repeat(4, 1fr); }
+  .proof-cards { flex-direction: row; }
+  .proof-cards .proof-card { flex: 1; }
+}
+
+/* ---------- 5-step qualifier form ---------- */
+.qualifier-form .q-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted2, #5b6472);
+  margin: 0 0 10px;
+}
+.qualifier-form .q-text {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+.q-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.q-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid var(--card-border, #e2e6ea);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease;
+}
+.q-option input {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  accent-color: var(--teal, #1b6977);
+}
+.q-option:has(input:checked) {
+  border-color: var(--teal, #1b6977);
+  background: #f2f8f8;
+}
+.q-dropdowns {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.q-dropdown-field label {
+  display: block;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.q-dropdown-field select {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1.5px solid var(--card-border, #e2e6ea);
+  border-radius: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--text);
+}

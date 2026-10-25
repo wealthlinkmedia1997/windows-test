@@ -2,9 +2,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rank Top 3 in Google &amp; ChatGPT in 90 Days | WealthLink Media</title>
-<meta name="description" content="Contractors: rank top 3 in ChatGPT and Google in 90 days or you don't pay. Full refund, no questions asked.">
+<meta name="description" content="Andre's team ranks one window installation and treatment company per 30-mile radius in the top 3 on Google Maps and ChatGPT. 30+ inbound calls a month within 90 days, or a full refund. $0 ad spend.">
 <link rel="preconnect" href="https://connect.facebook.net">
-<link rel="stylesheet" href="css/style.css?v=21">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="css/style.css?v=22">
 <script src="js/config.js?v=4"></script>
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -19,56 +22,112 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
 /></noscript>
 </head>
-<body>
-<p class="hero-kicker">For Window Installation &amp; Treatment Companies</p>
+<body class="qualifier-page">
+<a href="#application" class="skip-link">Skip to the application</a>
+<p class="hero-kicker">For window installation and treatment owners doing $300K&ndash;$5M a year</p>
 <div class="wrap">
 
-  <h1>How We Get Window Companies From <span class="accent">Invisible</span> to <span class="accent">30+ Inbound Calls Monthly</span></h1>
+  <h1>How Window Installation &amp; Treatment Owners Turn Multiple Google Business Profiles Into <span class="accent">30+ Inbound Calls</span> a Month</h1>
 
-  <p class="hero-sub">Watch this 2-minute breakdown of the exact system we used for <strong>Todd, Trevor, Anthony, Mark &amp; Paul</strong>. No ad spend, no cold calling, no chasing reviews.</p>
+  <p class="hero-sub">It is 2 a.m. A homeowner's window shatters in a storm. They search, and the company in the top 3 gets the $15,000 full-home job. This short video shows how Andre's team stacks multiple Google Business Profiles across your market, each ranked top 3, so homeowners find you no matter where they search. No ad spend.</p>
 
   <div id="explainer-video"></div>
-  <p class="video-caption">Watch how we do it (2 min)</p>
+  <p class="sound-on-line">Turn your sound on. Watch to the end, then leave your info. We'll call you within 5 minutes.</p>
 
-  <!-- Lead form, right on the page - no popup. Submitting it (wireLeadForm
-       in main.js) posts to the lead webhook and sends the visitor to
-       thank-you.html; there's no revenue/GBP question on this form, so
-       wireLeadForm's own defensive checks skip straight to that redirect. -->
-  <div class="cta-box">
-    <span class="cta-badge">1 Company Per Area</span>
-    <p class="cta-box-heading">Get Your Free Google Visibility Report</p>
-    <p class="modal-sub">Tell us your business name and we'll show you exactly where you're ranking, where your competitors are beating you, and what it's costing you every month.</p>
-    <form id="leadFormTop" class="lead-form" novalidate>
-      <div class="field" data-step="businessName">
+  <!-- Mechanism section, directly above the application form. -->
+  <div class="mechanism-box">
+    <p class="mechanism-heading">Apply to work with Andre's team.</p>
+    <p class="mechanism-copy">This is not a one-time Google Business Profile setup. We take one window company per 30-mile radius and run the Match Method every month: multiple Google Business Profiles placed where your ideal customer searches, each ranked top 3, done by the book. Top 3 on Google Maps and ChatGPT within 90 days, or a full refund. Target: 30+ inbound calls a month, $0 ad spend.</p>
+  </div>
+
+  <!-- 5-step qualifying application, right on the page - no popup.
+       wireQualifierForm (main.js) redirects a disqualifying answer
+       (single-window-only jobs, 1 crew, under-$25K current revenue)
+       straight to sorry.html, and a qualifying submission posts to the
+       lead webhook and sends the visitor to thank-you.html. -->
+  <div class="cta-box" id="application">
+    <span class="cta-badge">1 Company Per 30-Mile Radius</span>
+    <p class="cta-box-heading">Apply for the 5-Minute Call</p>
+    <form id="leadFormTop" class="lead-form qualifier-form" novalidate>
+      <div class="field" data-step="businessType">
         <div class="field-inner">
-          <label for="topBusinessName">Business Name</label>
-          <div class="autocomplete-wrapper">
-            <input type="text" id="topBusinessName" name="businessName" placeholder="CK's Windows"
-                   autocomplete="off" role="combobox" aria-autocomplete="list"
-                   aria-controls="topSuggestions" aria-expanded="false">
-            <span class="ac-spinner" hidden></span>
-            <ul class="ac-suggestions" id="topSuggestions" role="listbox" hidden></ul>
+          <p class="q-label">Question 1 of 5</p>
+          <div class="form-progress"><i></i></div>
+          <p class="q-text">Which best describes your business?</p>
+          <div class="q-options">
+            <label class="q-option"><input type="radio" name="businessType" value="installation"><span>Window installation</span></label>
+            <label class="q-option"><input type="radio" name="businessType" value="coverings"><span>Window coverings (blinds, shades, shutters)</span></label>
+            <label class="q-option"><input type="radio" name="businessType" value="tinting"><span>Window tinting</span></label>
+            <label class="q-option"><input type="radio" name="businessType" value="cleaning"><span>Window cleaning</span></label>
+            <label class="q-option"><input type="radio" name="businessType" value="other"><span>Other</span></label>
           </div>
-          <input type="hidden" name="placeId" value="">
-          <input type="hidden" name="placeAddress" value="">
         </div>
       </div>
-      <div class="field" data-step="firstName">
+
+      <div class="field" data-step="jobType">
         <div class="field-inner">
-          <label for="topFirstName">Full Name</label>
-          <input type="text" id="topFirstName" name="firstName" placeholder="John Smith" autocomplete="name">
+          <p class="q-label">Question 2 of 5</p>
+          <p class="q-text">What kind of jobs are you going after?</p>
+          <div class="q-options">
+            <label class="q-option"><input type="radio" name="jobType" value="fullhome"><span>Full-home window replacement jobs ($10,000+)</span></label>
+            <label class="q-option"><input type="radio" name="jobType" value="single"><span>Single-window replacement jobs</span></label>
+            <label class="q-option"><input type="radio" name="jobType" value="mix"><span>A mix of both</span></label>
+          </div>
         </div>
       </div>
-      <div class="field" data-step="phone">
+
+      <div class="field" data-step="crews">
         <div class="field-inner">
+          <p class="q-label">Question 3 of 5</p>
+          <p class="q-text">How many crews do you have?</p>
+          <div class="q-options">
+            <label class="q-option"><input type="radio" name="crews" value="1"><span>1 crew</span></label>
+            <label class="q-option"><input type="radio" name="crews" value="2-3"><span>2-3 crews</span></label>
+            <label class="q-option"><input type="radio" name="crews" value="4+"><span>4+ crews</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" data-step="revenue">
+        <div class="field-inner">
+          <p class="q-label">Question 4 of 5</p>
+          <p class="q-text">Where are you at monthly right now, and where do you want to be?</p>
+          <div class="q-dropdowns">
+            <div class="q-dropdown-field">
+              <label for="topCurrentRevenue">Current monthly revenue</label>
+              <select id="topCurrentRevenue" name="currentRevenue">
+                <option value="" disabled selected>Select...</option>
+                <option value="under25k">Under $25K</option>
+                <option value="25_50">$25K&ndash;$50K</option>
+                <option value="50_100">$50K&ndash;$100K</option>
+                <option value="100_250">$100K&ndash;$250K</option>
+                <option value="250_500">$250K&ndash;$500K</option>
+                <option value="500plus">$500K+</option>
+              </select>
+            </div>
+            <div class="q-dropdown-field">
+              <label for="topTargetRevenue">Target monthly revenue</label>
+              <select id="topTargetRevenue" name="targetRevenue">
+                <option value="" disabled selected>Select...</option>
+                <option value="under25k">Under $25K</option>
+                <option value="25_50">$25K&ndash;$50K</option>
+                <option value="50_100">$50K&ndash;$100K</option>
+                <option value="100_250">$100K&ndash;$250K</option>
+                <option value="250_500">$250K&ndash;$500K</option>
+                <option value="500plus">$500K+</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" data-step="contact">
+        <div class="field-inner">
+          <p class="q-label">Question 5 of 5</p>
           <label for="topPhone">Phone Number</label>
           <input type="tel" id="topPhone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
-        </div>
-      </div>
-      <div class="field" data-step="submit">
-        <div class="field-inner">
-          <button type="submit" class="btn">Get My Free Report</button>
-          <p class="fine-print">We'll call you today with your results.</p>
+          <button type="submit" class="btn">Call Me Within 5 Minutes</button>
+          <p class="fine-print">One company per 30-mile radius. We call within 5 minutes.</p>
         </div>
       </div>
     </form>
@@ -76,44 +135,129 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
 
   <hr class="divider">
 
+  <span class="results-eyebrow">Results</span>
+  <h2 class="results-heading">Real Results From Window Companies Using the <span class="highlight">Match Method</span></h2>
+
+  <div class="stats-bar">
+    <div class="stat-box"><span class="stat-num">100+</span><span class="stat-label">contractors in 5 years</span></div>
+    <div class="stat-box"><span class="stat-num">Multiple</span><span class="stat-label">GBPs per client</span></div>
+    <div class="stat-box"><span class="stat-num">$0</span><span class="stat-label">ad spend</span></div>
+    <div class="stat-box"><span class="stat-num">One</span><span class="stat-label">company per 30-mile radius</span></div>
+  </div>
+
+  <div class="proof-cards">
+    <div class="proof-card">
+      <img class="proof-photo" src="assets/videos/jim-poster.jpg" alt="Jim, Accent Window Coverings">
+      <div class="proof-body">
+        <p class="proof-name">Jim, Accent Window Coverings</p>
+        <p class="proof-stat"><span class="highlight">90+ qualified leads a month from Google Maps</span></p>
+        <p class="proof-quote">"And literally within 30 days I'm at the top - I've had everyone tell me they could get me there but nobody could get me there."</p>
+      </div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-photo is-placeholder" aria-hidden="true">T</div>
+      <div class="proof-body">
+        <p class="proof-name">Tony, Colorado Stain Masters</p>
+        <p class="proof-stat"><span class="highlight">70+ five-star reviews and $60K+ monthly recurring revenue</span></p>
+        <p class="proof-quote">3 Google Business Profiles, each pulling 30+ calls a month.</p>
+      </div>
+    </div>
+    <div class="proof-card">
+      <img class="proof-photo" src="assets/videos/chriss.jpg" alt="Chris, CK's Windows of Idaho Falls">
+      <div class="proof-body">
+        <p class="proof-name">Chris, CK's Windows of Idaho Falls</p>
+        <p class="proof-stat"><span class="highlight">100+ five-star reviews and calls every day after 2 months of nothing</span></p>
+        <p class="proof-quote">"2 months ago I wasn't getting calls, now my site presence has gone through the roof [over 100 5-star reviews] and I'm getting calls every day."</p>
+      </div>
+    </div>
+  </div>
+
   <h2 id="testimonials">What Window Owners Are Saying</h2>
   <div id="booking-testimonials"></div>
 
   <div class="cta-box">
-    <span class="cta-badge">1 Company Per Area</span>
-    <p class="cta-box-heading">Ready For Your Free Report?</p>
-    <p class="modal-sub">Same deal. Tell us your business name and we'll run the scan, show you where you stand, and show you exactly what to fix.</p>
-    <form id="leadFormBottom" class="lead-form" novalidate>
-      <div class="field" data-step="businessName">
+    <span class="cta-badge">1 Company Per 30-Mile Radius</span>
+    <p class="cta-box-heading">Apply for the 5-Minute Call</p>
+    <form id="leadFormBottom" class="lead-form qualifier-form" novalidate>
+      <div class="field" data-step="businessType">
         <div class="field-inner">
-          <label for="bottomBusinessName">Business Name</label>
-          <div class="autocomplete-wrapper">
-            <input type="text" id="bottomBusinessName" name="businessName" placeholder="CK's Windows"
-                   autocomplete="off" role="combobox" aria-autocomplete="list"
-                   aria-controls="bottomSuggestions" aria-expanded="false">
-            <span class="ac-spinner" hidden></span>
-            <ul class="ac-suggestions" id="bottomSuggestions" role="listbox" hidden></ul>
+          <p class="q-label">Question 1 of 5</p>
+          <div class="form-progress"><i></i></div>
+          <p class="q-text">Which best describes your business?</p>
+          <div class="q-options">
+            <label class="q-option"><input type="radio" name="businessType" value="installation"><span>Window installation</span></label>
+            <label class="q-option"><input type="radio" name="businessType" value="coverings"><span>Window coverings (blinds, shades, shutters)</span></label>
+            <label class="q-option"><input type="radio" name="businessType" value="tinting"><span>Window tinting</span></label>
+            <label class="q-option"><input type="radio" name="businessType" value="cleaning"><span>Window cleaning</span></label>
+            <label class="q-option"><input type="radio" name="businessType" value="other"><span>Other</span></label>
           </div>
-          <input type="hidden" name="placeId" value="">
-          <input type="hidden" name="placeAddress" value="">
         </div>
       </div>
-      <div class="field" data-step="firstName">
+
+      <div class="field" data-step="jobType">
         <div class="field-inner">
-          <label for="bottomFirstName">Full Name</label>
-          <input type="text" id="bottomFirstName" name="firstName" placeholder="John Smith" autocomplete="name">
+          <p class="q-label">Question 2 of 5</p>
+          <p class="q-text">What kind of jobs are you going after?</p>
+          <div class="q-options">
+            <label class="q-option"><input type="radio" name="jobType" value="fullhome"><span>Full-home window replacement jobs ($10,000+)</span></label>
+            <label class="q-option"><input type="radio" name="jobType" value="single"><span>Single-window replacement jobs</span></label>
+            <label class="q-option"><input type="radio" name="jobType" value="mix"><span>A mix of both</span></label>
+          </div>
         </div>
       </div>
-      <div class="field" data-step="phone">
+
+      <div class="field" data-step="crews">
         <div class="field-inner">
+          <p class="q-label">Question 3 of 5</p>
+          <p class="q-text">How many crews do you have?</p>
+          <div class="q-options">
+            <label class="q-option"><input type="radio" name="crews" value="1"><span>1 crew</span></label>
+            <label class="q-option"><input type="radio" name="crews" value="2-3"><span>2-3 crews</span></label>
+            <label class="q-option"><input type="radio" name="crews" value="4+"><span>4+ crews</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" data-step="revenue">
+        <div class="field-inner">
+          <p class="q-label">Question 4 of 5</p>
+          <p class="q-text">Where are you at monthly right now, and where do you want to be?</p>
+          <div class="q-dropdowns">
+            <div class="q-dropdown-field">
+              <label for="bottomCurrentRevenue">Current monthly revenue</label>
+              <select id="bottomCurrentRevenue" name="currentRevenue">
+                <option value="" disabled selected>Select...</option>
+                <option value="under25k">Under $25K</option>
+                <option value="25_50">$25K&ndash;$50K</option>
+                <option value="50_100">$50K&ndash;$100K</option>
+                <option value="100_250">$100K&ndash;$250K</option>
+                <option value="250_500">$250K&ndash;$500K</option>
+                <option value="500plus">$500K+</option>
+              </select>
+            </div>
+            <div class="q-dropdown-field">
+              <label for="bottomTargetRevenue">Target monthly revenue</label>
+              <select id="bottomTargetRevenue" name="targetRevenue">
+                <option value="" disabled selected>Select...</option>
+                <option value="under25k">Under $25K</option>
+                <option value="25_50">$25K&ndash;$50K</option>
+                <option value="50_100">$50K&ndash;$100K</option>
+                <option value="100_250">$100K&ndash;$250K</option>
+                <option value="250_500">$250K&ndash;$500K</option>
+                <option value="500plus">$500K+</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" data-step="contact">
+        <div class="field-inner">
+          <p class="q-label">Question 5 of 5</p>
           <label for="bottomPhone">Phone Number</label>
           <input type="tel" id="bottomPhone" name="phone" placeholder="(555) 123-4567" autocomplete="tel" inputmode="tel">
-        </div>
-      </div>
-      <div class="field" data-step="submit">
-        <div class="field-inner">
-          <button type="submit" class="btn">Get My Free Report</button>
-          <p class="fine-print">We'll call you today with your results.</p>
+          <button type="submit" class="btn">Call Me Within 5 Minutes</button>
+          <p class="fine-print">One company per 30-mile radius. We call within 5 minutes.</p>
         </div>
       </div>
     </form>
@@ -123,7 +267,7 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
 </div>
 
 <script src="js/testimonials-data.js?v=11"></script>
-<script src="js/main.js?v=14"></script>
+<script src="js/main.js?v=15"></script>
 <script>
   // Everything below used to be book-tracked.html's own page - now built
   // straight into the homepage instead of being a separate destination.
@@ -131,11 +275,8 @@ src="https://www.facebook.com/tr?id=1072650102023137&ev=PageView&noscript=1"
 
   renderTestimonials("booking-testimonials", window.HOME_TESTIMONIAL_IDS);
   [document.getElementById("leadFormTop"), document.getElementById("leadFormBottom")].forEach((f) => {
-    wireLeadForm(f);
-    wireProgressiveForm(f);
+    wireQualifierForm(f);
   });
-  wireBusinessAutocomplete(document.getElementById("topBusinessName"));
-  wireBusinessAutocomplete(document.getElementById("bottomBusinessName"));
 </script>
 
 </body></html>
