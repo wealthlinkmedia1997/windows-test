@@ -944,17 +944,17 @@ function wireScrollToScan(selector, inputId) {
 }
 
 // ---------- 5-step qualifying application form ----------
-// Business type/job type/crew count/revenue, then phone. Reuses the same
-// .field/.field-inner reveal animation as wireProgressiveForm (one question
-// unlocks at a time, answered ones stay visible with a checkmark), but the
-// completion check and the disqualify-on-answer logic are specific to this
-// question set, so it's its own function rather than bolted onto the old one.
+// Business type/job type/revenue, then marketing spend, then phone. Reuses
+// the same .field/.field-inner reveal animation as wireProgressiveForm (one
+// question unlocks at a time, answered ones stay visible with a checkmark),
+// but the completion check and the disqualify-on-answer logic are specific
+// to this question set, so it's its own function rather than bolted onto
+// the old one.
 //
-// Disqualifiers (redirect straight to sorry.html, same page already used for
-// the old revenue disqualifier): single-window-only jobs, 1 crew, and
-// under-$25K current revenue. Business type has no disqualifier - cleaning/
-// "Other" answers still move the visitor forward, just tagged as such in the
-// webhook payload.
+// Disqualifiers (redirect straight to sorry.html): a business type of
+// cleaning/"Other", single-window-only jobs (the broke-vs-rich filter), and
+// under-$25K current revenue. Marketing spend never disqualifies - it's just
+// ammo for the call.
 const QUALIFIER_LABELS = {
   businessType: {
     installation: "Window installation",
@@ -968,11 +968,6 @@ const QUALIFIER_LABELS = {
     single: "Single-window replacement jobs",
     mix: "A mix of both",
   },
-  crews: {
-    "1": "1 crew",
-    "2-3": "2-3 crews",
-    "4+": "4+ crews",
-  },
   revenue: {
     under25k: "Under $25K",
     "25_50": "$25K–$50K",
@@ -980,6 +975,13 @@ const QUALIFIER_LABELS = {
     "100_250": "$100K–$250K",
     "250_500": "$250K–$500K",
     "500plus": "$500K+",
+  },
+  marketingSpend: {
+    under1k: "Under $1K",
+    "1_3k": "$1,000-$3,000",
+    "3_6k": "$3,000-$6,000",
+    "6_10k": "$6,000-$10,000",
+    "10kplus": "$10,000+",
   },
 };
 
@@ -1014,8 +1016,8 @@ function wireQualifierForm(formEl) {
     const t = e.target;
     if (!steps[current] || !steps[current].contains(t)) return;
 
+    if (t.name === "businessType" && (t.value === "cleaning" || t.value === "other")) return disqualify();
     if (t.name === "jobType" && t.value === "single") return disqualify();
-    if (t.name === "crews" && t.value === "1") return disqualify();
     if (t.name === "currentRevenue" && t.value === "under25k") return disqualify();
 
     const stepName = steps[current].dataset.step;
@@ -1051,22 +1053,22 @@ function wireQualifierForm(formEl) {
 
     const businessType = (formEl.querySelector('[name="businessType"]:checked') || {}).value || "";
     const jobType = (formEl.querySelector('[name="jobType"]:checked') || {}).value || "";
-    const crews = (formEl.querySelector('[name="crews"]:checked') || {}).value || "";
     const currentRevenue = formEl.currentRevenue.value;
     const targetRevenue = formEl.targetRevenue.value;
+    const marketingSpend = (formEl.querySelector('[name="marketingSpend"]:checked') || {}).value || "";
 
     const data = {
       phone: phone,
       businessType: QUALIFIER_LABELS.businessType[businessType] || businessType,
       jobType: QUALIFIER_LABELS.jobType[jobType] || jobType,
-      crews: QUALIFIER_LABELS.crews[crews] || crews,
       currentRevenue: QUALIFIER_LABELS.revenue[currentRevenue] || currentRevenue,
       targetRevenue: QUALIFIER_LABELS.revenue[targetRevenue] || targetRevenue,
+      marketingSpend: QUALIFIER_LABELS.marketingSpend[marketingSpend] || marketingSpend,
       businessTypeCode: businessType,
       jobTypeCode: jobType,
-      crewsCode: crews,
       currentRevenueCode: currentRevenue,
       targetRevenueCode: targetRevenue,
+      marketingSpendCode: marketingSpend,
     };
 
     sessionStorage.setItem("rankflow_lead", JSON.stringify(data));
