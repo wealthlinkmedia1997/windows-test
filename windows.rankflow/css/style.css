@@ -1321,6 +1321,23 @@ footer a {
 }
 
 /* ---------- 5-step qualifier form ---------- */
+/* True one-question-at-a-time survey: only .is-current renders. This
+   overrides the shared .lead-form .field grid/reveal-animation rules
+   (used by the old progressive form) via selector specificity - the
+   qualifier form never toggles is-hidden/is-open/just-revealed, just
+   is-current, so those other rules simply don't apply here. */
+.qualifier-form.lead-form .field {
+  display: none;
+  margin-bottom: 0;
+}
+.qualifier-form.lead-form .field.is-current {
+  display: block;
+  animation: qStepIn .25s ease;
+}
+@keyframes qStepIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .qualifier-form .q-label {
   text-align: center;
   font-size: 11px;

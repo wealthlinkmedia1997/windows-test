@@ -988,50 +988,21 @@ function wireQualifierForm(formEl) {
   const steps = [];
   formEl.querySelectorAll("[data-step]").forEach((f) => steps.push(f));
   const bar = formEl.querySelector(".form-progress i");
+  let current = 0;
 
-  function isAnswered(step) {
-    const name = step.dataset.step;
-    if (name === "revenue") {
-      return !!formEl.currentRevenue.value && !!formEl.targetRevenue.value;
-    }
-    if (name === "contact") return false; // only ever "done" via actual submit
-    return !!formEl.querySelector('[name="' + name + '"]:checked');
+  // True one-question-at-a-time survey: only the current step is ever in
+  // the DOM flow (is-current), every other step is display:none (see the
+  // .qualifier-form CSS). Answering a step swaps it out for the next one
+  // in the same spot instead of revealing the next step underneath it.
+  function showStep(index) {
+    steps.forEach((step, i) => step.classList.toggle("is-current", i === index));
+    if (bar) bar.style.width = Math.round((index / (steps.length - 1)) * 100) + "%";
   }
 
-  function setVisible(field, show) {
-    const wasHidden = field.classList.contains("is-hidden");
-    if (show) {
-      field.classList.remove("is-hidden");
-      clearTimeout(field._openT);
-      field._openT = setTimeout(() => field.classList.add("is-open"), 400);
-      if (wasHidden) {
-        field.classList.remove("just-revealed");
-        void field.offsetWidth;
-        field.classList.add("just-revealed");
-        setTimeout(() => field.scrollIntoView({ behavior: "smooth", block: "nearest" }), 280);
-      }
-    } else {
-      clearTimeout(field._openT);
-      field.classList.add("is-hidden");
-      field.classList.remove("is-open");
-    }
-  }
-
-  function update() {
-    let unlocked = true;
-    steps.forEach((step) => {
-      setVisible(step, unlocked);
-      if (unlocked) {
-        const done = isAnswered(step);
-        step.classList.toggle("is-done", done);
-        if (done) step.classList.remove("has-error");
-      }
-      unlocked = unlocked && isAnswered(step);
-    });
-    if (bar) {
-      const required = steps.filter((s) => s.dataset.step !== "contact");
-      const filled = required.filter(isAnswered).length;
-      bar.style.width = Math.round((filled / required.length) * 100) + "%";
+  function goNext() {
+    if (current < steps.length - 1) {
+      current += 1;
+      showStep(current);
     }
   }
 
@@ -1041,10 +1012,20 @@ function wireQualifierForm(formEl) {
 
   formEl.addEventListener("change", (e) => {
     const t = e.target;
+    if (!steps[current] || !steps[current].contains(t)) return;
+
     if (t.name === "jobType" && t.value === "single") return disqualify();
     if (t.name === "crews" && t.value === "1") return disqualify();
     if (t.name === "currentRevenue" && t.value === "under25k") return disqualify();
-    update();
+
+    const stepName = steps[current].dataset.step;
+    if (stepName === "revenue") {
+      if (formEl.currentRevenue.value && formEl.targetRevenue.value) {
+        setTimeout(goNext, 220);
+      }
+      return;
+    }
+    if (t.type === "radio") setTimeout(goNext, 220);
   });
 
   // Live phone formatting -> (555) 123-4567
@@ -1100,5 +1081,5 @@ function wireQualifierForm(formEl) {
     window.location.href = "thank-you.html?phone=" + encodeURIComponent(phone);
   });
 
-  update();
+  showStep(0);
 }
